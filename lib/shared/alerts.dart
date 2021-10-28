@@ -60,3 +60,44 @@ class InfoAlert extends StatelessWidget {
     );
   }
 }
+
+class ErrorAlert extends StatelessWidget {
+  static final TextTheme textTheme = Get.textTheme;
+
+  final String message;
+
+  const ErrorAlert(this.message, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      textStyle: textTheme.bodyText1,
+      type: MaterialType.transparency,
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.all(25.0),
+          decoration: BoxDecoration(
+            color: backGroundColor.color,
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'error'.tr,
+                style: textTheme.headline5,
+              ),
+              const HeightSpacer(25.0),
+              Text(message),
+              const HeightSpacer(25.0),
+              ElevatedButton(
+                child: Text('ok'.tr),
+                onPressed: Get.back,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

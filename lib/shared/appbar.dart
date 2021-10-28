@@ -30,22 +30,11 @@ class MobileAppBar extends StatelessWidget {
     return Container(
       height: kToolbarHeight + 25.0,
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Get.theme.scaffoldBackgroundColor,
-            Colors.transparent,
-          ],
-          stops: const [0, 0.85],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
           KiwiGamesLogo(),
-          Categories(),
+          // Categories(),
           CurrentUser(),
         ],
       ),
@@ -130,34 +119,35 @@ class DesktopAppBar extends StatelessWidget {
             'assets/images/logos/logo.png',
             height: kToolbarHeight - 10.0,
           ),
-          const WidthSpacer(40.0),
-          InteractiveText(
-            text: 'home'.tr,
-            function: () => print('go to home'),
-          ),
-          const WidthSpacer(20.0),
-          InteractiveText(
-            text: 'selected_for_you'.tr,
-            function: () => print('go to selected'),
-          ),
-          const WidthSpacer(20.0),
-          InteractiveText(
-            text: 'my_list'.tr,
-            function: () => print('go to my list'),
-          ),
-          const WidthSpacer(20.0),
-          InteractiveText(
-              text: 'category'.tr, function: () => print('go to category')),
-          const WidthSpacer(25.0),
-          ElevatedButton(
-            child: Text('subscribe'.tr),
-            onPressed: () => print('subscribe'),
-          ),
-          const WidthSpacer(30.0),
+          // const WidthSpacer(40.0),
+          // InteractiveText(
+          //   text: 'home'.tr,
+          //   function: () => print('go to home'),
+          // ),
+          // const WidthSpacer(20.0),
+          // InteractiveText(
+          //   text: 'selected_for_you'.tr,
+          //   function: () => print('go to selected'),
+          // ),
+          // const WidthSpacer(20.0),
+          // InteractiveText(
+          //   text: 'my_list'.tr,
+          //   function: () => print('go to my list'),
+          // ),
+          // const WidthSpacer(20.0),
+          // InteractiveText(
+          //     text: 'category'.tr, function: () => print('go to category')),
+          // const WidthSpacer(25.0),
+          // ElevatedButton(
+          //   child: Text('subscribe'.tr),
+          //   onPressed: () => print('subscribe'),
+          // ),
+          const WidthSpacer(50.0),
           const UserList(),
           const WidthSpacer(25.0),
-          const Search(),
-          const WidthSpacer(20.0),
+          // const Search(),
+          // const WidthSpacer(20.0),
+          const Spacer(),
           const CurrentUser(),
         ],
       ),
@@ -171,21 +161,11 @@ class UserList extends GetView<UserController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      /* final List<Widget> users = [const SizedBox(width: 25.0)];
-      for (final user in controller.userList) {
-        users.add(UserImage(
-          pseudo: user.pseudo,
-          url: user.imagePath,
-          isActive: user.isActive,
-        ));
-        users.add(const SizedBox(width: 15.0));
-      }
-      users.removeLast(); */
       return Wrap(
         spacing: 10.0,
         children: controller.userList
             .map((user) => UserImage(
-                  pseudo: user.pseudo,
+                  username: user.username,
                   url: user.imagePath,
                   isActive: user.isActive,
                 ))
@@ -234,14 +214,11 @@ class CurrentUser extends GetView<UserController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      User currentUser = controller.user();
-      return UserImage(
-        pseudo: currentUser.pseudo,
-        isActive: currentUser.isActive,
-        url: currentUser.imagePath,
-      );
-    });
+    return UserImage(
+      username: controller.user.username,
+      isActive: controller.user.isActive,
+      url: controller.user.imagePath,
+    );
   }
 }
 

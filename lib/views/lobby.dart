@@ -4,7 +4,7 @@ import 'package:kiwigames/controllers/controllers.dart';
 import 'package:kiwigames/shared/shared.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class Lobby extends StatelessWidget {
+class Lobby extends GetView<LobbyController> {
   const Lobby({Key? key}) : super(key: key);
 
   @override
@@ -12,15 +12,17 @@ class Lobby extends StatelessWidget {
     return Scaffold(
       appBar: notLoggedAppBar,
       body: Center(
-        child: ListView(
-          padding: const EdgeInsets.all(25.0),
-          shrinkWrap: true,
-          children: const [
-            LobbyCode(),
-            HeightSpacer(50.0),
-            UserRow(),
-          ],
-        ),
+        child: Obx(() => controller.loading()
+            ? const CircularProgressIndicator()
+            : ListView(
+                padding: const EdgeInsets.all(25.0),
+                shrinkWrap: true,
+                children: const [
+                  LobbyCode(),
+                  HeightSpacer(50.0),
+                  UserRow(),
+                ],
+              )),
       ),
     );
   }
@@ -35,17 +37,31 @@ class LobbyCode extends GetView<LobbyController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: textStyle,
+            children: [
+              TextSpan(text: 'go_on'.tr),
+              TextSpan(
+                text: 'https://kiwigames.ovh',
+                style: textStyle.copyWith(color: primaryColor.color),
+              ),
+            ],
+          ),
+        ),
+        const HeightSpacer(25.0),
         Text(
           'flash_this_qrcode'.tr,
           style: Get.textTheme.bodyText1!.copyWith(color: dividerColor.color),
         ),
         const HeightSpacer(10.0),
         QrImage(
-          data: controller.lobbyCode(),
+          data: 'https://kiwigames.ovh',
           size: 300.0,
           backgroundColor: Colors.white,
         ),
-        const HeightSpacer(15.0),
+        const HeightSpacer(25.0),
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
@@ -77,9 +93,10 @@ class UserRow extends GetView<LobbyController> {
               .map(
                 (user) => UserImage(
                   isActive: user.isActive,
-                  pseudo: user.pseudo,
+                  username: user.username,
                   url: user.imagePath,
                   big: true,
+                  isHost: user.isHost,
                 ),
               )
               .toList();

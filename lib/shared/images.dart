@@ -15,30 +15,35 @@ class KiwiGamesLogo extends StatelessWidget {
 }
 
 class UserImage extends StatelessWidget {
-  final String pseudo;
+  final String username;
   final bool isActive;
   final String? url;
   final bool big;
+  final bool isHost;
 
   const UserImage({
     Key? key,
-    required this.pseudo,
+    required this.username,
     required this.isActive,
     this.url,
     this.big = false,
+    this.isHost = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double size;
+    double isHostSize;
     double padding;
     TextStyle textStyle;
     if (big) {
       size = 100.0;
+      isHostSize = 40;
       padding = 8.0;
       textStyle = Get.textTheme.headline5!;
     } else {
       size = 50.0;
+      isHostSize = 20.0;
       padding = 4.0;
       textStyle = Get.textTheme.headline6!;
     }
@@ -48,7 +53,7 @@ class UserImage extends StatelessWidget {
             alignment: Alignment.center,
             color: isActive ? primaryColor.color : inactiveColor.color,
             child: Text(
-              pseudo[0],
+              username[0],
               style: textStyle,
             ),
           )

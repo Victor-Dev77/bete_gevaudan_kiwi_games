@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kiwigames/controllers/controllers.dart';
+import 'package:kiwigames/models/models.dart';
+import 'package:kiwigames/shared/shared.dart';
+import 'package:kiwigames/shared/utils.dart';
 
 class RegisterController extends GetxController {
+  final loading = false.obs;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController pseudoController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
@@ -13,10 +19,32 @@ class RegisterController extends GetxController {
   @override
   void onClose() {
     emailController.dispose();
-    pseudoController.dispose();
+    usernameController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     telephoneController.dispose();
     super.onClose();
+  }
+
+  void register() async {
+    loading(true);
+    if (formKey.currentState!.validate()) {
+      String email = emailController.text.trim();
+      String username = usernameController.text.trim();
+      String password = passwordController.text.trim();
+      var res = await userProvider.register(
+        email: email,
+        username: username,
+        password: password,
+      );
+      if (res.statusCode == 200) {
+        User user = User(email: email, username: username, isActive: true);
+        Get.put(UserController(user), permanent: true);
+        Get.offAllNamed('/join-lobby');
+      } else {
+        Get.dialog(ErrorAlert('user_already_exist'.tr));
+      }
+    }
+    loading(false);
   }
 }

@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kiwigames/bindings/user_binding.dart';
-import 'package:kiwigames/shared/colors.dart';
+import 'package:kiwigames/controllers/controllers.dart';
 import 'package:kiwigames/shared/shared.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class JoinLobbyController extends GetxController {
   final loading = false.obs;
@@ -20,20 +22,36 @@ class JoinLobbyController extends GetxController {
   }
 
   void joinLobby() async {
-    /*  String pseudo = pseudoController.text.trim();
-    String lobbyCode = lobbyCodeController.text.trim();
-    if (lobbyCode.isEmpty) {
-      return;
-    }
-    if (isGuest && pseudo.isEmpty) {
-      return;
-    } */
     loading(true);
-    await Future.delayed(const Duration(seconds: 1));
-    Get.dialog(InfoAlert(
-      onConfirm: () => Get.offAllNamed('/browse'),
-      onCancel: () => Get.offAllNamed('/lobby'),
-    ));
+    if (formKey.currentState!.validate()) {
+      if (isGuest) {
+        redirect(false);
+      } else {
+        Get.dialog(InfoAlert(
+          onConfirm: () => redirect(true),
+          onCancel: () => redirect(false),
+        ));
+      }
+      // Get.offAllNamed('/join-lobby');
+    }
     loading(false);
+  }
+
+  void redirect(bool host) {
+    String username = isGuest
+        ? pseudoController.text.trim()
+        : Get.find<UserController>().user.username;
+    String code = lobbyCodeController.text.trim();
+    Get.put(
+      LobbyController(
+        screen: 'user',
+        host: host,
+        code: code,
+        username: username,
+      ),
+      permanent: true,
+    );
+    String to = host ? '/browse' : '/lobby';
+    Get.offAllNamed(to);
   }
 }

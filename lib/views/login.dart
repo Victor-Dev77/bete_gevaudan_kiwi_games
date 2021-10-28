@@ -65,7 +65,7 @@ class LoginForm extends GetView<LoginController> {
           key: controller.formKey,
           child: Column(
             children: const [
-              _EmailInput(),
+              _PseudoInput(),
               HeightSpacer(25.0),
               _PasswordInput(),
               HeightSpacer(20.0),
@@ -84,15 +84,17 @@ class LoginForm extends GetView<LoginController> {
   }
 }
 
-class _EmailInput extends GetView<LoginController> {
-  const _EmailInput({Key? key}) : super(key: key);
+class _PseudoInput extends GetView<LoginController> {
+  const _PseudoInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller.emailController,
+      controller: controller.pseudoController,
+      keyboardType: TextInputType.emailAddress,
+      validator: (e) => e!.trim().isNotEmpty ? null : 'no_pseudo'.tr,
       decoration: InputDecoration(
-        labelText: 'email'.tr,
+        labelText: 'pseudo'.tr,
       ),
     );
   }
@@ -108,6 +110,7 @@ class _PasswordInput extends GetView<LoginController> {
       builder: (obscureText, updater) => TextFormField(
         controller: controller.passwordController,
         obscureText: obscureText!,
+        validator: (e) => e!.trim().isNotEmpty ? null : 'no_password'.tr,
         decoration: InputDecoration(
           labelText: 'password'.tr,
           suffixIcon: IconButton(
@@ -175,7 +178,7 @@ class RememberMeForgotPassword extends StatelessWidget {
   }
 }
 
-class _LoginRegister extends StatelessWidget {
+class _LoginRegister extends GetView<LoginController> {
   static final buttonPadding = MaterialStateProperty.all(
     const EdgeInsets.symmetric(vertical: 25.0),
   );
@@ -184,48 +187,53 @@ class _LoginRegister extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget spacer;
-    Axis direction;
-    CrossAxisAlignment crossAxisAlignment;
-    int flex;
-    if (MediaQuery.of(context).size.width <= 500.0) {
-      spacer = const HeightSpacer(15.0);
-      direction = Axis.vertical;
-      crossAxisAlignment = CrossAxisAlignment.stretch;
-      flex = 0;
-    } else {
-      spacer = const WidthSpacer(25.0);
-      direction = Axis.horizontal;
-      crossAxisAlignment = CrossAxisAlignment.center;
-      flex = 1;
-    }
-    return Flex(
-      direction: direction,
-      crossAxisAlignment: crossAxisAlignment,
-      children: [
-        Expanded(
-          flex: flex,
-          child: ElevatedButton(
-            child: Text('log_in'.tr.toUpperCase()),
-            onPressed: () => Get.toNamed('/join-lobby'),
-            style: Get.theme.elevatedButtonTheme.style?.copyWith(
-              padding: buttonPadding,
+    return Obx(() {
+      if (controller.loading()) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      Widget spacer;
+      Axis direction;
+      CrossAxisAlignment crossAxisAlignment;
+      int flex;
+      if (MediaQuery.of(context).size.width <= 500.0) {
+        spacer = const HeightSpacer(15.0);
+        direction = Axis.vertical;
+        crossAxisAlignment = CrossAxisAlignment.stretch;
+        flex = 0;
+      } else {
+        spacer = const WidthSpacer(25.0);
+        direction = Axis.horizontal;
+        crossAxisAlignment = CrossAxisAlignment.center;
+        flex = 1;
+      }
+      return Flex(
+        direction: direction,
+        crossAxisAlignment: crossAxisAlignment,
+        children: [
+          Expanded(
+            flex: flex,
+            child: ElevatedButton(
+              child: Text('log_in'.tr.toUpperCase()),
+              onPressed: controller.login,
+              style: Get.theme.elevatedButtonTheme.style?.copyWith(
+                padding: buttonPadding,
+              ),
             ),
           ),
-        ),
-        spacer,
-        Expanded(
-          flex: flex,
-          child: OutlinedButton(
-            child: Text('register'.tr.toUpperCase()),
-            onPressed: () => Get.toNamed('/register'),
-            style: Get.theme.outlinedButtonTheme.style?.copyWith(
-              padding: buttonPadding,
+          spacer,
+          Expanded(
+            flex: flex,
+            child: OutlinedButton(
+              child: Text('register'.tr.toUpperCase()),
+              onPressed: () => Get.toNamed('/register'),
+              style: Get.theme.outlinedButtonTheme.style?.copyWith(
+                padding: buttonPadding,
+              ),
             ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }
 

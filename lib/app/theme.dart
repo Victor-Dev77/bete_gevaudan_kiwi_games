@@ -52,6 +52,7 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: inputColor.color,
+      errorStyle: TextStyle(color: inactiveColor.color),
       border: UnderlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),
       ),

@@ -72,8 +72,8 @@ class RegisterForm extends GetView<RegisterController> {
               _PasswordInput(),
               HeightSpacer(25.0),
               _ConfirmPassword(),
-              HeightSpacer(25.0),
-              _TelephoneInput(),
+              // HeightSpacer(25.0),
+              // _TelephoneInput(),
               HeightSpacer(50.0),
               _Loginregister(),
             ],
@@ -90,8 +90,10 @@ class _EmailInput extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: TextInputType.emailAddress,
       controller: controller.emailController,
       decoration: InputDecoration(labelText: 'email'.tr),
+      validator: (e) => GetUtils.isEmail(e!.trim()) ? null : 'not_an_email'.tr,
     );
   }
 }
@@ -102,8 +104,9 @@ class _PseudoInput extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller.pseudoController,
+      controller: controller.usernameController,
       decoration: InputDecoration(labelText: 'pseudo'.tr),
+      validator: (e) => e!.trim().isNotEmpty ? null : 'no_pseudo'.tr,
     );
   }
 }
@@ -118,6 +121,7 @@ class _PasswordInput extends GetView<RegisterController> {
       builder: (obscureText, updater) => TextFormField(
         controller: controller.passwordController,
         obscureText: obscureText!,
+        validator: (e) => e!.trim().isNotEmpty ? null : 'no_password'.tr,
         decoration: InputDecoration(
           labelText: 'password'.tr,
           suffixIcon: IconButton(
@@ -140,6 +144,17 @@ class _ConfirmPassword extends GetView<RegisterController> {
       builder: (obscureText, updater) => TextFormField(
         controller: controller.confirmPasswordController,
         obscureText: obscureText!,
+        validator: (e) {
+          String password = controller.passwordController.text.trim();
+          String confirmPassword = e!.trim();
+          if (confirmPassword.isEmpty) {
+            return 'no_password'.tr;
+          }
+          if (confirmPassword != password) {
+            return 'confirm_password_error'.tr;
+          }
+          return null;
+        },
         decoration: InputDecoration(
           labelText: 'confirm_password'.tr,
           suffixIcon: IconButton(
@@ -161,6 +176,7 @@ class _TelephoneInput extends GetView<RegisterController> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller.telephoneController,
+      keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         label: RichText(
           text: TextSpan(
@@ -183,7 +199,7 @@ class _TelephoneInput extends GetView<RegisterController> {
   }
 }
 
-class _Loginregister extends StatelessWidget {
+class _Loginregister extends GetView<RegisterController> {
   static final buttonPadding = MaterialStateProperty.all(
     const EdgeInsets.symmetric(vertical: 25.0),
   );
@@ -192,47 +208,52 @@ class _Loginregister extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget spacer;
-    Axis direction;
-    CrossAxisAlignment crossAxisAlignment;
-    int flex;
-    if (MediaQuery.of(context).size.width <= 500.0) {
-      spacer = const HeightSpacer(15.0);
-      direction = Axis.vertical;
-      crossAxisAlignment = CrossAxisAlignment.stretch;
-      flex = 0;
-    } else {
-      spacer = const WidthSpacer(25.0);
-      direction = Axis.horizontal;
-      crossAxisAlignment = CrossAxisAlignment.center;
-      flex = 1;
-    }
-    return Flex(
-      direction: direction,
-      crossAxisAlignment: crossAxisAlignment,
-      children: [
-        Expanded(
-          flex: flex,
-          child: OutlinedButton(
-            child: Text('log_in'.tr.toUpperCase()),
-            onPressed: () => back('/login'),
-            style: Get.theme.outlinedButtonTheme.style?.copyWith(
-              padding: buttonPadding,
+    return Obx(() {
+      if (controller.loading()) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      Widget spacer;
+      Axis direction;
+      CrossAxisAlignment crossAxisAlignment;
+      int flex;
+      if (MediaQuery.of(context).size.width <= 500.0) {
+        spacer = const HeightSpacer(15.0);
+        direction = Axis.vertical;
+        crossAxisAlignment = CrossAxisAlignment.stretch;
+        flex = 0;
+      } else {
+        spacer = const WidthSpacer(25.0);
+        direction = Axis.horizontal;
+        crossAxisAlignment = CrossAxisAlignment.center;
+        flex = 1;
+      }
+      return Flex(
+        direction: direction,
+        crossAxisAlignment: crossAxisAlignment,
+        children: [
+          Expanded(
+            flex: flex,
+            child: OutlinedButton(
+              child: Text('log_in'.tr.toUpperCase()),
+              onPressed: () => back('/login'),
+              style: Get.theme.outlinedButtonTheme.style?.copyWith(
+                padding: buttonPadding,
+              ),
             ),
           ),
-        ),
-        spacer,
-        Expanded(
-          flex: flex,
-          child: ElevatedButton(
-            child: Text('register'.tr.toUpperCase()),
-            onPressed: () => print('register'),
-            style: Get.theme.elevatedButtonTheme.style?.copyWith(
-              padding: buttonPadding,
+          spacer,
+          Expanded(
+            flex: flex,
+            child: ElevatedButton(
+              child: Text('register'.tr.toUpperCase()),
+              onPressed: controller.register,
+              style: Get.theme.elevatedButtonTheme.style?.copyWith(
+                padding: buttonPadding,
+              ),
             ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }

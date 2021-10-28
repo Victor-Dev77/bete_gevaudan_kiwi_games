@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kiwigames/controllers/user_controller.dart';
+import 'package:kiwigames/models/models.dart';
+import 'package:kiwigames/shared/shared.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LoginController extends GetxController {
@@ -9,39 +12,42 @@ class LoginController extends GetxController {
   final rememberMe = false.obs;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController pseudoController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
-  void onInit() async {
-    print('inited controller');
-    final _channel = WebSocketChannel.connect(
-      Uri.parse('wss://kiwigames.ovh'),
-    );
-    _channel.stream.listen((data) {
-      // data type = Uint8List, we have to decode it in order to have a string
-      String dataString = utf8.decode(data);
-      print(dataString);
-    });
-    print('send data');
-    Map<String, String> data = {
-      'event': 'action',
-      'message': 'salut é à ù',
-    };
-    var jsonData = json.encode(data);
-    _channel.sink.add(jsonData);
-    super.onInit();
-  }
-
-  @override
   void onClose() {
-    emailController.dispose();
+    pseudoController.dispose();
     passwordController.dispose();
     super.onClose();
   }
 
   void login() async {
     loading(true);
+    if (formKey.currentState!.validate()) {
+      String pseudo = pseudoController.text.trim();
+      String password = passwordController.text.trim();
+      var res = await userProvider.login(pseudo: pseudo, password: password);
+      if (res.statusCode == 200) {
+        User user = User.fromJson(res.body);
+        Get.put(UserController(user), permanent: true);
+        Get.offAllNamed('/join-lobby');
+      } else {
+        String errorMessage;
+        switch (res.statusCode) {
+          case 404:
+            errorMessage = 'user_not_found';
+            break;
+          case 401:
+            errorMessage = 'wrong_password';
+            break;
+          default:
+            errorMessage = 'error';
+            break;
+        }
+        Get.dialog(ErrorAlert(errorMessage.tr));
+      }
+    }
     loading(false);
   }
 }

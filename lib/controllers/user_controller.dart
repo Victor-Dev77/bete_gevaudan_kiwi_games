@@ -2,29 +2,37 @@ import 'package:get/get.dart';
 import 'package:kiwigames/models/models.dart';
 
 class UserController extends GetxController {
-  final user = User(pseudo: 'Zloffy66', isActive: true).obs;
+  final User user;
+
+  UserController(this.user);
+
   final userList = <User>[
     User(
-      pseudo: 'Childebert',
+      email: 'test@test.test',
+      username: 'Childebert',
       imagePath: 'https://source.unsplash.com/random',
       isActive: true,
     ),
     User(
-      pseudo: 'Clarantine',
+      email: 'test@test.test',
+      username: 'Clarantine',
       isActive: true,
     ),
     User(
-      pseudo: 'Gilbert Swag',
+      email: 'test@test.test',
+      username: 'Gilbert Swag',
       imagePath: 'https://source.unsplash.com/random',
       isActive: false,
     ),
     User(
-      pseudo: 'Clarantine',
+      email: 'test@test.test',
+      username: 'Clarantine',
       imagePath: 'https://source.unsplash.com/random',
       isActive: false,
     ),
     User(
-      pseudo: 'Gilbert Swag',
+      email: 'test@test.test',
+      username: 'Gilbert Swag',
       isActive: true,
     ),
   ].obs;

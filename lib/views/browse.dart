@@ -8,25 +8,25 @@ class Browse extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: appBar,
       extendBodyBehindAppBar: MediaQuery.of(context).size.width <= 1250.0,
       body: ListView(
         padding: const EdgeInsets.only(top: 0),
-        children: [
-          const LandingCarourel(),
-          const HeightSpacer(30.0),
-          const GameRowList(),
-          const HeightSpacer(50.0),
-          if (screenWidth > 774) const BottomBar(),
+        children: const [
+          LandingCarourel(),
+          HeightSpacer(50.0),
+          GameRowList(),
+          HeightSpacer(50.0),
+          // if (screenWidth > 774) const BottomBar(),
         ],
       ),
     );
   }
 }
 
-class LandingCarourel extends GetView<TabBarController> {
+class LandingCarourel extends GetView<BrowseController> {
   const LandingCarourel({Key? key}) : super(key: key);
 
   @override
@@ -34,66 +34,136 @@ class LandingCarourel extends GetView<TabBarController> {
     double screenWidth = MediaQuery.of(context).size.width;
     return SizedBox(
       width: Get.width,
-      height: screenWidth <= 600 ? Get.width : Get.height * 0.75,
-      child: TabBarView(
-        controller: controller.tabController,
-        children: const [
-          CarouselSlide(),
-          CarouselSlide(),
-          CarouselSlide(),
-        ],
-      ),
+      height: screenWidth <= 600 ? Get.height * 0.9 : Get.height * 0.75,
+      child: Obx(() => TabBarView(
+            controller: controller.tabController,
+            children: controller.carouselSlides
+                .map(
+                  (slide) => CarouselSlide(
+                    name: slide.name,
+                    catchPhrase: slide.catchPhrase,
+                    description: slide.description,
+                    imagePath: slide.imagePath,
+                    isAvailable: slide.isAvailable,
+                    gamePath: slide.gamePath,
+                  ),
+                )
+                .toList(),
+          )),
     );
   }
 }
 
 class CarouselSlide extends StatelessWidget {
-  const CarouselSlide({Key? key}) : super(key: key);
+  final String name;
+  final String catchPhrase;
+  final String description;
+  final String imagePath;
+  final String? gamePath;
+  final bool isAvailable;
+
+  const CarouselSlide({
+    Key? key,
+    required this.name,
+    required this.catchPhrase,
+    required this.description,
+    required this.imagePath,
+    this.gamePath,
+    required this.isAvailable,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.bottomLeft,
       fit: StackFit.expand,
-      children: const [
-        CustomNetworkImage(
-          url: 'https://source.unsplash.com/random',
+      children: [
+        Image.asset(imagePath, fit: BoxFit.cover),
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.transparent, backGroundColor.color],
+            ),
+          ),
         ),
-        SlideText(),
+        SlideText(
+          name: name,
+          catchPhrase: catchPhrase,
+          description: description,
+          available: isAvailable,
+          gamePath: gamePath,
+        ),
       ],
     );
   }
 }
 
-class SlideText extends StatelessWidget {
-  const SlideText({Key? key}) : super(key: key);
+class SlideText extends GetView<BrowseController> {
+  final String name;
+  final String catchPhrase;
+  final String description;
+  final String? gamePath;
+  final bool available;
+
+  const SlideText({
+    Key? key,
+    required this.name,
+    required this.catchPhrase,
+    required this.description,
+    this.gamePath,
+    required this.available,
+  }) : super(key: key);
+
+  void launchGame() {
+    if (gamePath != null) {
+      controller.launchGame(gamePath!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    Widget bottomButton = available
+        ? ElevatedButton(
+            child: Text('play'.tr),
+            onPressed: launchGame,
+          )
+        : const ColorFiltered(
+            colorFilter: ColorFilter.mode(
+              Colors.grey,
+              BlendMode.saturation,
+            ),
+            child: ElevatedButton(
+              onPressed: null,
+              child: Text('Bientôt disponible'),
+            ),
+          );
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
         constraints: const BoxConstraints(maxWidth: 600.0),
         padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          shrinkWrap: true,
+          physics: MediaQuery.of(context).size.width > 340
+              ? const NeverScrollableScrollPhysics()
+              : null,
           children: [
             Text(
-              'game name',
+              name,
               style: Get.textTheme.headline5,
             ),
+            Text(
+              catchPhrase,
+              style: Get.textTheme.headline6,
+            ),
             const HeightSpacer(10.0),
-            const Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut malesuada quam sit amet sodales elementum. Praesent dapibus mi turpis, quis blandit nunc venenatis in. Suspendisse viverra lectus a ullamcorper tincidunt.',
-              maxLines: 10,
+            Text(
+              description,
+              maxLines: 20,
             ),
-            const HeightSpacer(25.0),
-            ElevatedButton(
-              child: Text('play'.tr),
-              onPressed: () => print('play game'),
-            ),
+            Align(alignment: Alignment.bottomLeft, child: bottomButton),
           ],
         ),
       ),
@@ -110,14 +180,14 @@ class GameRowList extends StatelessWidget {
       padding: const EdgeInsets.all(0),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: 3,
-      itemBuilder: (_, index) => GameRow(title: 'Row number $index'),
+      itemCount: 1,
+      itemBuilder: (_, __) => GameRow(title: 'famous_games'.tr),
       separatorBuilder: (_, __) => const HeightSpacer(30.0),
     );
   }
 }
 
-class GameRow extends StatelessWidget {
+class GameRow extends GetView<BrowseController> {
   final String title;
 
   const GameRow({
@@ -139,12 +209,15 @@ class GameRow extends StatelessWidget {
             child: ListView.separated(
               clipBehavior: Clip.none,
               scrollDirection: Axis.horizontal,
-              itemCount: 20,
+              itemCount: controller.gameList.length,
               separatorBuilder: (_, __) => const WidthSpacer(20.0),
               itemBuilder: (context, index) {
-                return const Game(
-                  name: 'Game name',
-                  imageUrl: 'https://source.unsplash.com/random',
+                final game = controller.gameList[index];
+                return Game(
+                  name: game.name,
+                  imagePath: game.imagePath,
+                  isAvailable: game.isAvailable,
+                  gamePath: game.gamePath,
                 );
               },
             ),
@@ -155,9 +228,11 @@ class GameRow extends StatelessWidget {
   }
 }
 
-class Game extends StatelessWidget {
+class Game extends GetView<BrowseController> {
   final String name;
-  final String imageUrl;
+  final String imagePath;
+  final String? gamePath;
+  final bool isAvailable;
 
   static final BorderRadius borderRadius = BorderRadius.circular(5.0);
   static final List<Shadow> textShadow = [
@@ -179,14 +254,22 @@ class Game extends StatelessWidget {
   const Game({
     Key? key,
     required this.name,
-    required this.imageUrl,
+    required this.imagePath,
+    required this.gamePath,
+    required this.isAvailable,
   }) : super(key: key);
+
+  void launchGame() {
+    if (gamePath != null) {
+      controller.launchGame(gamePath!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     double aspectRatio = MediaQuery.of(context).size.width <= 600 ? 1 : 16 / 9;
     return InkWell(
-      onTap: () => print('selcted game'),
+      onTap: isAvailable ? launchGame : null,
       borderRadius: borderRadius,
       child: AspectRatio(
         aspectRatio: aspectRatio,
@@ -195,16 +278,32 @@ class Game extends StatelessWidget {
             borderRadius: borderRadius,
             boxShadow: boxShadow,
             image: DecorationImage(
-              image: NetworkImage(imageUrl),
+              image: AssetImage(imagePath),
               fit: BoxFit.cover,
             ),
           ),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              name,
-              style: Get.textTheme.headline6?.copyWith(shadows: textShadow),
-            ),
+          child: Stack(
+            children: [
+              if (!isAvailable) ...[
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.75),
+                      borderRadius: borderRadius),
+                ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Text('soon_available'.tr),
+                )
+              ],
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  name,
+                  style: Get.textTheme.headline6?.copyWith(shadows: textShadow),
+                ),
+              ),
+            ],
           ),
         ),
       ),

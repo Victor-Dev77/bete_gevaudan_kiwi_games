@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/controllers/controllers.dart';
@@ -10,7 +12,6 @@ class JoinLobby extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: notLoggedAppBar,
-      extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(25.0, 100.0, 25.0, 25.0),
         child: Center(
@@ -54,6 +55,7 @@ class _PseudoInput extends GetView<JoinLobbyController> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller.pseudoController,
+      validator: (e) => e!.trim().isEmpty ? 'no_pseudo'.tr : null,
       decoration: InputDecoration(labelText: 'pseudo'.tr),
     );
   }
@@ -66,6 +68,7 @@ class _LobbyCodeInput extends GetView<JoinLobbyController> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller.lobbyCodeController,
+      validator: (e) => e!.trim().isEmpty ? 'no_lobby_code'.tr : null,
       decoration: InputDecoration(labelText: 'lobby_code'.tr),
     );
   }
@@ -113,17 +116,19 @@ class _JoinLogin extends GetView<JoinLobbyController> {
               ),
             ),
           ),
-          spacer,
-          Expanded(
-            flex: flex,
-            child: OutlinedButton(
-              child: Text('log_in'.tr.toUpperCase()),
-              onPressed: () => back('/login'),
-              style: Get.theme.outlinedButtonTheme.style?.copyWith(
-                padding: buttonPadding,
+          if (controller.isGuest) ...[
+            spacer,
+            Expanded(
+              flex: flex,
+              child: OutlinedButton(
+                child: Text('log_in'.tr.toUpperCase()),
+                onPressed: () => back('/login'),
+                style: Get.theme.outlinedButtonTheme.style?.copyWith(
+                  padding: buttonPadding,
+                ),
               ),
             ),
-          )
+          ],
         ],
       );
     });

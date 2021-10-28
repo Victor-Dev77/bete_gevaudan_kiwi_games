@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:kiwigames/bindings/bindings.dart';
+import 'package:kiwigames/middlewares/middlewares.dart';
 import 'package:kiwigames/views/lobby.dart';
 import 'package:kiwigames/views/master_screen.dart';
 import 'package:kiwigames/views/views.dart';
@@ -19,9 +20,8 @@ class AppPages {
     GetPage(
       name: '/browse',
       page: () => const Browse(),
-      bindings: [
-        TabBarBinding(),
-      ],
+      bindings: [TabBarBinding(), BrowseBinding()],
+      middlewares: [BrowseMiddleWare()],
     ),
     GetPage(
       name: '/login',

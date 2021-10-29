@@ -15,6 +15,14 @@ class JoinLobbyController extends GetxController {
   final TextEditingController lobbyCodeController = TextEditingController();
 
   @override
+  void onInit() {
+    if (Get.isRegistered<LobbyController>()) {
+      Get.delete<LobbyController>(force: true);
+    }
+    super.onInit();
+  }
+
+  @override
   void onClose() {
     pseudoController.dispose();
     lobbyCodeController.dispose();

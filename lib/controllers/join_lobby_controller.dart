@@ -50,7 +50,7 @@ class JoinLobbyController extends GetxController {
   void redirect(bool host) {
     String username = isGuest
         ? pseudoController.text.trim()
-        : Get.find<UserController>().user.username;
+        : UserController.instance.user.username;
     String code = lobbyCodeController.text.trim();
     Get.put(
       LobbyController(

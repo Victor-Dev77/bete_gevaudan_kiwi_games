@@ -111,7 +111,6 @@ class DesktopAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserController userController = Get.find<UserController>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
@@ -144,7 +143,7 @@ class DesktopAppBar extends StatelessWidget {
           //   onPressed: () => print('subscribe'),
           // ),
           const WidthSpacer(50.0),
-          UserList(currentUsername: userController.user.username),
+          const UserList(),
           const WidthSpacer(25.0),
           // const Search(),
           // const WidthSpacer(20.0),
@@ -157,9 +156,7 @@ class DesktopAppBar extends StatelessWidget {
 }
 
 class UserList extends GetView<LobbyController> {
-  final String currentUsername;
-
-  const UserList({Key? key, required this.currentUsername}) : super(key: key);
+  const UserList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -167,13 +164,14 @@ class UserList extends GetView<LobbyController> {
       return Wrap(
         spacing: 10.0,
         children: controller.userList
-            .map((user) => currentUsername != user.username
-                ? UserImage(
-                    username: user.username,
-                    url: user.imagePath,
-                    isActive: user.isActive,
-                  )
-                : Container())
+            .map(
+                (user) => UserController.instance.user.username != user.username
+                    ? UserImage(
+                        username: user.username,
+                        url: user.imagePath,
+                        isActive: user.isActive,
+                      )
+                    : Container())
             .toList(),
       );
     });

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kiwigames/controllers/user_controller.dart';
 import 'package:kiwigames/models/models.dart';
 import 'package:kiwigames/shared/shared.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -19,6 +20,7 @@ class LobbyController extends GetxController {
   final lobbyCode = ''.obs;
   final userList = <LobbyUser>[].obs;
 
+  UserController? userController;
   WebSocketChannel? lobby;
   // TODO "brancher" le controlleur du jeu au streamcontroller ci dessous
   StreamController gameStream = StreamController();
@@ -32,6 +34,7 @@ class LobbyController extends GetxController {
 
   @override
   void onInit() {
+    userController = screen != 'principale' ? Get.find<UserController>() : null;
     createLobby();
     super.onInit();
   }
@@ -98,7 +101,9 @@ class LobbyController extends GetxController {
     var users = res['data'];
     if (users == null || users.isEmpty) return;
     LobbyUser lastUser = LobbyUser.fromJson(users.last);
-    if (res['type'] == 'notif new user' && lastUser.username != username) {
+    if ((res['type'] == 'notif new user' &&
+            userController?.user.username != username) ||
+        screen == 'principale') {
       showNewPlayer(lastUser);
     }
     List<LobbyUser> newUsers = [];

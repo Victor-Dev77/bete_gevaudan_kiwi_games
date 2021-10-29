@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/controllers/controllers.dart';
+import 'package:kiwigames/models/models.dart';
 import 'package:kiwigames/shared/shared.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class JoinLobbyController extends GetxController {
   final loading = false.obs;
@@ -33,6 +31,10 @@ class JoinLobbyController extends GetxController {
     loading(true);
     if (formKey.currentState!.validate()) {
       if (isGuest) {
+        Get.put(
+          UserController(User(username: pseudoController.text.trim())),
+          permanent: true,
+        );
         redirect(false);
       } else {
         Get.dialog(InfoAlert(

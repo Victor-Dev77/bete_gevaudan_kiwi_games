@@ -1,14 +1,14 @@
 class User {
-  final String email;
   final String username;
+  final String? email;
   final String? imagePath;
   final bool isActive;
 
   User({
-    required this.email,
     required this.username,
+    this.email,
     this.imagePath,
-    required this.isActive,
+    this.isActive = true,
   });
 
   Map<String, dynamic> toJson() => {
@@ -21,6 +21,6 @@ class User {
   User.fromJson(Map<String, dynamic> json)
       : email = json['email'],
         username = json['username'],
-        imagePath = null,
-        isActive = true;
+        imagePath = json['imagePath'],
+        isActive = json['isActive'] ?? true;
 }

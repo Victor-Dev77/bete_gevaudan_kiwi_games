@@ -44,16 +44,18 @@ class LobbyController extends GetxController {
   void bindLobbyControllerListener() {
     lobby?.stream.listen(
       (data) {
-        var res = jsonDecode(data);
+        Map<String, dynamic> res = jsonDecode(data);
+        print(res);
         String? type = res['type'];
-        if (type != null ||
-            type == 'notif new user' ||
+        if (type == 'notif new user' ||
             type == 'first connect' ||
             type == 'notif leave user') {
           handleLobbyPlayers(res);
-        } else if (res['message']['play game'] != null) {
-          String gamePath = res['message']['play game'];
-          Get.offAllNamed(gamePath);
+        } else if (res['message'] is! String) {
+          if (res['message']['play game'] != null) {
+            String gamePath = res['message']['play game'];
+            Get.offAllNamed(gamePath);
+          }
         } else {
           // si c'est pour le jeu
           gameStream.add(res);

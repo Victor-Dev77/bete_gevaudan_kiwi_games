@@ -67,6 +67,9 @@ class Messages extends Translations {
               'Cette adresse email ou ce pseudo est déjà utilisé',
           'could_not_find_lobby': 'Lobby introuvable',
           'new_player': 'Nouveau joueur !',
+          'username_already_used': 'Ce pseudo est déjà utilisé dans ce lobby',
+          'master_screen': 'Écran principal',
+          'reinitialise': 'Réinitialiser',
         },
       };
 }

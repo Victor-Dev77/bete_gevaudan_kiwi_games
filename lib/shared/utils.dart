@@ -6,5 +6,5 @@ void back(String path) {
 }
 
 String baseUrl = 'https://kiwigames.ovh';
-var userProvider = UserProvider()..baseUrl = '$baseUrl/api/auth/'..timeout = Duration(seconds: 15);
+var userProvider = UserProvider()..baseUrl = '$baseUrl/api/auth/';
 var lobbyProvider = LobbyProvider()..baseUrl = '$baseUrl/test/';

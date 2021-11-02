@@ -16,7 +16,7 @@ class MasterScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'create_lobby'.tr,
+              'master_screen'.tr,
               style: Get.textTheme.headline5,
             ),
             const HeightSpacer(50.0),
@@ -36,8 +36,12 @@ class MasterScreen extends StatelessWidget {
 class LobbyTypeRow extends StatelessWidget {
   const LobbyTypeRow({Key? key}) : super(key: key);
 
-  void goToLobby(String type) {
-    Get.toNamed('/lobby?type=$type');
+  void createLobby() {
+    Get.toNamed('/lobby');
+  }
+
+  void joinLobby() {
+    Get.offAllNamed('/join-lobby?master-screen');
   }
 
   @override
@@ -45,7 +49,7 @@ class LobbyTypeRow extends StatelessWidget {
     Axis direction;
     CrossAxisAlignment crossAxisAlignment;
     Widget spacer;
-    if (MediaQuery.of(context).size.width <= 500) {
+    if (MediaQuery.of(context).size.width <= 600) {
       direction = Axis.vertical;
       crossAxisAlignment = CrossAxisAlignment.stretch;
       spacer = const HeightSpacer(15.0);
@@ -59,20 +63,14 @@ class LobbyTypeRow extends StatelessWidget {
       crossAxisAlignment: crossAxisAlignment,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Tooltip(
-          message: 'private_lobby_tooltip'.tr,
-          child: BigButton(
-            onPressed: () => goToLobby('private'),
-            text: 'private_lobby'.tr,
-          ),
+        BigButton(
+          onPressed: createLobby,
+          text: 'create_lobby'.tr,
         ),
         spacer,
-        Tooltip(
-          message: 'public_lobby_tooltip'.tr,
-          child: BigButton(
-            text: 'public_lobby'.tr,
-            onPressed: () => goToLobby('public'),
-          ),
+        BigButton(
+          text: 'join_lobby'.tr,
+          onPressed: joinLobby,
         ),
       ],
     );

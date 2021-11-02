@@ -41,8 +41,7 @@ class CatchPhrase extends StatelessWidget {
           const HeightSpacer(25.0),
           ElevatedButton(
             child: Text('join_as_master_screen'.tr),
-            onPressed: () =>
-                Get.toNamed('/lobby?type=private&screen=principale&host=false'),
+            onPressed: () => Get.toNamed('/master-screen'),
           ),
         ],
       ),

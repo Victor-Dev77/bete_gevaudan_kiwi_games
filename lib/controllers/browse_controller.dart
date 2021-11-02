@@ -190,7 +190,7 @@ La personne ayant remporté le plus de votes gagne !
   }
 
   void launchGame(String gamePath) {
-    Get.find<LobbyController>().sendToLobby({
+    LobbyController.to.sendToLobby({
       'type': 'to all',
       'message': {
         'play game': gamePath,

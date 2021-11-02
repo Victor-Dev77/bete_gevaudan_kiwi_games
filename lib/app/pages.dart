@@ -47,5 +47,10 @@ class AppPages {
       page: () => const Lobby(),
       binding: LobbyBinding(),
     ),
+    GetPage(
+      name: '/forgot-password',
+      page: () => const ForgotPassword(),
+      binding: ForgotPasswordBinding(),
+    ),
   ];
 }

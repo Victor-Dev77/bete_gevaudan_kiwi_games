@@ -6,3 +6,4 @@ export 'join_lobby_controller.dart';
 export 'lobby_controller.dart';
 export 'home_controller.dart';
 export 'browse_controller.dart';
+export 'forgot_password_controller.dart';

@@ -164,14 +164,13 @@ class UserList extends GetView<LobbyController> {
       return Wrap(
         spacing: 10.0,
         children: controller.userList
-            .map(
-                (user) => UserController.instance.user.username != user.username
-                    ? UserImage(
-                        username: user.username,
-                        url: user.imagePath,
-                        isActive: user.isActive,
-                      )
-                    : Container())
+            .map((user) => UserController.to.user.username != user.username
+                ? UserImage(
+                    username: user.username,
+                    url: user.imagePath,
+                    isActive: user.isActive,
+                  )
+                : Container())
             .toList(),
       );
     });

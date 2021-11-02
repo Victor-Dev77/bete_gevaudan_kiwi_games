@@ -129,14 +129,14 @@ class SlideText extends GetView<BrowseController> {
             child: Text('play'.tr),
             onPressed: launchGame,
           )
-        : const ColorFiltered(
-            colorFilter: ColorFilter.mode(
+        : ColorFiltered(
+            colorFilter: const ColorFilter.mode(
               Colors.grey,
               BlendMode.saturation,
             ),
             child: ElevatedButton(
               onPressed: null,
-              child: Text('Bientôt disponible'),
+              child: Text('soon_available'.tr),
             ),
           );
     return Align(

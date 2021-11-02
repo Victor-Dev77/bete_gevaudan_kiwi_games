@@ -9,7 +9,7 @@ import 'package:kiwigames/shared/shared.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LobbyController extends GetxController {
-  static LobbyController get instance => Get.find();
+  static LobbyController get to => Get.find();
 
   static final TextTheme textTheme = Get.textTheme;
 
@@ -36,7 +36,7 @@ class LobbyController extends GetxController {
 
   @override
   void onInit() {
-    userController = screen != 'principale' ? UserController.instance : null;
+    userController = screen != 'principale' ? UserController.to : null;
     createLobby();
     super.onInit();
   }

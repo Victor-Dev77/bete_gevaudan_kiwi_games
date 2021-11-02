@@ -91,7 +91,6 @@ class _PseudoInput extends GetView<LoginController> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller.pseudoController,
-      keyboardType: TextInputType.emailAddress,
       validator: (e) => e!.trim().isNotEmpty ? null : 'no_pseudo'.tr,
       decoration: InputDecoration(
         labelText: 'pseudo'.tr,
@@ -171,7 +170,7 @@ class RememberMeForgotPassword extends StatelessWidget {
         spacer,
         InteractiveText(
           text: 'forgotten_password'.tr,
-          function: () => print('forgot password'),
+          function: () => Get.toNamed('/forgot-password'),
         ),
       ],
     );

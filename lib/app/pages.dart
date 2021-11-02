@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:kiwigames/bindings/bindings.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/routes/app_pages.dart';
 import 'package:kiwigames/middlewares/middlewares.dart';
 import 'package:kiwigames/views/lobby.dart';
 import 'package:kiwigames/views/master_screen.dart';
@@ -11,7 +12,7 @@ class AppPages {
     page: () => const NotFound(),
   );
 
-  final List<GetPage> appPages = [
+  List<GetPage> appPages = [
     GetPage(
       name: '/',
       page: () => const Home(),
@@ -47,5 +48,5 @@ class AppPages {
       page: () => const Lobby(),
       binding: LobbyBinding(),
     ),
-  ];
+  ]..addAll(BeteDuGevaudanPages.beteDuGevaudanRoutes);
 }

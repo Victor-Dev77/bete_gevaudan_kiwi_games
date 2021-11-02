@@ -9,6 +9,9 @@ import 'package:kiwigames/shared/shared.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LobbyController extends GetxController {
+  
+  static LobbyController get to => Get.find();
+
   static final TextTheme textTheme = Get.textTheme;
 
   final String screen;

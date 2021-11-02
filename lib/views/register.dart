@@ -178,7 +178,7 @@ class _TelephoneInput extends GetView<RegisterController> {
       controller: controller.telephoneController,
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
-        label: RichText(
+        /*label: RichText(
           text: TextSpan(
             style: labelStyle,
             children: [
@@ -193,7 +193,7 @@ class _TelephoneInput extends GetView<RegisterController> {
               ),
             ],
           ),
-        ),
+        ),*/
       ),
     );
   }

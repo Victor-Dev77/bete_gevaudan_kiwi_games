@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kiwigames.kiwigames">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="Kiwigames"
         android:icon="@mipmap/launcher_icon">

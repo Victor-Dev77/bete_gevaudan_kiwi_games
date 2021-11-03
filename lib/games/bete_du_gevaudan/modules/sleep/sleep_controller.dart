@@ -1,11 +1,14 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:chewie/chewie.dart';
+import 'package:flutter/material.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
 import 'package:get/get.dart';
-import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 
 class SleepController extends GetxController {
+  final assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
+
   final videoPlayerController = VideoPlayerController.asset(
       'assets/images/platform/games/bete_du_gevaudan/foret.mp4');
   ChewieController? _chewieController;
@@ -13,30 +16,38 @@ class SleepController extends GetxController {
   RxBool _videoCharged = false.obs;
   bool get videoCharged => _videoCharged.value;
 
-  final assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
-
   @override
   void onInit() {
     super.onInit();
-    _initVideo();
     //_initAudio();
+    _initVideo();
+    Future.delayed(Duration(seconds: 5), () {
+      if (PlayerController.to.player.isPrincipale)
+        Server.instance.nextPage(GameTour.MARIEUSE_WAKE);
+    });
   }
 
   _initVideo() async {
     await videoPlayerController.initialize();
     _chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
+      aspectRatio: 16 / 9,
+      autoInitialize: true,
       autoPlay: true,
       looping: true,
       showControls: false,
       showOptions: false,
       fullScreenByDefault: true,
+      errorBuilder: (context, errorMessage) {
+        return Center(
+          child: Text(
+            errorMessage,
+            style: TextStyle(color: Colors.red),
+          ),
+        );
+      },
     );
     _videoCharged.value = true;
-    Future.delayed(Duration(seconds: 5), () {
-      if (PlayerController.to.player.isPrincipale)
-        Server.instance.nextPage(GameTour.MARIEUSE_WAKE);
-    });
   }
 
   _initAudio() async {
@@ -57,9 +68,7 @@ class SleepController extends GetxController {
 
   @override
   void onClose() {
-    videoPlayerController.dispose();
-    _chewieController?.dispose();
-    assetsAudioPlayer.dispose();
+    // assetsAudioPlayer.dispose();
     super.onClose();
   }
 }

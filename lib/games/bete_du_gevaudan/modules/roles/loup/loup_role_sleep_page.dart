@@ -2,14 +2,11 @@ import 'package:chewie/chewie.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/loup/loup_role_controller.dart';
-import 'package:kiwigames/games/bete_du_gevaudan/modules/widgets_global/button_action_game.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 import 'package:flutter/material.dart';
 
-class LoupRoleSleepPage extends StatelessWidget {
-  final controller = Get.put(LoupRoleController());
-
+class LoupRoleSleepPage extends GetView<LoupRoleController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +22,9 @@ class LoupRoleSleepPage extends StatelessWidget {
         children: [
           Obx(() {
             if (controller.videoCharged)
-              return Chewie(controller: controller.chewieController);
+              return Center(
+                child: Chewie(controller: controller.chewieController),
+              );
             return Container();
           }),
           Center(

@@ -1,14 +1,12 @@
 import 'package:chewie/chewie.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/protecteur/protecteur_role_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 import 'package:flutter/material.dart';
-import 'protecteur_role_controller.dart';
 
-class ProtecteurRoleSleepPage extends StatelessWidget {
-  final controller = Get.put(ProtecteurRoleController());
-
+class ProtecteurRoleSleepPage extends GetView<ProtecteurRoleController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +22,9 @@ class ProtecteurRoleSleepPage extends StatelessWidget {
         children: [
           Obx(() {
             if (controller.videoCharged)
-              return Chewie(controller: controller.chewieController);
+              return Center(
+                child: Chewie(controller: controller.chewieController),
+              );
             return Container();
           }),
           Center(

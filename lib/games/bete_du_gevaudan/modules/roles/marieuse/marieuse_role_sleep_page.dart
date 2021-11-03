@@ -1,14 +1,12 @@
 import 'package:chewie/chewie.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
-import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/marieuse/marieuse_role_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 import 'package:flutter/material.dart';
+import 'marieuse_role_controller.dart';
 
-class MarieuseRoleSleepPage extends StatelessWidget {
-  final controller = Get.put(MarieuseRoleController());
-
+class MarieuseRoleSleepPage extends GetView<MarieuseRoleController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +22,9 @@ class MarieuseRoleSleepPage extends StatelessWidget {
         children: [
           Obx(() {
             if (controller.videoCharged)
-              return Chewie(controller: controller.chewieController);
+              return Center(
+                child: Chewie(controller: controller.chewieController),
+              );
             return Container();
           }),
           Center(

@@ -112,7 +112,13 @@ class Player {
   }
 
   Map<String, dynamic> toJson() {
-    return {"id": id, "name": name, "typePlayer": typePlayer.toString()};
+    return {
+      "id": id,
+      "name": name,
+      "typePlayer": typePlayer.toString(),
+      "isKill": isKill,
+      "isHost": isHost,
+    };
   }
 
   @override

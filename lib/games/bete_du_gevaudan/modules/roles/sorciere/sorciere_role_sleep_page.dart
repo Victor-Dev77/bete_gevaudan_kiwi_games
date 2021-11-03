@@ -6,9 +6,7 @@ import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.d
 import 'package:flutter/material.dart';
 import 'sorciere_role_controller.dart';
 
-class SorciereRoleSleepPage extends StatelessWidget {
-  final controller = Get.put(SorciereRoleController());
-
+class SorciereRoleSleepPage extends GetView<SorciereRoleController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +22,9 @@ class SorciereRoleSleepPage extends StatelessWidget {
         children: [
           Obx(() {
             if (controller.videoCharged)
-              return Chewie(controller: controller.chewieController);
+              return Center(
+                child: Chewie(controller: controller.chewieController),
+              );
             return Container();
           }),
           Center(

@@ -20,7 +20,9 @@ class SleepPage extends GetView<SleepController> {
         children: [
           Obx(() {
             if (controller.videoCharged)
-              return Chewie(controller: controller.chewieController);
+              return Center(
+                child: Chewie(controller: controller.chewieController),
+              );
             return Container();
           }),
           Center(

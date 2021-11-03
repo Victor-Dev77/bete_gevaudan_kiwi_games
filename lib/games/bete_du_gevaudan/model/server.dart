@@ -45,6 +45,8 @@ class Server {
       GameTour tour = GameTour.values
           .firstWhere((e) => e.toString() == data["message"].toString());
       PlayerController.to.switchGameTour(tour);
+    } else if (data["message"].toString().contains("married-")) {
+      _assignMarriedPlayer(data);
     }
   }
 
@@ -97,5 +99,30 @@ class Server {
       }
     });
     PlayerController.to.listPlayerAlive = PlayerController.to.listPlayer;
+  }
+
+  marriedPlayers(List<Player> list) {
+    _send({
+      "message": "married-${list.toString()}",
+      "type": "to users",
+    });
+  }
+
+  _assignMarriedPlayer(Map data) {
+    var msg = data["message"].toString().substring("married-".length);
+    List listOfMap = json.decode(msg);
+    var id1 = listOfMap[0]["id"];
+    var id2 = listOfMap[1]["id"];
+    var ip1 = PlayerController.to.listPlayer
+        .indexWhere((element) => element.id == id1);
+    var ip2 = PlayerController.to.listPlayer
+        .indexWhere((element) => element.id == id2);
+    if (ip1 != -1 && ip2 != -1) {
+      PlayerController.to.married = [
+        PlayerController.to.listPlayer[ip1],
+        PlayerController.to.listPlayer[ip2]
+      ];
+    }
+    print("players married => ${PlayerController.to.married}");
   }
 }

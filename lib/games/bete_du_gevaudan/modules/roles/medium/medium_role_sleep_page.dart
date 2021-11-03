@@ -6,9 +6,7 @@ import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.d
 import 'package:flutter/material.dart';
 import 'medium_role_controller.dart';
 
-class MediumRoleSleepPage extends StatelessWidget {
-  final controller = Get.put(MediumRoleController());
-
+class MediumRoleSleepPage extends GetView<MediumRoleController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +22,9 @@ class MediumRoleSleepPage extends StatelessWidget {
         children: [
           Obx(() {
             if (controller.videoCharged)
-              return Chewie(controller: controller.chewieController);
+              return Center(
+                child: Chewie(controller: controller.chewieController),
+              );
             return Container();
           }),
           Center(

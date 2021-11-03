@@ -8,7 +8,6 @@ import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'medium_role_controller.dart';
 
 class MediumRoleWakePage extends GetView<MediumRoleController> {
@@ -25,7 +24,9 @@ class MediumRoleWakePage extends GetView<MediumRoleController> {
         children: [
           Obx(() {
             if (controller.videoCharged)
-              return Chewie(controller: controller.chewieController);
+              return Center(
+                child: Chewie(controller: controller.chewieController),
+              );
             return Container();
           }),
           Center(

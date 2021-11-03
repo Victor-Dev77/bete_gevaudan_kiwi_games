@@ -24,7 +24,9 @@ class LoupRoleWakePage extends GetView<LoupRoleController> {
         children: [
           Obx(() {
             if (controller.videoCharged)
-              return Chewie(controller: controller.chewieController);
+              return Center(
+                child: Chewie(controller: controller.chewieController),
+              );
             return Container();
           }),
           Center(

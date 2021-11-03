@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kiwigames/controllers/controllers.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/distrib_role.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
@@ -70,6 +71,12 @@ class PlayerController extends GetxController {
   int nbPlayerReady = 0;
   List<Player> listPlayer = [];
   List<Player> listPlayerAlive = [];
+
+  // Specific Role Player
+  List<Player>? married; // Marieuse
+  Player? playerWillKillIfMaleAlphaDie; // Male Alpha
+  Player? playerProtected; // Protecteur
+  Player? playerKillByLoup; // Loup Garou
 
   bool attributTypePlayer() {
     if (player.isPrincipale) {
@@ -266,20 +273,62 @@ class PlayerController extends GetxController {
             ),
           ),
         ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              "FERMEZ LES YEUX, VOUS DORMEZ",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: ConstantColor.white,
-                fontSize: 22,
+        Column(
+          children: [
+            Expanded(
+              flex: 2,
+              child: married?.length == 2 ? _buildMarried() : Container(),
+            ),
+            Expanded(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    "FERMEZ LES YEUX, VOUS DORMEZ",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: ConstantColor.white,
+                      fontSize: 22,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+            Expanded(
+              flex: 2,
+              child: Container(),
+            ),
+          ],
         ),
       ],
+    );
+  }
+
+  _buildMarried() {
+    if (married == null) return Container();
+    var idMe = married!.indexWhere((item) => item.id == player.id);
+    if (idMe == -1) return Container();
+    var otherPlayer = idMe == 0 ? married![1] : married![0];
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                FontAwesomeIcons.solidHeart,
+                color: ConstantColor.black,
+              ),
+              SizedBox(height: 5),
+              Text(
+                otherPlayer.name,
+                style: TextStyle(color: ConstantColor.black, fontSize: 17),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

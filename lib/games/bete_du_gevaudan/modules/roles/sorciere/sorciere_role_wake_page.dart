@@ -1,10 +1,12 @@
+import 'package:get/get.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/widgets_global/button_action_game.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 import 'package:flutter/material.dart';
+import 'sorciere_role_controller.dart';
 
-class SorciereRoleWakePage extends StatelessWidget {
+class SorciereRoleWakePage extends GetView<SorciereRoleController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

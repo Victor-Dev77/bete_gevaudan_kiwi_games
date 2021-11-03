@@ -8,7 +8,6 @@ import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'marieuse_role_controller.dart';
 
 class MarieuseRoleWakePage extends GetView<MarieuseRoleController> {
@@ -25,7 +24,9 @@ class MarieuseRoleWakePage extends GetView<MarieuseRoleController> {
         children: [
           Obx(() {
             if (controller.videoCharged)
-              return Chewie(controller: controller.chewieController);
+              return Center(
+                child: Chewie(controller: controller.chewieController),
+              );
             return Container();
           }),
           Center(
@@ -102,7 +103,11 @@ class MarieuseRoleWakePage extends GetView<MarieuseRoleController> {
                   return ButtonActionGame(
                     onTap: () {
                       print(_.listPlayerUnis);
-                      Server.instance.nextPage(GameTour.MARIEUSE_SLEEP);
+                      Server.instance.marriedPlayers(_.listPlayerUnis);
+                      Future.delayed(
+                          Duration(seconds: 1),
+                          () => Server.instance
+                              .nextPage(GameTour.MARIEUSE_SLEEP));
                     },
                     isActive: _.isUnionValid(),
                     text: "SUIVANT",

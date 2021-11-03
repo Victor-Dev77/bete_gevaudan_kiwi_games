@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:kiwigames/controllers/controllers.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/distrib_role.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/routes/app_pages.dart';
 import 'package:get/get.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 
 enum GameTour {
   INTRO_GAME,
@@ -39,14 +41,25 @@ class PlayerController extends GetxController {
     nbPlayerAlive = players.length;
     for (int i = 0; i < nbPlayerAlive; i++) {
       var p = players[i];
-      listPlayer.add(Player(id: i, name: p.username, isHost: p.isHost, screen: p.screen ?? "user", isPrincipale: false));
+      listPlayer.add(Player(
+          id: i,
+          name: p.username,
+          isHost: p.isHost,
+          screen: p.screen ?? "user",
+          isPrincipale: false));
     }
     listPlayerAlive.addAll(listPlayer);
-    _player = listPlayer.firstWhere((element) => element.name == LobbyController.to.username, orElse: () => Player(id: 100, name: "principale", isHost: false, screen: "principale", isPrincipale: true));
+    _player = listPlayer.firstWhere(
+        (element) => element.name == LobbyController.to.username,
+        orElse: () => Player(
+            id: 100,
+            name: "principale",
+            isHost: false,
+            screen: "principale",
+            isPrincipale: true));
     print("user player device: $_player");
     print("list of players: $listPlayer");
   }
-
 
   GameTour gameTour = GameTour.INTRO_GAME;
   int nbTour = 0;
@@ -54,22 +67,35 @@ class PlayerController extends GetxController {
   Player _player = Player(id: 4, name: "Victor");
   Player get player => this._player;
   int nbPlayerAlive = 0;
+  int nbPlayerReady = 0;
   List<Player> listPlayer = [];
   List<Player> listPlayerAlive = [];
 
   bool attributTypePlayer() {
-    var distrib = DistribRole.distribRoles(listPlayer.length);
-    distrib.entries.forEach((element) {
-      int indexPlayer =
-          listPlayerAlive.indexWhere((item) => item.id == element.key);
-      if (indexPlayer != -1) {
-        listPlayerAlive[indexPlayer].typePlayer = element.value;
-      }
-    });
-    listPlayer = listPlayerAlive;
-    _player = listPlayer[3];
-    print(listPlayerAlive);
-    return true;
+    if (player.isPrincipale) {
+      var distrib = DistribRole.distribRoles(listPlayer.length);
+      distrib.entries.forEach((element) {
+        int indexPlayer =
+            listPlayerAlive.indexWhere((item) => item.id == element.key);
+        print('index player: $indexPlayer / ${element.key}');
+        if (indexPlayer != -1) {
+          listPlayerAlive[indexPlayer].typePlayer = element.value;
+        }
+      });
+      listPlayer = listPlayerAlive;
+      print(listPlayerAlive);
+      Server.instance.sendRolePlayer(listPlayer);
+      return true;
+    }
+    return false;
+  }
+
+  addPlayerReady() {
+    if (player.isPrincipale) nbPlayerReady++;
+    if (nbPlayerReady == listPlayer.length) {
+      nbPlayerReady = 0;
+      Server.instance.nextPage(GameTour.SLEEP);
+    }
   }
 
   bool containsRole(TypePlayer typePlayer) {
@@ -209,5 +235,51 @@ class PlayerController extends GetxController {
 
   quitGame() {
     print("QUITTER");
+  }
+
+  Widget sleepPlayerPageWidget() {
+    return Stack(
+      children: [
+        Opacity(
+          opacity: 0.3,
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(player.imageTypePlayer),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      player.nameTypePlayer,
+                      style:
+                          TextStyle(color: ConstantColor.white, fontSize: 22),
+                    ),
+                  ),
+                ),
+                Expanded(flex: 3, child: Container()),
+                Spacer()
+              ],
+            ),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              "FERMEZ LES YEUX, VOUS DORMEZ",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: ConstantColor.white,
+                fontSize: 22,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

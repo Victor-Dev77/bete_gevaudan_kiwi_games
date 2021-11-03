@@ -1,11 +1,13 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
 import 'package:get/get.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 
 class SleepController extends GetxController {
-  final videoPlayerController = VideoPlayerController.asset('assets/foret.mp4');
+  final videoPlayerController = VideoPlayerController.asset(
+      'assets/images/platform/games/bete_du_gevaudan/foret.mp4');
   ChewieController? _chewieController;
   ChewieController get chewieController => this._chewieController!;
   RxBool _videoCharged = false.obs;
@@ -17,9 +19,7 @@ class SleepController extends GetxController {
   void onInit() {
     super.onInit();
     _initVideo();
-    _initAudio();
-    //Future.delayed(Duration(seconds: 5),
-    //    () => PlayerController.to.switchGameTour(GameTour.MARIEUSE_WAKE));
+    //_initAudio();
   }
 
   _initVideo() async {
@@ -30,13 +30,18 @@ class SleepController extends GetxController {
       looping: true,
       showControls: false,
       showOptions: false,
+      fullScreenByDefault: true,
     );
     _videoCharged.value = true;
+    Future.delayed(Duration(seconds: 5), () {
+      if (PlayerController.to.player.isPrincipale)
+        Server.instance.nextPage(GameTour.MARIEUSE_WAKE);
+    });
   }
 
   _initAudio() async {
-    assetsAudioPlayer.open(
-      Audio("assets/foret_audio.mp3"),
+    await assetsAudioPlayer.open(
+      Audio("assets/images/platform/games/bete_du_gevaudan/foret_audio.mp3"),
       showNotification: false,
       autoStart: true,
       loopMode: LoopMode.single,

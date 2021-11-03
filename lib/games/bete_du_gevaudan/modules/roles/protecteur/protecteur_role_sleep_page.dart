@@ -1,64 +1,42 @@
+import 'package:chewie/chewie.dart';
+import 'package:get/get.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
-import 'package:kiwigames/games/bete_du_gevaudan/modules/widgets_global/button_action_game.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 import 'package:flutter/material.dart';
+import 'protecteur_role_controller.dart';
 
 class ProtecteurRoleSleepPage extends StatelessWidget {
+  final controller = Get.put(ProtecteurRoleController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                      PlayerController.to.player.nameTypePlayer,
-                      style:
-                          TextStyle(color: ConstantColor.white, fontSize: 22),
-                    ),
-                    Text(
-                      "Tour: ${PlayerController.to.gameTour}",
-                      style: TextStyle(
-                        color: ConstantColor.white,
-                        fontSize: 22,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "FERMEZ LES YEUX, VOUS DORMEZ",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: ConstantColor.white,
-                      fontSize: 22,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Center(
-                child: ButtonActionGame(
-                  onTap: () =>
-                      PlayerController.to.switchGameTour(GameTour.WOLF_WAKE),
-                  isActive: true,
-                  text: "SUIVANT",
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: _buildScreen(),
     );
+  }
+
+  _buildScreen() {
+    Future.delayed(Duration(seconds: 3),
+        () => PlayerController.to.switchGameTour(GameTour.WOLF_WAKE));
+    if (PlayerController.to.player.isPrincipale) {
+      return Stack(
+        children: [
+          Obx(() {
+            if (controller.videoCharged)
+              return Chewie(controller: controller.chewieController);
+            return Container();
+          }),
+          Center(
+            child: Text(
+              Constant.protecteurSleep,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: ConstantColor.white, fontSize: 22),
+            ),
+          ),
+        ],
+      );
+    }
+    return PlayerController.to.sleepPlayerPageWidget();
   }
 }

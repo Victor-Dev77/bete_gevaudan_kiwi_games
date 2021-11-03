@@ -1,3 +1,4 @@
+import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/widgets_global/button_action_game.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
@@ -20,8 +21,7 @@ class SorciereRoleWakePage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ButtonActionGame(
-              onTap: () =>
-                  PlayerController.to.switchGameTour(GameTour.SORCIERE_SLEEP),
+              onTap: () => Server.instance.nextPage(GameTour.SORCIERE_SLEEP),
               isActive: true,
               text: "SUIVANT",
             ),

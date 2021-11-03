@@ -7,16 +7,14 @@ class ButtonActionGame extends StatelessWidget {
   final VoidCallback onTap;
   final String text;
   final double? width;
-  final Color borderColor, color;
-  final bool isActive;
+  final bool isActive, isPrimaryColor;
   ButtonActionGame(
       {this.key,
       required this.onTap,
       this.text: "",
       this.width,
-      this.borderColor: ConstantColor.white,
-      this.isActive: false,
-      this.color: ConstantColor.white});
+      this.isActive: true,
+      this.isPrimaryColor: false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +24,16 @@ class ButtonActionGame extends StatelessWidget {
         onTap: isActive ? onTap : null,
         child: Container(
           height: 55,
-          width: width ?? Get.width / 2,
+          width: width ?? Get.width - 100,
           padding: EdgeInsets.symmetric(horizontal: 40),
-          decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: borderColor)),
+          color: isPrimaryColor ? ConstantColor.primary : ConstantColor.white,
           child: Center(
             child: Text(
               text,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: ConstantColor.black,
+                color:
+                    isPrimaryColor ? ConstantColor.white : ConstantColor.black,
                 fontSize: 22,
                 fontStyle: FontStyle.italic,
               ),

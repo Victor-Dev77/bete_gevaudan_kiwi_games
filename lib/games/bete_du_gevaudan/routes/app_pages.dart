@@ -9,9 +9,7 @@ import 'package:kiwigames/games/bete_du_gevaudan/bindings/roles/sorciere_role_bi
 import 'package:kiwigames/games/bete_du_gevaudan/bindings/sleep_binding.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/distrib_role/distrib_role_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/end_game/end_game_page.dart';
-import 'package:kiwigames/games/bete_du_gevaudan/modules/kill_player/kill_player_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_dead_page.dart';
-import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/loup/loup_role_sleep_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/loup/loup_role_wake_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/male_alpha/male_alpha_role_sleep_page.dart';

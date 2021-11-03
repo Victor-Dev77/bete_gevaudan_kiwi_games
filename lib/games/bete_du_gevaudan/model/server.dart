@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:kiwigames/controllers/controllers.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/distrib_role/distrib_role_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/status.dart' as status;
-import 'package:web_socket_channel/io.dart';
 
 class Server {
   Server._internal();
@@ -11,7 +10,7 @@ class Server {
   static Server get instance => _instance;
 
   //WebSocketChannel _channel =
-     // IOWebSocketChannel.connect(Uri.parse('wss://kiwigames.ovh'));
+  // IOWebSocketChannel.connect(Uri.parse('wss://kiwigames.ovh'));
   // wss://www.kiwigames.ovh/socket.io/?EIO=4&transport=websocket
   // wss://ws.ifelse.io/
   // ws://10.0.2.2:3000 - localhost emulateur Android
@@ -36,12 +35,16 @@ class Server {
   }
 
   _filterData(Map<dynamic, dynamic> data) {
-    if (data["type"] == "notif new user") {
-      print(data["data"]);
-      //PlayerController.to.modifListPlayer(data["data"]);
-    }
     if (data["message"] == "startGame") {
       PlayerController.to.switchGameTour(GameTour.DISTRIB_ROLE);
+    } else if (data["message"].toString().contains("distrib_role-")) {
+      _assignRoleToPlayer(data);
+    } else if (data["message"] == "ready") {
+      PlayerController.to.addPlayerReady();
+    } else if (data["message"].toString().contains("GameTour.")) {
+      GameTour tour = GameTour.values
+          .firstWhere((e) => e.toString() == data["message"].toString());
+      PlayerController.to.switchGameTour(tour);
     }
   }
 
@@ -52,12 +55,37 @@ class Server {
     });
   }
 
-  firstConnect() {
+  sendRolePlayer(List<Player> listPlayer) {
     _send({
-      "type": "first connect",
-      "screen": "user",
-      "host": "true",
-      "user": {"username": "Victor"}
+      "message": "distrib_role-${listPlayer.toString()}",
+      "type": "to users",
     });
+  }
+
+  imReady() {
+    _send({
+      "message": "ready",
+      "type": "to principale",
+    });
+  }
+
+  nextPage(GameTour tour) {
+    _send({
+      "message": tour.toString(),
+      "type": "to all",
+    });
+  }
+
+  _assignRoleToPlayer(Map data) {
+    var msg = data["message"].toString().substring("distrib_role-".length);
+    List listOfMap = json.decode(msg);
+    var index = listOfMap.indexWhere(
+        (element) => element["id"] == PlayerController.to.player.id);
+    if (index != -1) {
+      TypePlayer type = TypePlayer.values.firstWhere(
+          (e) => e.toString() == listOfMap[index]["typePlayer"].toString());
+      PlayerController.to.player.setTypePlayer = type;
+      DistribRoleController.to.setPlayerHasRole(true);
+    }
   }
 }

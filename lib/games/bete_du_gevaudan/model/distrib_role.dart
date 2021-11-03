@@ -31,7 +31,7 @@ class DistribRole {
       // verifie si joueur n'a pas deja un role
       int indexPlayer = -1;
       do {
-        indexPlayer = 1 + _rnd.nextInt(nbPlayer);
+        indexPlayer = _rnd.nextInt(nbPlayer); // +1
       } while (_listPlayerWithRole.contains(indexPlayer));
       // assigne role au joueur index X
       _players[indexPlayer] = _listRole[0];
@@ -98,7 +98,7 @@ class DistribRole {
 
   static List<int> _getListOtherPlayer(List<int> listWithRole, int nbPlayer) {
     List<int> list = [];
-    for (int i = 1; i <= nbPlayer; i++) {
+    for (int i = 0; i < nbPlayer; i++) {
       if (!listWithRole.contains(i)) list.add(i);
     }
     return list;

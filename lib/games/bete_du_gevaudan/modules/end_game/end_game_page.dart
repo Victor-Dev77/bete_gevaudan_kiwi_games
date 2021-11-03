@@ -10,14 +10,14 @@ class EndGamePage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(ConstantImage.background),
+            image: AssetImage(ConstantImage.backgroundNuitIntro),
             fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: <Widget>[
             Expanded(
-              child: Container(),//ConstantImage.logoImage,
+              child: Container(), //ConstantImage.logoImage,
             ),
             Expanded(
               flex: 3,
@@ -49,7 +49,7 @@ class _EndGameContent extends StatelessWidget {
           ],
         ),
         SizedBox(height: 20),
-        Container(),//Image.asset(isWin ? ConstantImage.win : ConstantImage.dead),
+        Container(), //Image.asset(isWin ? ConstantImage.win : ConstantImage.dead),
         SizedBox(height: 40),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -74,10 +74,11 @@ class _EndGameContent extends StatelessWidget {
     return /*TextEndGame(
       text: "Vous avez perdu...",
       win: false,
-    );*/Container();
+    );*/
+        Container();
   }
 
-   Widget _buildWinText() {
+  Widget _buildWinText() {
     return Column(
       children: [
         /*TextEndGame(

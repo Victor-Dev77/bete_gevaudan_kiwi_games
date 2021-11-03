@@ -16,14 +16,14 @@ class KillPlayerPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(ConstantImage.background),
+            image: AssetImage(ConstantImage.backgroundNuitIntro),
             fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: <Widget>[
             Expanded(
-              child: Container(),//ConstantImage.logoImage,
+              child: Container(), //ConstantImage.logoImage,
             ),
             Expanded(flex: 3, child: _buildFormKill()),
             Expanded(
@@ -59,10 +59,12 @@ class KillPlayerPage extends StatelessWidget {
                 itemCount: PlayerController.to.nbPlayerAlive,
                 itemBuilder: (ctx, index) {
                   var player = PlayerController.to.listPlayerAlive[index];
-                  if (player.id == PlayerController.to.player.id) return Container();
+                  if (player.id == PlayerController.to.player.id)
+                    return Container();
                   return GetBuilder<KillPlayerController>(
                     builder: (_) {
-                      return Container();/*ButtonKillPlayer(
+                      return Container();
+                      /*ButtonKillPlayer(
                         onTap: (player) =>
                             controller.selectPlayerToKill(player),
                         player: player,
@@ -82,10 +84,10 @@ class KillPlayerPage extends StatelessWidget {
                 child: Obx(
                   () => ButtonActionGame(
                     onTap: () {
-                      PlayerController.to.killPlayer(controller.getPlayerSelected().id);
+                      PlayerController.to
+                          .killPlayer(controller.getPlayerSelected().id);
                       Get.offAllNamed(Routes.WAKE);
                     },
-                    borderColor: ConstantColor.transparent,
                     width: Get.width - Get.width / 4,
                     text: "Tuer",
                     isActive: controller.isPlayerSelected.value,

@@ -8,18 +8,18 @@ class WakePage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(ConstantImage.background),
+            image: AssetImage(ConstantImage.backgroundNuitIntro),
             fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: <Widget>[
             Expanded(
-              child: Container(),//ConstantImage.logoImage,
+              child: Container(), //ConstantImage.logoImage,
             ),
             Spacer(flex: 3),
             Expanded(
-              child: Container(),//RowPlayerWithMusic(),
+              child: Container(), //RowPlayerWithMusic(),
             )
           ],
         ),

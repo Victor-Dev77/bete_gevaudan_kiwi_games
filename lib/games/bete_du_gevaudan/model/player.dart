@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_image.dart';
 
 enum TypePlayer {
@@ -34,16 +36,30 @@ class Player {
 
   set setTypePlayer(TypePlayer value) => this.typePlayer = value;
 
-  /*String get imageTypePlayer {
+  String get imageTypePlayer {
     switch (typePlayer) {
-      case TypePlayer.WOLF:
-        return isSelectedToKill ? ConstantImage.wolf : ConstantImage.wolf;
-      case TypePlayer.FARMER:
-        return isSelectedToKill ? ConstantImage.farmerWhite : ConstantImage.farmer;
+      case TypePlayer.LOUP:
+        return ConstantImage.card_loup;
+      case TypePlayer.SORCIERE:
+        return ConstantImage.card_sorciere;
+      case TypePlayer.PETITE_FILLE:
+        return ConstantImage.card_petite_fille;
+      case TypePlayer.MEDIUM:
+        return ConstantImage.card_medium;
+      case TypePlayer.PROTECTEUR:
+        return ConstantImage.card_protecteur;
+      case TypePlayer.LE_PETIT_FARCEUR:
+        return ConstantImage.card_petit_farceur;
+      case TypePlayer.MARIEUSE:
+        return ConstantImage.card_marieuse;
+      case TypePlayer.MALE_ALPHA:
+        return ConstantImage.card_male_alpha;
+      case TypePlayer.VILLAGEOIS:
+        return ConstantImage.card_villageois;
       default:
-        return ConstantImage.farmer;
+        return ConstantImage.card_villageois;
     }
-  }*/
+  }
 
   String get nameTypePlayer {
     switch (typePlayer) {
@@ -95,8 +111,12 @@ class Player {
     }
   }
 
+  Map<String, dynamic> toJson() {
+    return {"id": id, "name": name, "typePlayer": typePlayer.toString()};
+  }
+
   @override
-  String toString() => "$id, $name, $typePlayer";
+  String toString() => json.encode(toJson());
 
   /*factory Player.fromDocument(Map<dynamic, dynamic> map) {
     return Player(

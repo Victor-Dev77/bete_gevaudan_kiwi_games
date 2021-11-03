@@ -11,7 +11,7 @@ class PlayerPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(ConstantImage.background),
+            image: AssetImage(ConstantImage.backgroundNuitIntro),
             fit: BoxFit.cover,
           ),
         ),
@@ -33,7 +33,7 @@ class PlayerPage extends StatelessWidget {
                           ),
                           onPressed: () => Get.back()),
                     ),
-                    Container(),//ConstantImage.logoImage,
+                    Container(), //ConstantImage.logoImage,
                     Padding(
                       padding: EdgeInsets.only(right: 20),
                       child: IconButton(
@@ -46,7 +46,7 @@ class PlayerPage extends StatelessWidget {
               ),
               Expanded(
                 flex: 2,
-                child: Container(),//ExplainedTypePlayer(),
+                child: Container(), //ExplainedTypePlayer(),
               ),
               Expanded(
                 child: Padding(

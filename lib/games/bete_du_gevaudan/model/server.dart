@@ -87,5 +87,15 @@ class Server {
       PlayerController.to.player.setTypePlayer = type;
       DistribRoleController.to.setPlayerHasRole(true);
     }
+    // chaque joueur applique les roles de sa liste de joueurs
+    listOfMap.forEach((map) {
+      var i = PlayerController.to.listPlayer
+          .indexWhere((element) => element.id == map["id"]);
+      if (i != -1) {
+        PlayerController.to.listPlayer[i].setTypePlayer = TypePlayer.values
+            .firstWhere((e) => e.toString() == map["typePlayer"].toString());
+      }
+    });
+    PlayerController.to.listPlayerAlive = PlayerController.to.listPlayer;
   }
 }

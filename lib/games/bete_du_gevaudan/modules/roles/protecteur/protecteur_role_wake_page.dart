@@ -105,7 +105,11 @@ class ProtecteurRoleWakePage extends GetView<ProtecteurRoleController> {
                   return ButtonActionGame(
                     onTap: () {
                       print(_.playerSelected);
-                      Server.instance.nextPage(GameTour.PROTECTEUR_SLEEP);
+                      Server.instance.choicePlayerToProtect(_.playerSelected!);
+                      Future.delayed(
+                          Duration(seconds: 1),
+                          () => Server.instance
+                              .nextPage(GameTour.PROTECTEUR_SLEEP));
                     },
                     isActive: _.playerSelected != null,
                     text: "SUIVANT",

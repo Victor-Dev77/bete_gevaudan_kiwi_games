@@ -35,18 +35,39 @@ class Server {
   }
 
   _filterData(Map<dynamic, dynamic> data) {
+    // Start Game at begin
     if (data["message"] == "startGame") {
       PlayerController.to.switchGameTour(GameTour.DISTRIB_ROLE);
-    } else if (data["message"].toString().contains("distrib_role-")) {
+    }
+    // Distrib Role
+    else if (data["message"].toString().contains("distrib_role-")) {
       _assignRoleToPlayer(data);
-    } else if (data["message"] == "ready") {
+    }
+    // Wait player click Ready to launch Tour
+    else if (data["message"] == "ready") {
       PlayerController.to.addPlayerReady();
-    } else if (data["message"].toString().contains("GameTour.")) {
+    }
+    // Change Page
+    else if (data["message"].toString().contains("GameTour.")) {
       GameTour tour = GameTour.values
           .firstWhere((e) => e.toString() == data["message"].toString());
       PlayerController.to.switchGameTour(tour);
-    } else if (data["message"].toString().contains("married-")) {
+    }
+    // Specific Role Marieuse
+    else if (data["message"].toString().contains("married-")) {
       _assignMarriedPlayer(data);
+    }
+    // Specific Role Male Alpha
+    else if (data["message"].toString().contains("playerChoiceMaleAlpha-")) {
+      _assignMaleAlphaKillPlayer(data);
+    }
+    // Specific Role Protecteur
+    else if (data["message"].toString().contains("choicePlayerToProtect-")) {
+      _assignPlayerProtected(data);
+    }
+    // Specific Role Loup
+    else if (data["message"].toString().contains("choicePlayerKillByLoup-")) {
+      _assignPlayerKilledByLoup(data);
     }
   }
 
@@ -101,6 +122,7 @@ class Server {
     PlayerController.to.listPlayerAlive = PlayerController.to.listPlayer;
   }
 
+  // Specific Role Marieuse
   marriedPlayers(List<Player> list) {
     _send({
       "message": "married-${list.toString()}",
@@ -124,5 +146,64 @@ class Server {
       ];
     }
     print("players married => ${PlayerController.to.married}");
+  }
+
+  // Specific Role Male Alpha
+  choicePlayerByMaleAlpha(Player player) {
+    _send({
+      "message": "playerChoiceMaleAlpha-[${player.toString()}]",
+      "type": "to users",
+    });
+  }
+
+  _assignMaleAlphaKillPlayer(Map data) {
+    var msg =
+        data["message"].toString().substring("playerChoiceMaleAlpha-".length);
+    List listOfMap = json.decode(msg);
+    var ip1 = PlayerController.to.listPlayer
+        .indexWhere((element) => element.id == listOfMap[0]["id"]);
+    if (ip1 != -1) {
+      PlayerController.to.playerWillKillIfMaleAlphaDie =
+          PlayerController.to.listPlayer[ip1];
+    }
+  }
+
+  // Specific Role Protecteur
+  choicePlayerToProtect(Player player) {
+    _send({
+      "message": "choicePlayerToProtect-[${player.toString()}]",
+      "type": "to users",
+    });
+  }
+
+  _assignPlayerProtected(Map data) {
+    var msg =
+        data["message"].toString().substring("choicePlayerToProtect-".length);
+    List listOfMap = json.decode(msg);
+    var ip1 = PlayerController.to.listPlayer
+        .indexWhere((element) => element.id == listOfMap[0]["id"]);
+    if (ip1 != -1) {
+      PlayerController.to.playerProtected = PlayerController.to.listPlayer[ip1];
+    }
+  }
+
+  // Specific Role Loup
+  choicePlayerKillByLoup(Player player) {
+    _send({
+      "message": "choicePlayerKillByLoup-[${player.toString()}]",
+      "type": "to users",
+    });
+  }
+
+  _assignPlayerKilledByLoup(Map data) {
+    var msg =
+        data["message"].toString().substring("choicePlayerKillByLoup-".length);
+    List listOfMap = json.decode(msg);
+    var ip1 = PlayerController.to.listPlayer
+        .indexWhere((element) => element.id == listOfMap[0]["id"]);
+    if (ip1 != -1) {
+      PlayerController.to.playerKillByLoup =
+          PlayerController.to.listPlayer[ip1];
+    }
   }
 }

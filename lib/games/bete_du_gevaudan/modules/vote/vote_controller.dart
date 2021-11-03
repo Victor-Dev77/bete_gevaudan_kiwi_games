@@ -1,16 +1,11 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
 import 'package:video_player/video_player.dart';
 
-class MarieuseRoleController extends GetxController {
-  static MarieuseRoleController get to => Get.find();
-
-  List<Player> listPlayerUnis = [];
-
+class VoteController extends GetxController {
   final videoPlayerController = VideoPlayerController.asset(
-      'assets/images/platform/games/bete_du_gevaudan/foret.mp4');
+      'assets/images/platform/games/bete_du_gevaudan/feu.mp4');
   ChewieController? _chewieController;
   ChewieController get chewieController => this._chewieController!;
   RxBool _videoCharged = false.obs;
@@ -42,21 +37,5 @@ class MarieuseRoleController extends GetxController {
       },
     );
     _videoCharged.value = true;
-  }
-
-  bool isUnionValid() => listPlayerUnis.length == 2;
-
-  bool isContainPlayer(Player player) {
-    return listPlayerUnis.contains(player);
-  }
-
-  clickPlayer(Player player) {
-    if (listPlayerUnis.length < 2 && !listPlayerUnis.contains(player))
-      listPlayerUnis.add(player);
-    else if (listPlayerUnis.contains(player))
-      listPlayerUnis.remove(player);
-    else
-      listPlayerUnis[1] = player;
-    update();
   }
 }

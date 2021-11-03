@@ -186,7 +186,7 @@ class PlayerController extends GetxController {
         Get.offAllNamed(Routes.WAKE);
         break;
       case GameTour.VOTE:
-        //Get.offAllNamed(Routes.VOTE);
+        Get.offAllNamed(Routes.VOTE);
         break;
       case GameTour.RESULT_VOTE:
         //Get.offAllNamed(Routes.RESULT_VOTE);

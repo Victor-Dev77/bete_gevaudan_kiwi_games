@@ -27,7 +27,6 @@ class MediumRoleController extends GetxController {
     _chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
       aspectRatio: 16 / 9,
-      autoInitialize: true,
       autoPlay: true,
       looping: true,
       showControls: false,

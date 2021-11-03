@@ -104,7 +104,12 @@ class MaleAlphaRoleWakePage extends GetView<MaleAlphaRoleController> {
                   return ButtonActionGame(
                     onTap: () {
                       print(_.playerSelected);
-                      Server.instance.nextPage(GameTour.MALE_ALPHA_SLEEP);
+                      Server.instance
+                          .choicePlayerByMaleAlpha(_.playerSelected!);
+                      Future.delayed(
+                          Duration(seconds: 1),
+                          () => Server.instance
+                              .nextPage(GameTour.MALE_ALPHA_SLEEP));
                     },
                     isActive: _.playerSelected != null,
                     text: "SUIVANT",

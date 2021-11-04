@@ -12,7 +12,7 @@ class ResetPassword extends StatelessWidget {
       appBar: notLoggedAppBar,
       body: GetBuilder<ResetPasswordController>(
         builder: (c) {
-          if (c.id == null || c.id!.isEmpty) {
+          if (c.code == null || c.code!.isEmpty) {
             return const Center(child: _NoIdFound());
           }
           return const SingleChildScrollView(
@@ -91,10 +91,20 @@ class _NewPasswordInput extends GetView<ResetPasswordController> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller.newPasswordController,
-      decoration: InputDecoration(labelText: 'new_password'.tr),
-      validator: (e) => e!.trim().isEmpty ? 'no_password'.tr : null,
+    return ValueBuilder<bool?>(
+      initialValue: true,
+      builder: (obscureText, updater) => TextFormField(
+        controller: controller.newPasswordController,
+        validator: (e) => e!.trim().isEmpty ? 'no_password'.tr : null,
+        obscureText: obscureText!,
+        decoration: InputDecoration(
+          labelText: 'new_password'.tr,
+          suffixIcon: IconButton(
+            onPressed: () => updater(!obscureText),
+            icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -104,14 +114,24 @@ class _ConfirmNewPasswordInput extends GetView<ResetPasswordController> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller.confirmNewPasswordController,
-      decoration: InputDecoration(labelText: 'confirm_new_password'.tr),
-      validator: (e) => e!.trim().isEmpty
-          ? 'no_password'.tr
-          : e.trim() != controller.newPassword
-              ? 'please_confirm_new_password'.tr
-              : null,
+    return ValueBuilder<bool?>(
+      initialValue: true,
+      builder: (obscureText, updater) => TextFormField(
+        controller: controller.confirmNewPasswordController,
+        obscureText: obscureText!,
+        decoration: InputDecoration(
+          labelText: 'confirm_new_password'.tr,
+          suffixIcon: IconButton(
+            onPressed: () => updater(!obscureText),
+            icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility),
+          ),
+        ),
+        validator: (e) => e!.trim().isEmpty
+            ? 'no_password'.tr
+            : e.trim() != controller.newPassword
+                ? 'please_confirm_new_password'.tr
+                : null,
+      ),
     );
   }
 }

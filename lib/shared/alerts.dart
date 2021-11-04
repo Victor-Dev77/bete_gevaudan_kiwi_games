@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kiwigames/shared/colors.dart';
 import 'package:kiwigames/shared/shared.dart';
 
 class NoHostAlert extends StatelessWidget {
@@ -65,15 +64,18 @@ class ErrorAlert extends StatelessWidget {
   static final TextTheme textTheme = Get.textTheme;
 
   final String message;
+  final VoidCallback? onPressed;
 
-  const ErrorAlert(this.message, {Key? key}) : super(key: key);
+  const ErrorAlert(this.message, {Key? key, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
       textStyle: textTheme.bodyText1,
       type: MaterialType.transparency,
-      child: Center(
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(25.0),
         child: Container(
           padding: const EdgeInsets.all(25.0),
           decoration: BoxDecoration(
@@ -92,7 +94,7 @@ class ErrorAlert extends StatelessWidget {
               const HeightSpacer(25.0),
               ElevatedButton(
                 child: Text('ok'.tr),
-                onPressed: Get.back,
+                onPressed: onPressed ?? Get.back,
               ),
             ],
           ),

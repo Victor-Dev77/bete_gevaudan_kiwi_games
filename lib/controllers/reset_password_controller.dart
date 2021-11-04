@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:kiwigames/shared/shared.dart';
 
 class ResetPasswordController extends GetxController {
-  String? id = Get.parameters['id'];
+  String? code = Get.parameters['code'];
 
   final loading = false.obs;
 
@@ -17,15 +17,18 @@ class ResetPasswordController extends GetxController {
   void resetPassword() async {
     loading(true);
     if (formKey.currentState!.validate()) {
-      await 1.delay();
-      Get.dialog(
-        InfoAlert(
-          'password_reseted'.tr,
-          onPressed: () => Get.offAllNamed('/login'),
-        ),
-      );
-      print(newPassword);
-      print(confirmNewPassword);
+      var res =
+          await userProvider.resetPassword(password: newPassword, code: code!);
+      Widget alert = res.body['sucess']
+          ? InfoAlert(
+              'password_reseted'.tr,
+              onPressed: () => Get.offAllNamed('/login'),
+            )
+          : ErrorAlert(
+              'reset_error'.tr,
+              onPressed: () => Get.offAllNamed('/forgot-password'),
+            );
+      Get.dialog(alert);
     }
     loading(false);
   }

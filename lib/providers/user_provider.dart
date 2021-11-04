@@ -26,6 +26,16 @@ class UserProvider extends GetConnect {
     });
   }
 
+  Future<Response> resetPassword({
+    required String password,
+    required String code,
+  }) {
+    return post('reset-password', {
+      'password': password,
+      'code': code,
+    });
+  }
+
   // forgotpassword
   // param email
 }

@@ -83,7 +83,11 @@ Retourner à l'accueil ?
 ''',
           'no_id_found':
               'Aucun code de réinitialisation trouvé, merci de refaire "mot de passe oublié"',
-          'go_to_forgot_password': 'Mot de passe'
+          'go_to_forgot_password': 'Mot de passe',
+          'reset_error': '''
+Le code de réinitialisation n'est plus valide ou a expiré
+Réinitialiser le mot de passe ?
+''',
         },
       };
 }

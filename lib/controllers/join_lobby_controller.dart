@@ -36,8 +36,6 @@ class JoinLobbyController extends GetxController {
     loading(true);
     if (formKey.currentState!.validate()) {
       var res = await lobbyProvider.checkLobby(lobbyCode);
-      print(res.body);
-      print(res.statusCode);
       if (res.statusCode == 404) {
         Get.dialog(ErrorAlert('could_not_find_lobby'.tr));
       } else {
@@ -61,7 +59,7 @@ class JoinLobbyController extends GetxController {
           if (res.body['host'] != null) {
             redirect(false);
           } else {
-            Get.dialog(InfoAlert(
+            Get.dialog(NoHostAlert(
               onConfirm: () => redirect(true),
               onCancel: () => redirect(false),
             ));

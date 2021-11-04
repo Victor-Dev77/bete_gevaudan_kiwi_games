@@ -5,3 +5,4 @@ export 'join_lobby.dart';
 export 'not_found.dart';
 export 'home.dart';
 export 'forgot_password.dart';
+export 'reset_password.dart';

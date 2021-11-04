@@ -37,7 +37,7 @@ class LobbyTypeRow extends StatelessWidget {
   const LobbyTypeRow({Key? key}) : super(key: key);
 
   void createLobby() {
-    Get.toNamed('/lobby');
+    Get.offAllNamed('/lobby');
   }
 
   void joinLobby() {

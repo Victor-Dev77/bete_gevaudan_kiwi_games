@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 import 'package:kiwigames/shared/colors.dart';
 import 'package:kiwigames/shared/shared.dart';
 
-class InfoAlert extends StatelessWidget {
+class NoHostAlert extends StatelessWidget {
   static final TextTheme textTheme = Get.textTheme;
 
   final VoidCallback onConfirm;
   final VoidCallback onCancel;
 
-  const InfoAlert({
+  const NoHostAlert({
     Key? key,
     required this.onConfirm,
     required this.onCancel,
@@ -93,6 +93,50 @@ class ErrorAlert extends StatelessWidget {
               ElevatedButton(
                 child: Text('ok'.tr),
                 onPressed: Get.back,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class InfoAlert extends StatelessWidget {
+  static final TextTheme textTheme = Get.textTheme;
+
+  final String message;
+  final VoidCallback? onPressed;
+
+  const InfoAlert(this.message, {Key? key, this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      textStyle: textTheme.bodyText1,
+      type: MaterialType.transparency,
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(25.0),
+        child: Container(
+          padding: const EdgeInsets.all(25.0),
+          decoration: BoxDecoration(
+            color: backGroundColor.color,
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'information'.tr,
+                style: textTheme.headline5,
+              ),
+              const HeightSpacer(25.0),
+              Text(message),
+              const HeightSpacer(25.0),
+              ElevatedButton(
+                child: Text('ok'.tr),
+                onPressed: onPressed ?? Get.back,
               ),
             ],
           ),

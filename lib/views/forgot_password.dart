@@ -67,7 +67,7 @@ class ForgotPasswordForm extends GetView<ForgotPasswordController> {
             children: const [
               _EmailInput(),
               HeightSpacer(50.0),
-              _LoginReinitialise(),
+              _LoginReset(),
             ],
           ),
         ),
@@ -90,12 +90,12 @@ class _EmailInput extends GetView<ForgotPasswordController> {
   }
 }
 
-class _LoginReinitialise extends GetView<ForgotPasswordController> {
+class _LoginReset extends GetView<ForgotPasswordController> {
   static final buttonPadding = MaterialStateProperty.all(
     const EdgeInsets.symmetric(vertical: 25.0),
   );
 
-  const _LoginReinitialise({Key? key}) : super(key: key);
+  const _LoginReset({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +126,7 @@ class _LoginReinitialise extends GetView<ForgotPasswordController> {
             flex: flex,
             child: OutlinedButton(
               child: Text('log_in'.tr.toUpperCase()),
-              onPressed: () => back('/login'),
+              onPressed: () => Get.offAllNamed('/login'),
               style: Get.theme.outlinedButtonTheme.style?.copyWith(
                 padding: buttonPadding,
               ),
@@ -136,8 +136,8 @@ class _LoginReinitialise extends GetView<ForgotPasswordController> {
           Expanded(
             flex: flex,
             child: ElevatedButton(
-              child: Text('reinitialise'.tr.toUpperCase()),
-              onPressed: controller.reinitialisePassword,
+              child: Text('reset'.tr.toUpperCase()),
+              onPressed: controller.resetPassword,
               style: Get.theme.elevatedButtonTheme.style?.copyWith(
                 padding: buttonPadding,
               ),

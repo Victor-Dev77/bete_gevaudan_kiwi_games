@@ -52,6 +52,9 @@ class LobbyController extends GetxController {
         Map<String, dynamic> res = jsonDecode(data);
         print(res);
         String? type = res['type'];
+        // TODO nouveau event user :
+        // notif user disconnected
+        // notif user reconnected
         if (type == 'notif new user' ||
             type == 'first connect' ||
             type == 'notif leave user') {

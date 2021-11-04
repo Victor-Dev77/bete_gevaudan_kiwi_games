@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/app/app.dart';
+import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 
 void main() {
+  configureApp();
   Paint.enableDithering = true;
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const Kiwigames());

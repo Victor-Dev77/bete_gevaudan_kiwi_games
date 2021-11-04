@@ -69,7 +69,21 @@ class Messages extends Translations {
           'new_player': 'Nouveau joueur !',
           'username_already_used': 'Ce pseudo est déjà utilisé dans ce lobby',
           'master_screen': 'Écran principal',
-          'reinitialise': 'Réinitialiser',
+          'reset': 'Réinitialiser',
+          'reset_password': 'Réinitialiser le mot de passe',
+          'email_sent':
+              "Un email de réinitialisation du mot de passe vient d'être envoyé à cette adresse mail.",
+          'new_password': 'Nouveau mot de passe',
+          'confirm_new_password': 'Confirmer le nouveau mot de passe',
+          'please_confirm_new_password':
+              'Merci de confirmer le nouveau mot de passe',
+          'password_reseted': '''
+Mot de passe réinitialisé !
+Retourner à l'accueil ?
+''',
+          'no_id_found':
+              'Aucun code de réinitialisation trouvé, merci de refaire "mot de passe oublié"',
+          'go_to_forgot_password': 'Mot de passe'
         },
       };
 }

@@ -52,5 +52,10 @@ class AppPages {
       page: () => const ForgotPassword(),
       binding: ForgotPasswordBinding(),
     ),
+    GetPage(
+      name: '/reset-password',
+      page: () => const ResetPassword(),
+      binding: ResetPasswordBinding(),
+    ),
   ];
 }

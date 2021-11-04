@@ -19,4 +19,13 @@ class UserProvider extends GetConnect {
       'password': password,
     });
   }
+
+  Future<Response> checkResetPassword(String email) {
+    return post('forgotpassword', {
+      'email': email,
+    });
+  }
+
+  // forgotpassword
+  // param email
 }

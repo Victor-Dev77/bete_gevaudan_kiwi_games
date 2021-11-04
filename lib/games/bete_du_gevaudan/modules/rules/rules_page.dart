@@ -31,13 +31,41 @@ class RulesPage extends StatelessWidget {
               );
             return Container();
           }),
-          Center(
-            child: Text(
-              Constant.introGameText,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: ConstantColor.white, fontSize: 22),
-            ),
-          ),
+          Obx(() {
+            if (controller.introGame)
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      "LA BETE DU GEVAUDAN",
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(color: ConstantColor.white, fontSize: 33),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        Constant.credit,
+                        style:
+                            TextStyle(color: ConstantColor.white, fontSize: 22),
+                      ),
+                    ),
+                  )
+                ],
+              );
+            return Center(
+              child: Text(
+                Constant.introGameText,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: ConstantColor.white, fontSize: 22),
+              ),
+            );
+          }),
         ],
       );
     }
@@ -79,21 +107,18 @@ class RulesPage extends StatelessWidget {
             ),
             Expanded(flex: 3, child: Container()),
             Expanded(
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    if (PlayerController.to.player.isHost)
-                      ButtonActionGame(
-                        width: 200,
-                        onTap: () => Server.instance.startGame(),
-                        text: "Jouer",
-                      ),
-                    Container(),
-                  ],
-                ),
-              ),
+              child: Container(child: Center(
+                child: Obx(() {
+                  if (!controller.introGame &&
+                      PlayerController.to.player.isHost)
+                    return ButtonActionGame(
+                      width: 200,
+                      onTap: () => Server.instance.startGame(),
+                      text: "Jouer",
+                    );
+                  return Container();
+                }),
+              )),
             ),
           ],
         ),

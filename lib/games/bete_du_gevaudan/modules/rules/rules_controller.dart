@@ -12,6 +12,8 @@ class RulesController extends GetxController {
   ChewieController get chewieController => this._chewieController!;
   RxBool _videoCharged = false.obs;
   bool get videoCharged => _videoCharged.value;
+  RxBool _introGame = true.obs;
+  bool get introGame => _introGame.value;
 
   @override
   void onInit() {
@@ -45,5 +47,6 @@ class RulesController extends GetxController {
     );
     videoPlayerController.play();
     _videoCharged.value = true;
+    Future.delayed(Duration(seconds: 7), () => _introGame.value = false);
   }
 }

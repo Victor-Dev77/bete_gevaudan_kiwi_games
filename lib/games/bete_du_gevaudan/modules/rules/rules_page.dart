@@ -1,78 +1,101 @@
+import 'package:chewie/chewie.dart';
+import 'package:get/get.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/rules/rules_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/widgets_global/button_action_game.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_image.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 class RulesPage extends StatelessWidget {
+  final controller = Get.put(RulesController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(ConstantImage.backgroundNuitIntro),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Center(
-            child: _buildScreen(),
-          ),
-        ),
-      ),
+      body: _buildScreen(),
     );
   }
 
   _buildScreen() {
-    if (PlayerController.to.player.isPrincipale)
-      return Text(
-        Constant.introGameText,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            color: ConstantColor.white,
-            fontSize: 17,
-            fontWeight: FontWeight.w600),
-      );
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Expanded(
-          flex: 2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              //ConstantImage.logoImage,
-              SizedBox(height: 20),
-              Text(
-                "LA BETE DU GEVAUDAN",
-                style: TextStyle(
-                  fontSize: 27,
-                  fontWeight: FontWeight.bold,
-                  color: ConstantColor.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Expanded(flex: 3, child: Container()),
-        Expanded(
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                if (PlayerController.to.player.isHost)
-                  ButtonActionGame(
-                    onTap: () => Server.instance.startGame(),
-                    text: "Jouer",
-                  ),
-                Container(),
-              ],
+    if (PlayerController.to.player.isPrincipale) {
+      return Stack(
+        children: [
+          Obx(() {
+            if (controller.videoCharged)
+              return Center(
+                child: Chewie(controller: controller.chewieController),
+              );
+            return Container();
+          }),
+          Center(
+            child: Text(
+              Constant.introGameText,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: ConstantColor.white, fontSize: 22),
             ),
           ),
+        ],
+      );
+    }
+    return Stack(
+      children: [
+        Obx(() {
+          if (controller.videoCharged)
+            return SizedBox.expand(
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: controller.videoPlayerController.value.size.width,
+                  height: controller.videoPlayerController.value.size.height,
+                  child: VideoPlayer(controller.videoPlayerController),
+                ),
+              ),
+            );
+          return Container();
+        }),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 20),
+                  Text(
+                    "LA BETE DU GEVAUDAN",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: ConstantColor.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(flex: 3, child: Container()),
+            Expanded(
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    if (PlayerController.to.player.isHost)
+                      ButtonActionGame(
+                        width: 200,
+                        onTap: () => Server.instance.startGame(),
+                        text: "Jouer",
+                      ),
+                    Container(),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

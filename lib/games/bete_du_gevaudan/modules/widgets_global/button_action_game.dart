@@ -35,7 +35,6 @@ class ButtonActionGame extends StatelessWidget {
                 color:
                     isPrimaryColor ? ConstantColor.white : ConstantColor.black,
                 fontSize: 22,
-                fontStyle: FontStyle.italic,
               ),
             ),
           ),

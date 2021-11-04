@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
 import 'package:get/get.dart';
@@ -25,19 +28,32 @@ class DistribRoleController extends GetxController {
   RxBool _videoCharged = false.obs;
   bool get videoCharged => _videoCharged.value;
 
+  final AudioPlayer justAudioPlayer = AudioPlayer();
+
   @override
   void onInit() {
     super.onInit();
-    _initVideo();
+    if (PlayerController.to.player.isPrincipale) {
+      _initAudio();
+      _initVideo();
+    }
     var res = PlayerController.to.attributTypePlayer();
     _playerHasRole.value = res;
   }
 
   @override
   void onClose() {
+    justAudioPlayer.dispose();
     videoPlayerController.dispose();
     _chewieController?.dispose();
     super.onClose();
+  }
+
+  _initAudio() async {
+    int i = 1 + Random().nextInt(3);
+    await justAudioPlayer.setAsset(
+        "assets/images/platform/games/bete_du_gevaudan/voix/attribution_des_roles_$i.mp3");
+    justAudioPlayer.play();
   }
 
   _initVideo() async {

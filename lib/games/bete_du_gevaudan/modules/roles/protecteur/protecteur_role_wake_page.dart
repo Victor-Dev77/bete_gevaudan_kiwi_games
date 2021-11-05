@@ -100,22 +100,31 @@ class ProtecteurRoleWakePage extends GetView<ProtecteurRoleController> {
           ),
           Expanded(
             child: Center(
-              child: GetBuilder<ProtecteurRoleController>(
-                builder: (_) {
-                  return ButtonActionGame(
-                    onTap: () {
-                      print(_.playerSelected);
-                      Server.instance.choicePlayerToProtect(_.playerSelected!);
-                      Future.delayed(
-                          Duration(seconds: 1),
-                          () => Server.instance
-                              .nextPage(GameTour.PROTECTEUR_SLEEP));
+              child: Obx(() {
+                if (controller.voiceOffFinish)
+                  return GetBuilder<ProtecteurRoleController>(
+                    builder: (_) {
+                      return ButtonActionGame(
+                        onTap: () {
+                          print(_.playerSelected);
+                          Server.instance
+                              .choicePlayerToProtect(_.playerSelected!);
+                          Future.delayed(
+                              Duration(seconds: 1),
+                              () => Server.instance
+                                  .nextPage(GameTour.PROTECTEUR_SLEEP));
+                        },
+                        isActive: _.playerSelected != null,
+                        text: "SUIVANT",
+                      );
                     },
-                    isActive: _.playerSelected != null,
-                    text: "SUIVANT",
                   );
-                },
-              ),
+                return ButtonActionGame(
+                  onTap: () {},
+                  isActive: false,
+                  showLoader: true,
+                );
+              }),
             ),
           ),
         ],

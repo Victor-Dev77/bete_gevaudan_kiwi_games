@@ -159,12 +159,20 @@ class MediumRoleWakePage extends GetView<MediumRoleController> {
         ),
         Expanded(
           child: Center(
-            child: ButtonActionGame(
-              onTap: () {
-                Server.instance.nextPage(GameTour.MEDIUM_SLEEP);
-              },
-              text: "SUIVANT",
-            ),
+            child: Obx(() {
+              if (controller.voiceOffFinish)
+                return ButtonActionGame(
+                  onTap: () {
+                    Server.instance.nextPage(GameTour.MEDIUM_SLEEP);
+                  },
+                  text: "SUIVANT",
+                );
+              return ButtonActionGame(
+                onTap: () {},
+                isActive: false,
+                showLoader: true,
+              );
+            }),
           ),
         ),
       ],

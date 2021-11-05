@@ -7,14 +7,15 @@ class ButtonActionGame extends StatelessWidget {
   final VoidCallback onTap;
   final String text;
   final double? width;
-  final bool isActive, isPrimaryColor;
+  final bool isActive, isPrimaryColor, showLoader;
   ButtonActionGame(
       {this.key,
       required this.onTap,
       this.text: "",
       this.width,
       this.isActive: true,
-      this.isPrimaryColor: false});
+      this.isPrimaryColor: false,
+      this.showLoader: false});
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +29,21 @@ class ButtonActionGame extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 40),
           color: isPrimaryColor ? ConstantColor.primary : ConstantColor.white,
           child: Center(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color:
-                    isPrimaryColor ? ConstantColor.white : ConstantColor.black,
-                fontSize: 22,
-              ),
-            ),
+            child: showLoader
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(isPrimaryColor
+                        ? ConstantColor.white
+                        : ConstantColor.primary))
+                : Text(
+                    text,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: isPrimaryColor
+                          ? ConstantColor.white
+                          : ConstantColor.black,
+                      fontSize: 22,
+                    ),
+                  ),
           ),
         ),
       ),

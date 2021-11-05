@@ -99,23 +99,31 @@ class MaleAlphaRoleWakePage extends GetView<MaleAlphaRoleController> {
           ),
           Expanded(
             child: Center(
-              child: GetBuilder<MaleAlphaRoleController>(
-                builder: (_) {
-                  return ButtonActionGame(
-                    onTap: () {
-                      print(_.playerSelected);
-                      Server.instance
-                          .choicePlayerByMaleAlpha(_.playerSelected!);
-                      Future.delayed(
-                          Duration(seconds: 1),
-                          () => Server.instance
-                              .nextPage(GameTour.MALE_ALPHA_SLEEP));
+              child: Obx(() {
+                if (controller.voiceOffFinish)
+                  return GetBuilder<MaleAlphaRoleController>(
+                    builder: (_) {
+                      return ButtonActionGame(
+                        onTap: () {
+                          print(_.playerSelected);
+                          Server.instance
+                              .choicePlayerByMaleAlpha(_.playerSelected!);
+                          Future.delayed(
+                              Duration(seconds: 1),
+                              () => Server.instance
+                                  .nextPage(GameTour.MALE_ALPHA_SLEEP));
+                        },
+                        isActive: _.playerSelected != null,
+                        text: "SUIVANT",
+                      );
                     },
-                    isActive: _.playerSelected != null,
-                    text: "SUIVANT",
                   );
-                },
-              ),
+                return ButtonActionGame(
+                  onTap: () {},
+                  isActive: false,
+                  showLoader: true,
+                );
+              }),
             ),
           ),
         ],

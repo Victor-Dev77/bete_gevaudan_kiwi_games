@@ -115,6 +115,16 @@ class PlayerController extends GetxController {
     return res;
   }
 
+  String getUsernameForTypePlayer(TypePlayer typePlayer) {
+    String res = "";
+    listPlayerAlive.forEach((element) {
+      if (element.typePlayer == typePlayer) {
+        res = element.name;
+      }
+    });
+    return res;
+  }
+
   switchGameTour(GameTour tour) {
     gameTour = tour;
     switchRolePage();

@@ -3,6 +3,12 @@ import 'package:kiwigames/controllers/controllers.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/distrib_role/distrib_role_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/loup/loup_role_controller.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/male_alpha/male_alpha_role_controller.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/marieuse/marieuse_role_controller.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/medium/medium_role_controller.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/protecteur/protecteur_role_controller.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/sorciere/sorciere_role_controller.dart';
 
 class Server {
   Server._internal();
@@ -68,6 +74,12 @@ class Server {
     // Specific Role Loup
     else if (data["message"].toString().contains("choicePlayerKillByLoup-")) {
       _assignPlayerKilledByLoup(data);
+    }
+    // Get finish Voice Off for player
+    else if (data["message"]
+        .toString()
+        .contains(PlayerController.to.player.name)) {
+      _makeReadyBtnVoiceOffFinish(data);
     }
   }
 
@@ -204,6 +216,48 @@ class Server {
     if (ip1 != -1) {
       PlayerController.to.playerKillByLoup =
           PlayerController.to.listPlayer[ip1];
+    }
+  }
+
+  finishVoiceOff(String username, TypePlayer typePlayer) {
+    _send({
+      "message": "$username-${typePlayer.toString()}",
+      "type": "to one",
+      "username": username
+    });
+  }
+
+  _makeReadyBtnVoiceOffFinish(Map data) {
+    var typeMsg = data["message"]
+        .toString()
+        .substring("${PlayerController.to.player.name}-".length);
+    TypePlayer type =
+        TypePlayer.values.firstWhere((e) => e.toString() == typeMsg.toString());
+    switch (type) {
+      case TypePlayer.LOUP:
+        LoupRoleController.to.setVoiceOffFinish();
+        break;
+      case TypePlayer.SORCIERE:
+        SorciereRoleController.to.setVoiceOffFinish();
+        break;
+      case TypePlayer.PETITE_FILLE:
+        break;
+      case TypePlayer.MEDIUM:
+        MediumRoleController.to.setVoiceOffFinish();
+        break;
+      case TypePlayer.PROTECTEUR:
+        ProtecteurRoleController.to.setVoiceOffFinish();
+        break;
+      case TypePlayer.LE_PETIT_FARCEUR:
+        break;
+      case TypePlayer.MARIEUSE:
+        MarieuseRoleController.to.setVoiceOffFinish();
+        break;
+      case TypePlayer.MALE_ALPHA:
+        MaleAlphaRoleController.to.setVoiceOffFinish();
+        break;
+      case TypePlayer.VILLAGEOIS:
+        break;
     }
   }
 }

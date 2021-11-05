@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
 import 'package:video_player/video_player.dart';
 
 class ProtecteurRoleController extends GetxController {
+  static ProtecteurRoleController get to => Get.find();
   Player? playerSelected;
 
   AudioPlayer justAudioPlayer = AudioPlayer();
@@ -19,6 +21,9 @@ class ProtecteurRoleController extends GetxController {
   RxBool _videoCharged = false.obs;
   bool get videoCharged => _videoCharged.value;
   bool changeAudio = false;
+  RxBool _voiceOffFinish = false.obs;
+  bool get voiceOffFinish => _voiceOffFinish.value;
+  setVoiceOffFinish() => _voiceOffFinish.value = true;
 
   @override
   void onInit() {
@@ -56,6 +61,25 @@ class ProtecteurRoleController extends GetxController {
     await justAudioPlayer.setAsset(
         "assets/images/platform/games/bete_du_gevaudan/voix/appel_protecteur_$i.mp3");
     justAudioPlayer.play();
+    justAudioPlayer.playerStateStream.listen((state) {
+      print(state.processingState);
+      switch (state.processingState) {
+        case ProcessingState.idle:
+          break;
+        case ProcessingState.loading:
+          break;
+        case ProcessingState.buffering:
+          break;
+        case ProcessingState.ready:
+          break;
+        case ProcessingState.completed:
+          Server.instance.finishVoiceOff(
+            PlayerController.to.getUsernameForTypePlayer(TypePlayer.PROTECTEUR),
+            TypePlayer.PROTECTEUR,
+          );
+          break;
+      }
+    });
   }
 
   changeAudioForSleep() async {

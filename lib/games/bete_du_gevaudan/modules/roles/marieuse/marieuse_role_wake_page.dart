@@ -98,22 +98,30 @@ class MarieuseRoleWakePage extends GetView<MarieuseRoleController> {
           ),
           Expanded(
             child: Center(
-              child: GetBuilder<MarieuseRoleController>(
-                builder: (_) {
-                  return ButtonActionGame(
-                    onTap: () {
-                      print(_.listPlayerUnis);
-                      Server.instance.marriedPlayers(_.listPlayerUnis);
-                      Future.delayed(
-                          Duration(seconds: 1),
-                          () => Server.instance
-                              .nextPage(GameTour.MARIEUSE_SLEEP));
+              child: Obx(() {
+                if (controller.voiceOffFinish)
+                  return GetBuilder<MarieuseRoleController>(
+                    builder: (_) {
+                      return ButtonActionGame(
+                        onTap: () {
+                          print(_.listPlayerUnis);
+                          Server.instance.marriedPlayers(_.listPlayerUnis);
+                          Future.delayed(
+                              Duration(seconds: 1),
+                              () => Server.instance
+                                  .nextPage(GameTour.MARIEUSE_SLEEP));
+                        },
+                        isActive: _.isUnionValid(),
+                        text: "SUIVANT",
+                      );
                     },
-                    isActive: _.isUnionValid(),
-                    text: "SUIVANT",
                   );
-                },
-              ),
+                return ButtonActionGame(
+                  onTap: () {},
+                  isActive: false,
+                  showLoader: true,
+                );
+              }),
             ),
           ),
         ],

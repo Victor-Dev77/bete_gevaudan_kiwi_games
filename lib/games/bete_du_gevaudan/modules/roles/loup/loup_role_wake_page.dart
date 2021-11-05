@@ -99,20 +99,31 @@ class LoupRoleWakePage extends GetView<LoupRoleController> {
           ),
           Expanded(
             child: Center(
-              child: GetBuilder<LoupRoleController>(
-                builder: (_) {
-                  return ButtonActionGame(
-                    onTap: () {
-                      print(_.playerSelected);
-                      Server.instance.choicePlayerKillByLoup(_.playerSelected!);
-                      Future.delayed(Duration(seconds: 1),
-                          () => Server.instance.nextPage(GameTour.WOLF_SLEEP));
+              child: Obx(() {
+                if (controller.voiceOffFinish)
+                  return GetBuilder<LoupRoleController>(
+                    builder: (_) {
+                      return ButtonActionGame(
+                        onTap: () {
+                          print(_.playerSelected);
+                          Server.instance
+                              .choicePlayerKillByLoup(_.playerSelected!);
+                          Future.delayed(
+                              Duration(seconds: 1),
+                              () => Server.instance
+                                  .nextPage(GameTour.WOLF_SLEEP));
+                        },
+                        isActive: _.playerSelected != null,
+                        text: "SUIVANT",
+                      );
                     },
-                    isActive: _.playerSelected != null,
-                    text: "SUIVANT",
                   );
-                },
-              ),
+                return ButtonActionGame(
+                  onTap: () {},
+                  isActive: false,
+                  showLoader: true,
+                );
+              }),
             ),
           ),
         ],

@@ -138,7 +138,7 @@ class Server {
   marriedPlayers(List<Player> list) {
     _send({
       "message": "married-${list.toString()}",
-      "type": "to users",
+      "type": "to all",
     });
   }
 
@@ -164,7 +164,7 @@ class Server {
   choicePlayerByMaleAlpha(Player player) {
     _send({
       "message": "playerChoiceMaleAlpha-[${player.toString()}]",
-      "type": "to users",
+      "type": "to all",
     });
   }
 
@@ -184,7 +184,7 @@ class Server {
   choicePlayerToProtect(Player player) {
     _send({
       "message": "choicePlayerToProtect-[${player.toString()}]",
-      "type": "to users",
+      "type": "to all",
     });
   }
 
@@ -200,10 +200,10 @@ class Server {
   }
 
   // Specific Role Loup
-  choicePlayerKillByLoup(Player player) {
+  choicePlayerKillByLoup(List<Player> list) {
     _send({
-      "message": "choicePlayerKillByLoup-[${player.toString()}]",
-      "type": "to users",
+      "message": "choicePlayerKillByLoup-${list.toString()}",
+      "type": "to all",
     });
   }
 
@@ -211,12 +211,15 @@ class Server {
     var msg =
         data["message"].toString().substring("choicePlayerKillByLoup-".length);
     List listOfMap = json.decode(msg);
-    var ip1 = PlayerController.to.listPlayer
-        .indexWhere((element) => element.id == listOfMap[0]["id"]);
-    if (ip1 != -1) {
-      PlayerController.to.playerKillByLoup =
-          PlayerController.to.listPlayer[ip1];
-    }
+    List<Player> listOfPlayer = [];
+    listOfMap.forEach((item) {
+      var ip1 = PlayerController.to.listPlayer
+          .indexWhere((element) => element.id == item["id"]);
+      if (ip1 != -1) {
+        listOfPlayer.add(PlayerController.to.listPlayer[ip1]);
+      }
+    });
+    PlayerController.to.playerKillByLoup = listOfPlayer;
   }
 
   finishVoiceOff(String username, TypePlayer typePlayer) {

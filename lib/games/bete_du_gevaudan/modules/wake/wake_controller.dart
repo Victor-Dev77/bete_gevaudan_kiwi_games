@@ -3,6 +3,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
 import 'package:video_player/video_player.dart';
@@ -21,10 +22,59 @@ class WakeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    print("-----  WAKE UP VILLAGE  -------");
+    print(PlayerController.to.playerKillByLoup);
+    print(PlayerController.to.married);
+    print(PlayerController.to.playerProtected);
+    print(PlayerController.to.playerWillKillIfMaleAlphaDie);
+    print("-------------------------------");
     if (PlayerController.to.player.isPrincipale) {
+      _checkSortOfTour();
       _initAudio();
       _initVideo();
     }
+  }
+
+  //TODO faire apres le ready des loups si plusieurs loup
+
+  _checkSortOfTour() {
+    List<Player> killsByLoup = PlayerController.to.playerKillByLoup;
+    List<Player>? married = PlayerController.to.married;
+    Player? playerProtected = PlayerController.to.playerProtected;
+    Player? playerKillByMaleAlpha =
+        PlayerController.to.playerWillKillIfMaleAlphaDie;
+    //TODO manque sorciere
+    if (killsByLoup.length == 1) {
+      // Considere qu'il y a 1 mort minimum (s'il n'est pas sauvé par protecteur)
+    } else {
+      // Determiné majorité ou égalité
+      Map<String, int> compteurOfPlayer = {};
+      killsByLoup.forEach((victime) {
+        compteurOfPlayer[victime.name] = compteurOfPlayer[victime.name] != null
+            ? compteurOfPlayer[victime.name]! + 1
+            : 0;
+      });
+      print("compteur of players: $compteurOfPlayer");
+      compteurOfPlayer.values.reduce(max);
+    }
+  }
+
+  Player _getMajority(List<Player> killsByLoup) {
+    var modeMap = {};
+    var maxEl = killsByLoup[0];
+    var maxCount = 1;
+    for (var i = 0; i < killsByLoup.length; i++) {
+      var el = killsByLoup[i];
+      if (modeMap[el.name] == null)
+        modeMap[el.name] = 1;
+      else
+        modeMap[el.name]++;
+      if (modeMap[el.name] > maxCount) {
+        maxEl = el;
+        maxCount = modeMap[el.name];
+      }
+    }
+    return maxEl;
   }
 
   _initVideo() async {

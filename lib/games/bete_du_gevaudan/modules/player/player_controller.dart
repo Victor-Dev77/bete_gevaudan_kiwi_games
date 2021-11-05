@@ -76,7 +76,7 @@ class PlayerController extends GetxController {
   List<Player>? married; // Marieuse
   Player? playerWillKillIfMaleAlphaDie; // Male Alpha
   Player? playerProtected; // Protecteur
-  Player? playerKillByLoup; // Loup Garou
+  List<Player> playerKillByLoup = []; // Loup Garou
 
   bool attributTypePlayer() {
     if (player.isPrincipale) {

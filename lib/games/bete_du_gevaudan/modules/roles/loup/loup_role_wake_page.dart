@@ -106,8 +106,10 @@ class LoupRoleWakePage extends GetView<LoupRoleController> {
                       return ButtonActionGame(
                         onTap: () {
                           print(_.playerSelected);
-                          Server.instance
-                              .choicePlayerKillByLoup(_.playerSelected!);
+                          PlayerController.to.playerKillByLoup
+                              .add(_.playerSelected!);
+                          Server.instance.choicePlayerKillByLoup(
+                              PlayerController.to.playerKillByLoup);
                           Future.delayed(
                               Duration(seconds: 1),
                               () => Server.instance

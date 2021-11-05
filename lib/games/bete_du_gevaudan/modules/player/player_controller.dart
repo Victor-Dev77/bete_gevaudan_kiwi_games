@@ -323,19 +323,22 @@ class PlayerController extends GetxController {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                FontAwesomeIcons.solidHeart,
-                color: ConstantColor.black,
-              ),
-              SizedBox(height: 5),
-              Text(
-                otherPlayer.name,
-                style: TextStyle(color: ConstantColor.black, fontSize: 17),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  FontAwesomeIcons.solidHeart,
+                  color: ConstantColor.white,
+                ),
+                SizedBox(height: 5),
+                Text(
+                  otherPlayer.name,
+                  style: TextStyle(color: ConstantColor.white, fontSize: 17),
+                ),
+              ],
+            ),
           )
         ],
       ),

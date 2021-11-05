@@ -8,6 +8,7 @@ import 'package:kiwigames/games/bete_du_gevaudan/bindings/roles/protecteur_role_
 import 'package:kiwigames/games/bete_du_gevaudan/bindings/roles/sorciere_role_binding.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/bindings/sleep_binding.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/bindings/vote_binding.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/bindings/wake_binding.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/distrib_role/distrib_role_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/end_game/end_game_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_dead_page.dart';
@@ -107,6 +108,7 @@ class BeteDuGevaudanPages {
     GetPage(
       name: Routes.WAKE,
       page: () => WakePage(),
+      binding: WakeBinding(),
     ),
     GetPage(
       name: Routes.VOTE,

@@ -9,14 +9,17 @@ import 'package:flutter/material.dart';
 class LoupRoleSleepPage extends GetView<LoupRoleController> {
   @override
   Widget build(BuildContext context) {
+    controller.changeAudioForSleep();
     return Scaffold(
       body: _buildScreen(),
     );
   }
 
   _buildScreen() {
-    Future.delayed(Duration(seconds: 3),
-        () => PlayerController.to.switchGameTour(GameTour.SORCIERE_WAKE));
+    Future.delayed(PlayerController.to.durationChrono, () {
+      controller.onClose();
+      PlayerController.to.switchGameTour(GameTour.SORCIERE_WAKE);
+    });
     if (PlayerController.to.player.isPrincipale) {
       return Stack(
         children: [

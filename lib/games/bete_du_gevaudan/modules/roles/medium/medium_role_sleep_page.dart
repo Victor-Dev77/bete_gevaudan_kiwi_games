@@ -9,14 +9,17 @@ import 'medium_role_controller.dart';
 class MediumRoleSleepPage extends GetView<MediumRoleController> {
   @override
   Widget build(BuildContext context) {
+    controller.changeAudioForSleep();
     return Scaffold(
       body: _buildScreen(),
     );
   }
 
   _buildScreen() {
-    Future.delayed(Duration(seconds: 3),
-        () => PlayerController.to.switchGameTour(GameTour.MALE_ALPHA_WAKE));
+    Future.delayed(PlayerController.to.durationChrono, () {
+      controller.onClose();
+      PlayerController.to.switchGameTour(GameTour.MALE_ALPHA_WAKE);
+    });
     if (PlayerController.to.player.isPrincipale) {
       return Stack(
         children: [

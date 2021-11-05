@@ -4,6 +4,6 @@ import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/loup/loup_role_co
 class LoupRoleBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(LoupRoleController());
+    Get.put(LoupRoleController(), permanent: true);
   }
 }

@@ -11,7 +11,7 @@ class MarieuseRoleController extends GetxController {
   static MarieuseRoleController get to => Get.find();
 
   List<Player> listPlayerUnis = [];
-  final AudioPlayer justAudioPlayer = AudioPlayer();
+  AudioPlayer justAudioPlayer = AudioPlayer();
 
   final videoPlayerController = VideoPlayerController.asset(
       'assets/images/platform/games/bete_du_gevaudan/foret.mp4');
@@ -19,6 +19,7 @@ class MarieuseRoleController extends GetxController {
   ChewieController get chewieController => this._chewieController!;
   RxBool _videoCharged = false.obs;
   bool get videoCharged => _videoCharged.value;
+  bool changeAudio = false;
 
   @override
   void onInit() {
@@ -51,6 +52,18 @@ class MarieuseRoleController extends GetxController {
     _videoCharged.value = true;
   }
 
+  changeAudioForSleep() async {
+    if (!changeAudio && PlayerController.to.player.isPrincipale) {
+      AudioPlayer.clearAssetCache();
+      justAudioPlayer = AudioPlayer();
+      int i = 1 + Random().nextInt(3);
+      await justAudioPlayer.setAsset(
+          "assets/images/platform/games/bete_du_gevaudan/voix/sleep_marieuse_$i.mp3");
+      justAudioPlayer.play();
+      changeAudio = true;
+    }
+  }
+
   _initAudio() async {
     int i = 1 + Random().nextInt(3);
     await justAudioPlayer.setAsset(
@@ -79,6 +92,7 @@ class MarieuseRoleController extends GetxController {
     justAudioPlayer.dispose();
     //videoPlayerController.dispose();
     //_chewieController?.dispose();
+    Get.delete<MarieuseRoleController>(force: true);
     super.onClose();
   }
 }

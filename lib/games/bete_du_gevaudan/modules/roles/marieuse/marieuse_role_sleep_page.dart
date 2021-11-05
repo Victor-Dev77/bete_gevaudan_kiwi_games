@@ -9,14 +9,17 @@ import 'marieuse_role_controller.dart';
 class MarieuseRoleSleepPage extends GetView<MarieuseRoleController> {
   @override
   Widget build(BuildContext context) {
+    controller.changeAudioForSleep();
     return Scaffold(
       body: _buildScreen(),
     );
   }
 
   _buildScreen() {
-    Future.delayed(Duration(seconds: 3),
-        () => PlayerController.to.switchGameTour(GameTour.MEDIUM_WAKE));
+    Future.delayed(PlayerController.to.durationChrono, () {
+      controller.onClose();
+      PlayerController.to.switchGameTour(GameTour.MEDIUM_WAKE);
+    });
     if (PlayerController.to.player.isPrincipale) {
       return Stack(
         children: [

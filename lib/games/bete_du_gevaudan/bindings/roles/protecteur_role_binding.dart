@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class ProtecteurRoleBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(ProtecteurRoleController());
+    Get.put(ProtecteurRoleController(), permanent: true);
   }
 }

@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class MediumRoleBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(MediumRoleController());
+    Get.put(MediumRoleController(), permanent: true);
   }
 }

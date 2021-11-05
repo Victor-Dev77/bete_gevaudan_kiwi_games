@@ -51,6 +51,7 @@ class RulesPage extends StatelessWidget {
                     child: Center(
                       child: Text(
                         Constant.credit,
+                        textAlign: TextAlign.center,
                         style:
                             TextStyle(color: ConstantColor.white, fontSize: 22),
                       ),

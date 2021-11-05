@@ -9,14 +9,17 @@ import 'sorciere_role_controller.dart';
 class SorciereRoleSleepPage extends GetView<SorciereRoleController> {
   @override
   Widget build(BuildContext context) {
+    controller.changeAudioForSleep();
     return Scaffold(
       body: _buildScreen(),
     );
   }
 
   _buildScreen() {
-    Future.delayed(Duration(seconds: 3),
-        () => PlayerController.to.switchGameTour(GameTour.WAKE));
+    Future.delayed(PlayerController.to.durationChrono, () {
+      controller.onClose();
+      PlayerController.to.switchGameTour(GameTour.WAKE);
+    });
     if (PlayerController.to.player.isPrincipale) {
       return Stack(
         children: [

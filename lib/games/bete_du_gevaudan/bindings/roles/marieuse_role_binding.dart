@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class MarieuseRoleBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(MarieuseRoleController());
+    Get.put(MarieuseRoleController(), permanent: true);
   }
 }

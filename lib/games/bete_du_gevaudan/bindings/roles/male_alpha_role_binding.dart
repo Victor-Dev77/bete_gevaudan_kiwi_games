@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class MaleAlphaRoleBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(MaleAlphaRoleController());
+    Get.put(MaleAlphaRoleController(), permanent: true);
   }
 }

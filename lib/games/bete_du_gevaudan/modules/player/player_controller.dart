@@ -106,6 +106,14 @@ class PlayerController extends GetxController {
     }
   }
 
+  addPlayerReadyVoted() {
+    if (player.isPrincipale) nbPlayerReady++;
+    if (nbPlayerReady == listPlayer.length) {
+      nbPlayerReady = 0;
+      Server.instance.nextPage(GameTour.RESULT_VOTE);
+    }
+  }
+
   bool containsRole(TypePlayer typePlayer) {
     bool res = false;
     listPlayerAlive.forEach((element) {
@@ -200,7 +208,7 @@ class PlayerController extends GetxController {
         Get.offAllNamed(Routes.VOTE);
         break;
       case GameTour.RESULT_VOTE:
-        //Get.offAllNamed(Routes.RESULT_VOTE);
+        Get.offAllNamed(Routes.RESULT_VOTE);
         break;
       case GameTour.END_TOUR:
         break;

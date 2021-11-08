@@ -9,6 +9,7 @@ import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/marieuse/marieuse
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/medium/medium_role_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/protecteur/protecteur_role_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/sorciere/sorciere_role_controller.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/vote/vote_controller.dart';
 
 class Server {
   Server._internal();
@@ -50,8 +51,12 @@ class Server {
       _assignRoleToPlayer(data);
     }
     // Wait player click Ready to launch Tour
-    else if (data["message"] == "ready") {
+    else if (data["message"] == "readySleep") {
       PlayerController.to.addPlayerReady();
+    }
+    // Wait player click vote to launch Result Vote
+    else if (data["message"] == "readyResultVote") {
+      PlayerController.to.addPlayerReadyVoted();
     }
     // Change Page
     else if (data["message"].toString().contains("GameTour.")) {
@@ -79,6 +84,10 @@ class Server {
     else if (data["message"].toString().contains("dead-")) {
       _checkDeadPlayer(data);
     }
+    // Vote Player
+    else if (data["message"].toString().contains("vote-")) {
+      _checkVotePlayer(data);
+    }
     // Get finish Voice Off for player
     else if (data["message"]
         .toString()
@@ -103,7 +112,14 @@ class Server {
 
   imReady() {
     _send({
-      "message": "ready",
+      "message": "readySleep",
+      "type": "to principale",
+    });
+  }
+
+  imReadyVoted() {
+    _send({
+      "message": "readyResultVote",
       "type": "to principale",
     });
   }
@@ -285,12 +301,34 @@ class Server {
     }
     ip1 = PlayerController.to.listPlayerAlive
         .indexWhere((element) => element.id == listOfMap[0]["id"]);
-    if (ip1 != -1) {
+    /*if (ip1 != -1) {
       PlayerController.to.listPlayerAlive.removeAt(ip1);
       PlayerController.to.nbPlayerAlive--;
-    }
+    }*/
     if (listOfMap[0]["id"] == PlayerController.to.player.id) {
       PlayerController.to.player.isKill = true;
+    }
+  }
+
+  selectPlayerVote(Player player) {
+    _send({
+      "message": "vote-[${player.toString()}]",
+      "type": "to principale",
+    });
+  }
+
+  _checkVotePlayer(Map data) {
+    var msg = data["message"].toString().substring("vote-".length);
+    var auteur = data["auteur"];
+    List listOfMap = json.decode(msg);
+    var ip1 = PlayerController.to.listPlayer
+        .indexWhere((element) => element.id == listOfMap[0]["id"]);
+    if (ip1 != -1) {
+      PlayerController.to.listPlayer[ip1].isSelectedToKill = true;
+      var ip2 = PlayerController.to.listPlayer
+          .indexWhere((element) => element.name == auteur["username"]);
+      VoteController.to.updatePlayersVoted(PlayerController.to.listPlayer[ip1],
+          PlayerController.to.listPlayer[ip2]);
     }
   }
 }

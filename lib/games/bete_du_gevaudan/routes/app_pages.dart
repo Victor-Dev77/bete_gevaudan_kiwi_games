@@ -1,5 +1,6 @@
 import 'package:kiwigames/games/bete_du_gevaudan/bindings/app_binding.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/bindings/distrib_role_binding.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/bindings/result_vote_binding.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/bindings/roles/loup_role_binding.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/bindings/roles/male_alpha_role_binding.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/bindings/roles/marieuse_role_binding.dart';
@@ -12,6 +13,7 @@ import 'package:kiwigames/games/bete_du_gevaudan/bindings/wake_binding.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/distrib_role/distrib_role_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/end_game/end_game_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_dead_page.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/result_vote/result_vote_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/loup/loup_role_sleep_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/loup/loup_role_wake_page.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/male_alpha/male_alpha_role_sleep_page.dart';
@@ -114,6 +116,11 @@ class BeteDuGevaudanPages {
       name: Routes.VOTE,
       page: () => VotePage(),
       binding: VoteBinding(),
+    ),
+    GetPage(
+      name: Routes.RESULT_VOTE,
+      page: () => ResultVotePage(),
+      binding: ResultVoteBinding(),
     ),
 
     GetPage(

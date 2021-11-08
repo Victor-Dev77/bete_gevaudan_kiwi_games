@@ -20,6 +20,7 @@ abstract class Routes {
   static const SORCIERE_ROLE_SLEEP = '/loup-du-gevaudan/sorciere_role_sleep';
   static const WAKE = '/loup-du-gevaudan/wake';
   static const VOTE = '/loup-du-gevaudan/vote';
+  static const RESULT_VOTE = '/loup-du-gevaudan/result_vote';
 
   static const PLAYER_DEAD = '/loup-du-gevaudan/player_dead';
 

@@ -58,6 +58,12 @@ class WakeController extends GetxController {
       _initAudio("wake_without_dead_");
     } else {
       // Joueur voté
+      if (playerKillByMaleAlpha != null &&
+          playerVote!.typePlayer == TypePlayer.MALE_ALPHA) {
+        //Mort Male Alpha mais transferer a autre joueur
+        playerVote = playerKillByMaleAlpha;
+        print("male alpha");
+      }
       if (playerProtected != null && playerProtected.name == playerVote!.name) {
         // Pas de mort grace au protecteur
         print("sauvé par le protecteur");
@@ -65,12 +71,6 @@ class WakeController extends GetxController {
         _initAudio("wake_without_dead_");
       } else {
         // Mort
-        if (playerKillByMaleAlpha != null &&
-            playerVote!.typePlayer == TypePlayer.MALE_ALPHA) {
-          //Mort Male Alpha mais transferer a autre joueur
-          playerVote = playerKillByMaleAlpha;
-          print("male alpha");
-        }
         if (married != null) {
           var index =
               married.indexWhere((element) => element.name == playerVote!.name);
@@ -151,9 +151,7 @@ class WakeController extends GetxController {
         case ProcessingState.ready:
           break;
         case ProcessingState.completed:
-          Future.delayed(PlayerController.to.durationChrono, () {
-            Server.instance.nextPage(GameTour.VOTE);
-          });
+          Server.instance.nextPage(GameTour.VOTE);
           break;
       }
     });

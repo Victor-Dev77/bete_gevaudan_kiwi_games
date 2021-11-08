@@ -18,6 +18,9 @@ class WakeController extends GetxController {
   ChewieController get chewieController => this._chewieController!;
   RxBool _videoCharged = false.obs;
   bool get videoCharged => _videoCharged.value;
+  RxInt _resultVoteDead = 0.obs;
+  int get resultVoteDead => _resultVoteDead.value;
+  Player? playerVote;
 
   @override
   void onInit() {
@@ -30,7 +33,6 @@ class WakeController extends GetxController {
     print("-------------------------------");
     if (PlayerController.to.player.isPrincipale) {
       _checkSortOfTour();
-      _initAudio();
       _initVideo();
     }
   }
@@ -44,37 +46,70 @@ class WakeController extends GetxController {
     Player? playerKillByMaleAlpha =
         PlayerController.to.playerWillKillIfMaleAlphaDie;
     //TODO manque sorciere
-    if (killsByLoup.length == 1) {
-      // Considere qu'il y a 1 mort minimum (s'il n'est pas sauvé par protecteur)
+
+    // Determiné majorité ou égalité
+    playerVote = _getMajority(killsByLoup, killsByLoup.length);
+    if (playerVote == null) {
+      // Egalité mais verifier sorciere
+
+      // Egalité
+      print("egalité");
+      _resultVoteDead.value = 1;
+      _initAudio("wake_without_dead_");
     } else {
-      // Determiné majorité ou égalité
-      Map<String, int> compteurOfPlayer = {};
-      killsByLoup.forEach((victime) {
-        compteurOfPlayer[victime.name] = compteurOfPlayer[victime.name] != null
-            ? compteurOfPlayer[victime.name]! + 1
-            : 0;
-      });
-      print("compteur of players: $compteurOfPlayer");
-      compteurOfPlayer.values.reduce(max);
+      // Joueur voté
+      if (playerProtected != null && playerProtected.name == playerVote!.name) {
+        // Pas de mort grace au protecteur
+        print("sauvé par le protecteur");
+        _resultVoteDead.value = 1;
+        _initAudio("wake_without_dead_");
+      } else {
+        // Mort
+        if (playerKillByMaleAlpha != null &&
+            playerVote!.typePlayer == TypePlayer.MALE_ALPHA) {
+          //Mort Male Alpha mais transferer a autre joueur
+          playerVote = playerKillByMaleAlpha;
+          print("male alpha");
+        }
+        if (married != null) {
+          var index =
+              married.indexWhere((element) => element.name == playerVote!.name);
+          if (index != -1) {
+            // Marrié donc 2 mort
+            print("married");
+          } else {
+            // Juste playerVote de mort
+            print("dead");
+            _resultVoteDead.value = 2;
+            _initAudio("wake_with_dead_");
+            Server.instance.deadPlayer(playerVote!);
+          }
+        } else {
+          // Juste playerVote de mort
+          print("dead");
+          _resultVoteDead.value = 2;
+          _initAudio("wake_with_dead_");
+          Server.instance.deadPlayer(playerVote!);
+        }
+      }
     }
   }
 
-  Player _getMajority(List<Player> killsByLoup) {
-    var modeMap = {};
-    var maxEl = killsByLoup[0];
-    var maxCount = 1;
-    for (var i = 0; i < killsByLoup.length; i++) {
-      var el = killsByLoup[i];
-      if (modeMap[el.name] == null)
-        modeMap[el.name] = 1;
+  Player? _getMajority(List<Player> array, int size) {
+    int count = 0;
+    int i = 0;
+    Player? majorityElement;
+    for (i = 0; i < size; i++) {
+      if (count == 0) majorityElement = array[i];
+      if (array[i] == majorityElement)
+        count++;
       else
-        modeMap[el.name]++;
-      if (modeMap[el.name] > maxCount) {
-        maxEl = el;
-        maxCount = modeMap[el.name];
-      }
+        count--;
     }
-    return maxEl;
+    count = 0;
+    for (i = 0; i < size; i++) if (array[i] == majorityElement) count++;
+    if (count > size / 2) return majorityElement;
+    return null;
   }
 
   _initVideo() async {
@@ -99,10 +134,10 @@ class WakeController extends GetxController {
     _videoCharged.value = true;
   }
 
-  _initAudio() async {
+  _initAudio(String prefix) async {
     int i = 1 + Random().nextInt(3);
     await justAudioPlayer.setAsset(
-        "assets/images/platform/games/bete_du_gevaudan/voix/wake_without_dead_$i.mp3");
+        "assets/images/platform/games/bete_du_gevaudan/voix/$prefix$i.mp3");
     justAudioPlayer.play();
     justAudioPlayer.playerStateStream.listen((state) {
       print(state.processingState);

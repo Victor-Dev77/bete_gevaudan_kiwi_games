@@ -75,10 +75,14 @@ class Server {
     else if (data["message"].toString().contains("choicePlayerKillByLoup-")) {
       _assignPlayerKilledByLoup(data);
     }
+    // Dead Player
+    else if (data["message"].toString().contains("dead-")) {
+      _checkDeadPlayer(data);
+    }
     // Get finish Voice Off for player
     else if (data["message"]
         .toString()
-        .contains(PlayerController.to.player.name)) {
+        .contains("ready-${PlayerController.to.player.name}-")) {
       _makeReadyBtnVoiceOffFinish(data);
     }
   }
@@ -224,7 +228,7 @@ class Server {
 
   finishVoiceOff(String username, TypePlayer typePlayer) {
     _send({
-      "message": "$username-${typePlayer.toString()}",
+      "message": "ready-$username-${typePlayer.toString()}",
       "type": "to one",
       "username": username
     });
@@ -233,7 +237,7 @@ class Server {
   _makeReadyBtnVoiceOffFinish(Map data) {
     var typeMsg = data["message"]
         .toString()
-        .substring("${PlayerController.to.player.name}-".length);
+        .substring("ready-${PlayerController.to.player.name}-".length);
     TypePlayer type =
         TypePlayer.values.firstWhere((e) => e.toString() == typeMsg.toString());
     switch (type) {
@@ -261,6 +265,32 @@ class Server {
         break;
       case TypePlayer.VILLAGEOIS:
         break;
+    }
+  }
+
+  deadPlayer(Player player) {
+    _send({
+      "message": "dead-[${player.toString()}]",
+      "type": "to all",
+    });
+  }
+
+  _checkDeadPlayer(Map data) {
+    var msg = data["message"].toString().substring("dead-".length);
+    List listOfMap = json.decode(msg);
+    var ip1 = PlayerController.to.listPlayer
+        .indexWhere((element) => element.id == listOfMap[0]["id"]);
+    if (ip1 != -1) {
+      PlayerController.to.listPlayer[ip1].isKill = true;
+    }
+    ip1 = PlayerController.to.listPlayerAlive
+        .indexWhere((element) => element.id == listOfMap[0]["id"]);
+    if (ip1 != -1) {
+      PlayerController.to.listPlayerAlive.removeAt(ip1);
+      PlayerController.to.nbPlayerAlive--;
+    }
+    if (listOfMap[0]["id"] == PlayerController.to.player.id) {
+      PlayerController.to.player.isKill = true;
     }
   }
 }

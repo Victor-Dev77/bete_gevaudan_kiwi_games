@@ -7,6 +7,7 @@ import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_image.dart';
 
 enum GameTour {
   INTRO_GAME,
@@ -341,6 +342,23 @@ class PlayerController extends GetxController {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget killPlayerWidget() {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(ConstantImage.tombe),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Center(
+        child: Text(
+          "TU ES MORT",
+          style: TextStyle(color: ConstantColor.white, fontSize: 27),
+        ),
       ),
     );
   }

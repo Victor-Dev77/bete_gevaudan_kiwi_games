@@ -21,6 +21,9 @@ abstract class ConstantImage {
   static const card_villageois =
       "assets/images/platform/games/bete_du_gevaudan/card_perso_villageois.jpg";
 
+  static const tombe =
+      "assets/images/platform/games/bete_du_gevaudan/pierre_tombale.jpg";
+
   /*static final logoImage = Image.asset(
     ConstantImage.logo,
     width: 50,

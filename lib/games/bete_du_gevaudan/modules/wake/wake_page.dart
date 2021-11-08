@@ -26,11 +26,20 @@ class WakePage extends GetView<WakeController> {
             return Container();
           }),
           Center(
-            child: Text(
-              Constant.wakeNoKill,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: ConstantColor.white, fontSize: 22),
-            ),
+            child: Obx(() {
+              if (controller.resultVoteDead == 0)
+                return CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(ConstantColor.primary),
+                );
+              return Text(
+                controller.resultVoteDead == 2
+                    ? "LE VILLAGE SE REVEILLE.\n${controller.playerVote!.name.toUpperCase()} EST MORT !"
+                    : Constant.wakeNoKill,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: ConstantColor.white, fontSize: 22),
+              );
+            }),
           ),
         ],
       );

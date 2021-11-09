@@ -73,6 +73,8 @@ class RegisterForm extends GetView<RegisterController> {
               _ConfirmPassword(),
               // HeightSpacer(25.0),
               // _TelephoneInput(),
+              HeightSpacer(25.0),
+              _RemenberMe(),
               HeightSpacer(50.0),
               _Loginregister(),
             ],
@@ -192,6 +194,33 @@ class _TelephoneInput extends GetView<RegisterController> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RemenberMe extends GetView<RegisterController> {
+  const _RemenberMe({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.translate(
+      offset: const Offset(-10.0, 0),
+      child: Obx(
+        () => Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Checkbox(
+              onChanged: controller.rememberMe,
+              value: controller.rememberMe(),
+            ),
+            InteractiveText(
+              text: 'remember_me'.tr,
+              function: () => controller.rememberMe.toggle(),
+              color: dividerColor.color,
+            ),
+          ],
         ),
       ),
     );

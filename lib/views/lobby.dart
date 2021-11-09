@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/controllers/controllers.dart';
+import 'package:kiwigames/models/models.dart';
 import 'package:kiwigames/shared/shared.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -10,7 +11,37 @@ class Lobby extends GetView<LobbyController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: notLoggedAppBar,
+      appBar: AppBar(
+        title: Obx(() {
+          bool hasHost = false;
+          for (final user in controller.userList) {
+            if (user.isHost) {
+              hasHost = true;
+            }
+          }
+          MainAxisAlignment mainAxisAlignment;
+          List<Widget> children;
+          if (hasHost ||
+              controller.screen == 'principale' ||
+              controller.isGuest) {
+            mainAxisAlignment = MainAxisAlignment.start;
+            children = const [KiwiGamesLogo()];
+          } else {
+            mainAxisAlignment = MainAxisAlignment.spaceBetween;
+            children = [
+              const KiwiGamesLogo(),
+              ElevatedButton(
+                child: Text('become_host_lobby'.tr),
+                onPressed: controller.setHost,
+              ),
+            ];
+          }
+          return Row(
+            mainAxisAlignment: mainAxisAlignment,
+            children: children,
+          );
+        }),
+      ),
       body: Center(
         child: Obx(() => controller.loading()
             ? const CircularProgressIndicator()

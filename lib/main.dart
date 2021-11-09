@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:kiwigames/app/app.dart';
 import 'configure_nonweb.dart' if (dart.library.html) 'configure_web.dart';
 
-void main() {
+void main() async {
   configureApp();
+  await GetStorage.init();
   Paint.enableDithering = true;
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const Kiwigames());

@@ -50,6 +50,7 @@ class Messages extends Translations {
           'information': 'Informartion',
           'lobby_no_host': "Ce lobby n'a actuellement pas d'hôte.",
           'become_host': 'Veux-tu devenir hôte ?',
+          'become_host_lobby': 'Devenir hôte',
           'not_an_email': 'Merci de renseigner une adresse email valide',
           'password_too_short': 'Mot de passe trop court',
           'no_pseudo': 'Merci de renseigner un pseudo',

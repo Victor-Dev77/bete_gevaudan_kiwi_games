@@ -8,6 +8,10 @@ class UserProvider extends GetConnect {
     });
   }
 
+  Future<Response> loginWithUuid(String loginUuid) {
+    return post('login', {'login_uuid': loginUuid});
+  }
+
   Future<Response> register({
     required String email,
     required String username,

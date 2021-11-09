@@ -24,33 +24,38 @@ class ScreenTypeChoice extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    Axis direction;
-    CrossAxisAlignment crossAxisAlignment;
-    Widget spacer;
-    if (MediaQuery.of(context).size.width <= 850) {
-      direction = Axis.vertical;
-      crossAxisAlignment = CrossAxisAlignment.stretch;
-      spacer = const HeightSpacer(25.0);
-    } else {
-      direction = Axis.horizontal;
-      crossAxisAlignment = CrossAxisAlignment.center;
-      spacer = const WidthSpacer(25.0);
-    }
-    return Flex(
-      direction: direction,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: crossAxisAlignment,
-      children: [
-        BigButton(
-          text: 'join_as_master_screen'.tr,
-          onPressed: controller.goToMasterScreen,
-        ),
-        spacer,
-        BigButton(
-          text: 'join_as_player'.tr,
-          onPressed: controller.goToPlayerScreen,
-        ),
-      ],
-    );
+    return Obx(() {
+      if (controller.loading()) {
+        return const CircularProgressIndicator();
+      }
+      Axis direction;
+      CrossAxisAlignment crossAxisAlignment;
+      Widget spacer;
+      if (MediaQuery.of(context).size.width <= 850) {
+        direction = Axis.vertical;
+        crossAxisAlignment = CrossAxisAlignment.stretch;
+        spacer = const HeightSpacer(25.0);
+      } else {
+        direction = Axis.horizontal;
+        crossAxisAlignment = CrossAxisAlignment.center;
+        spacer = const WidthSpacer(25.0);
+      }
+      return Flex(
+        direction: direction,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: crossAxisAlignment,
+        children: [
+          BigButton(
+            text: 'join_as_master_screen'.tr,
+            onPressed: controller.goToMasterScreen,
+          ),
+          spacer,
+          BigButton(
+            text: 'join_as_player'.tr,
+            onPressed: controller.goToPlayerScreen,
+          ),
+        ],
+      );
+    });
   }
 }

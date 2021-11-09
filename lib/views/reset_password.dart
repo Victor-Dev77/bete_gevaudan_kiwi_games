@@ -3,24 +3,19 @@ import 'package:get/get.dart';
 import 'package:kiwigames/controllers/controllers.dart';
 import 'package:kiwigames/shared/shared.dart';
 
-class ResetPassword extends StatelessWidget {
+class ResetPassword extends GetView<ResetPasswordController> {
   const ResetPassword({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: notLoggedAppBar,
-      body: GetBuilder<ResetPasswordController>(
-        builder: (c) {
-          if (c.code == null || c.code!.isEmpty) {
-            return const Center(child: _NoIdFound());
-          }
-          return const SingleChildScrollView(
-            padding: EdgeInsets.only(top: 50.0, bottom: 25.0),
-            child: ResetPasswordForm(),
-          );
-        },
-      ),
+      body: controller.code == null || controller.code!.isEmpty
+          ? const Center(child: _NoIdFound())
+          : const SingleChildScrollView(
+              padding: EdgeInsets.only(top: 50.0, bottom: 25.0),
+              child: ResetPasswordForm(),
+            ),
     );
   }
 }

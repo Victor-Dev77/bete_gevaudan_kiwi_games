@@ -84,6 +84,7 @@ class JoinLobbyController extends GetxController {
         host: host,
         code: code,
         username: username,
+        isGuest: isGuest,
       ),
       permanent: true,
     );

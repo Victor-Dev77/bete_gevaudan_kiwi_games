@@ -69,7 +69,7 @@ class LoginForm extends GetView<LoginController> {
               HeightSpacer(25.0),
               _PasswordInput(),
               HeightSpacer(20.0),
-              RememberMeForgotPassword(),
+              _RememberMeForgotPassword(),
               HeightSpacer(50.0),
               _LoginRegister(),
               /* HeightSpacer(60.0),
@@ -122,8 +122,8 @@ class _PasswordInput extends GetView<LoginController> {
   }
 }
 
-class RememberMeForgotPassword extends StatelessWidget {
-  const RememberMeForgotPassword({Key? key}) : super(key: key);
+class _RememberMeForgotPassword extends GetView<LoginController> {
+  const _RememberMeForgotPassword({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -147,20 +147,19 @@ class RememberMeForgotPassword extends StatelessWidget {
       mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment,
       children: [
-        ValueBuilder<bool?>(
-          initialValue: false,
-          builder: (rememberMe, updater) => Transform.translate(
-            offset: const Offset(-10.0, 0),
-            child: Row(
+        Transform.translate(
+          offset: const Offset(-10.0, 0),
+          child: Obx(
+            () => Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Checkbox(
-                  onChanged: updater,
-                  value: rememberMe,
+                  onChanged: controller.rememberMe,
+                  value: controller.rememberMe(),
                 ),
                 InteractiveText(
                   text: 'remember_me'.tr,
-                  function: () => updater(!rememberMe!),
+                  function: () => controller.rememberMe.toggle(),
                   color: dividerColor.color,
                 ),
               ],

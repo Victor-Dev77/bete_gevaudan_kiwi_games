@@ -16,7 +16,8 @@ class LobbyController extends GetxController {
   final String screen;
   final String? code;
   final String? username;
-  final bool host;
+  bool host;
+  final bool isGuest;
 
   final loading = false.obs;
   final lobbyCode = ''.obs;
@@ -32,6 +33,7 @@ class LobbyController extends GetxController {
     this.code,
     this.username,
     required this.host,
+    this.isGuest = false,
   });
 
   @override
@@ -57,6 +59,7 @@ class LobbyController extends GetxController {
         // notif user reconnected
         if (type == 'notif new user' ||
             type == 'first connect' ||
+            type == 'notif new host' ||
             type == 'notif leave user') {
           handleLobbyPlayers(res);
         } else if (res['message'] is! String) {
@@ -131,5 +134,21 @@ class LobbyController extends GetxController {
         style: textTheme.headline5!.copyWith(color: primaryColor.color),
       ),
     );
+  }
+
+  void setHost() {
+    print('setting host');
+    host = true;
+    sendToLobby({
+      'type': 'first connect',
+      'screen': screen,
+      'host': host,
+      'user': LobbyUser(
+        username: username!,
+        screen: screen,
+        isHost: host,
+      ).toJson(),
+    });
+    Get.offAllNamed('/browse');
   }
 }

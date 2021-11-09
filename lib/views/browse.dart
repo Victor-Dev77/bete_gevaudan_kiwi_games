@@ -260,6 +260,7 @@ class Game extends GetView<BrowseController> {
   }) : super(key: key);
 
   void launchGame() {
+    // TODO check for user number
     if (gamePath != null) {
       controller.launchGame(gamePath!);
     }

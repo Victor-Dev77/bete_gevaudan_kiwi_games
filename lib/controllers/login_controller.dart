@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:kiwigames/controllers/user_controller.dart';
 import 'package:kiwigames/models/models.dart';
 import 'package:kiwigames/shared/shared.dart';
@@ -26,6 +27,9 @@ class LoginController extends GetxController {
       String password = passwordController.text.trim();
       var res = await userProvider.login(pseudo: pseudo, password: password);
       if (res.statusCode == 200) {
+        if (rememberMe()) {
+          GetStorage().write('login_uuid', res.body['login_uuid']);
+        }
         User user = User.fromJson(res.body);
         Get.put(UserController(user), permanent: true);
         Get.offAllNamed('/join-lobby');

@@ -39,6 +39,8 @@ class LoupRoleWakePage extends GetView<LoupRoleController> {
         ],
       );
     }
+    if (PlayerController.to.player.isKill)
+      return PlayerController.to.killPlayerWidget();
     if (PlayerController.to.player.typePlayer != TypePlayer.LOUP)
       return PlayerController.to.sleepPlayerPageWidget();
     return Container(
@@ -73,7 +75,7 @@ class LoupRoleWakePage extends GetView<LoupRoleController> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: GetBuilder<LoupRoleController>(
                 builder: (_) {
-                  var listPlayer = PlayerController.to.listPlayerAlive;
+                  var listPlayer = PlayerController.to.listPlayer;
                   listPlayer.removeWhere(
                       (element) => element.typePlayer == TypePlayer.LOUP);
                   return GridView.builder(

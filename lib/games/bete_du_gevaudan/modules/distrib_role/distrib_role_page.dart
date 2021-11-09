@@ -29,23 +29,14 @@ class DistribRolePage extends StatelessWidget {
           }),
           Container(
             child: Center(
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        Constant.beginGame,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: ConstantColor.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Spacer(),
-                ],
+              child: Text(
+                Constant.beginGame,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: ConstantColor.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

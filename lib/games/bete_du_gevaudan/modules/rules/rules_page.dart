@@ -34,27 +34,20 @@ class RulesPage extends StatelessWidget {
           Obx(() {
             if (controller.introGame)
               return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Expanded(
+                  Text(
+                    "LA BETE DU GEVAUDAN",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: ConstantColor.white, fontSize: 33),
+                  ),
+                  SizedBox(height: 20),
+                  Center(
                     child: Text(
-                      "LA BETE DU GEVAUDAN",
+                      Constant.credit,
                       textAlign: TextAlign.center,
                       style:
-                          TextStyle(color: ConstantColor.white, fontSize: 33),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Container(),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        Constant.credit,
-                        textAlign: TextAlign.center,
-                        style:
-                            TextStyle(color: ConstantColor.white, fontSize: 22),
-                      ),
+                          TextStyle(color: ConstantColor.white, fontSize: 22),
                     ),
                   )
                 ],

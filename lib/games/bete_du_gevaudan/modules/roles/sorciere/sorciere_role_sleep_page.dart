@@ -40,6 +40,8 @@ class SorciereRoleSleepPage extends GetView<SorciereRoleController> {
         ],
       );
     }
+    if (PlayerController.to.player.isKill)
+      return PlayerController.to.killPlayerWidget();
     return PlayerController.to.sleepPlayerPageWidget();
   }
 }

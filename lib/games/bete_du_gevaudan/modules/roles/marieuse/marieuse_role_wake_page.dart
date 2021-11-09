@@ -39,6 +39,8 @@ class MarieuseRoleWakePage extends GetView<MarieuseRoleController> {
         ],
       );
     }
+    if (PlayerController.to.player.isKill)
+      return PlayerController.to.killPlayerWidget();
     if (PlayerController.to.player.typePlayer != TypePlayer.MARIEUSE)
       return PlayerController.to.sleepPlayerPageWidget();
     return Container(
@@ -72,7 +74,7 @@ class MarieuseRoleWakePage extends GetView<MarieuseRoleController> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: GetBuilder<MarieuseRoleController>(
                 builder: (_) {
-                  var listPlayer = PlayerController.to.listPlayerAlive;
+                  var listPlayer = PlayerController.to.listPlayer;
                   listPlayer.removeWhere(
                       (element) => element.typePlayer == TypePlayer.MARIEUSE);
                   return GridView.builder(

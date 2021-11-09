@@ -39,6 +39,8 @@ class MaleAlphaRoleWakePage extends GetView<MaleAlphaRoleController> {
         ],
       );
     }
+    if (PlayerController.to.player.isKill)
+      return PlayerController.to.killPlayerWidget();
     if (PlayerController.to.player.typePlayer != TypePlayer.MALE_ALPHA)
       return PlayerController.to.sleepPlayerPageWidget();
     return Container(
@@ -73,7 +75,7 @@ class MaleAlphaRoleWakePage extends GetView<MaleAlphaRoleController> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: GetBuilder<MaleAlphaRoleController>(
                 builder: (_) {
-                  var listPlayer = PlayerController.to.listPlayerAlive;
+                  var listPlayer = PlayerController.to.listPlayer;
                   listPlayer.removeWhere(
                       (element) => element.typePlayer == TypePlayer.MALE_ALPHA);
                   return GridView.builder(

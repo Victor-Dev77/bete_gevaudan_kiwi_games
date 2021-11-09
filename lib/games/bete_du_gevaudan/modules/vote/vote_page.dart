@@ -8,7 +8,6 @@ import 'package:kiwigames/games/bete_du_gevaudan/modules/widgets_global/button_a
 import 'package:kiwigames/games/bete_du_gevaudan/modules/widgets_global/button_select_player.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
-import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_image.dart';
 
 class VotePage extends GetView<VoteController> {
   @override
@@ -33,72 +32,79 @@ class VotePage extends GetView<VoteController> {
           }),
           Container(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Expanded(
-                  child: Text(
-                    Constant.vote,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: ConstantColor.white, fontSize: 22),
+                  child: Center(
+                    child: Text(
+                      Constant.vote,
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(color: ConstantColor.white, fontSize: 22),
+                    ),
                   ),
                 ),
                 Expanded(
                   flex: 3,
-                  child: Container(
-                    child: GetBuilder<VoteController>(
-                      builder: (_) {
-                        return GridView.builder(
-                          itemCount: PlayerController.to.listPlayer.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 0.75,
-                          ),
-                          itemBuilder: (ctx, index) {
-                            var player = PlayerController.to.listPlayer[index];
-                            var playerShow = _.playersVoted[player.name]!;
-                            return Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    player.name,
-                                    style: TextStyle(
+                  child: Center(
+                    child: Container(
+                      child: GetBuilder<VoteController>(
+                        builder: (_) {
+                          return GridView.builder(
+                            itemCount: PlayerController.to.listPlayer.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 10,
+                            ),
+                            itemBuilder: (ctx, index) {
+                              var player =
+                                  PlayerController.to.listPlayer[index];
+                              var playerShow = _.playersVoted[player.name]!;
+                              return Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      player.name,
+                                      style: TextStyle(
+                                        color: playerShow["isDead"]
+                                            ? ConstantColor.grey
+                                            : ConstantColor.white,
+                                        fontSize: 22,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    Container(
+                                      width: 50,
+                                      height: 50,
                                       color: playerShow["isDead"]
                                           ? ConstantColor.grey
                                           : ConstantColor.white,
-                                      fontSize: 22,
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Container(
-                                    width: 50,
-                                    height: 50,
-                                    color: playerShow["isDead"]
-                                        ? ConstantColor.grey
-                                        : ConstantColor.white,
-                                    child: Center(
-                                      child: Text(
-                                        playerShow["isDead"]
-                                            ? "X"
-                                            : playerShow["cmpt"].toString(),
-                                        style: TextStyle(
-                                          color: ConstantColor.black,
-                                          fontSize: 22,
+                                      child: Center(
+                                        child: Text(
+                                          playerShow["isDead"]
+                                              ? "X"
+                                              : playerShow["cmpt"].toString(),
+                                          style: TextStyle(
+                                            color: ConstantColor.black,
+                                            fontSize: 22,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
+                Spacer(),
               ],
             ),
           ),

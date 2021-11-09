@@ -40,6 +40,8 @@ class MaleAlphaRoleSleepPage extends GetView<MaleAlphaRoleController> {
         ],
       );
     }
+    if (PlayerController.to.player.isKill)
+      return PlayerController.to.killPlayerWidget();
     return PlayerController.to.sleepPlayerPageWidget();
   }
 }

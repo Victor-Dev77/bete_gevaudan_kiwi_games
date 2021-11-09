@@ -40,6 +40,8 @@ class MediumRoleSleepPage extends GetView<MediumRoleController> {
         ],
       );
     }
+    if (PlayerController.to.player.isKill)
+      return PlayerController.to.killPlayerWidget();
     return PlayerController.to.sleepPlayerPageWidget();
   }
 }

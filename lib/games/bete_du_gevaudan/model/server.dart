@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:kiwigames/controllers/controllers.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/distrib_role/distrib_role_controller.dart';
@@ -63,6 +64,10 @@ class Server {
       GameTour tour = GameTour.values
           .firstWhere((e) => e.toString() == data["message"].toString());
       PlayerController.to.switchGameTour(tour);
+    }
+    // Increase Nb Tour
+    else if (data["message"].toString().contains("increaseNBTour-")) {
+      _assignNbTour(data);
     }
     // Specific Role Marieuse
     else if (data["message"].toString().contains("married-")) {
@@ -129,6 +134,19 @@ class Server {
       "message": tour.toString(),
       "type": "to all",
     });
+  }
+
+  increaseNBTour(int nbTour) {
+    _send({
+      "message": "increaseNBTour-$nbTour",
+      "type": "to all",
+    });
+  }
+
+  _assignNbTour(Map data) {
+    var msg = data["message"].toString().substring("increaseNBTour-".length);
+    var tour = int.parse(msg);
+    PlayerController.to.nbTour = tour;
   }
 
   _assignRoleToPlayer(Map data) {
@@ -258,26 +276,32 @@ class Server {
         TypePlayer.values.firstWhere((e) => e.toString() == typeMsg.toString());
     switch (type) {
       case TypePlayer.LOUP:
-        LoupRoleController.to.setVoiceOffFinish();
+        if (Get.isRegistered<LoupRoleController>())
+          LoupRoleController.to.setVoiceOffFinish();
         break;
       case TypePlayer.SORCIERE:
-        SorciereRoleController.to.setVoiceOffFinish();
+        if (Get.isRegistered<SorciereRoleController>())
+          SorciereRoleController.to.setVoiceOffFinish();
         break;
       case TypePlayer.PETITE_FILLE:
         break;
       case TypePlayer.MEDIUM:
-        MediumRoleController.to.setVoiceOffFinish();
+        if (Get.isRegistered<MediumRoleController>())
+          MediumRoleController.to.setVoiceOffFinish();
         break;
       case TypePlayer.PROTECTEUR:
-        ProtecteurRoleController.to.setVoiceOffFinish();
+        if (Get.isRegistered<ProtecteurRoleController>())
+          ProtecteurRoleController.to.setVoiceOffFinish();
         break;
       case TypePlayer.LE_PETIT_FARCEUR:
         break;
       case TypePlayer.MARIEUSE:
-        MarieuseRoleController.to.setVoiceOffFinish();
+        if (Get.isRegistered<MarieuseRoleController>())
+          MarieuseRoleController.to.setVoiceOffFinish();
         break;
       case TypePlayer.MALE_ALPHA:
-        MaleAlphaRoleController.to.setVoiceOffFinish();
+        if (Get.isRegistered<MaleAlphaRoleController>())
+          MaleAlphaRoleController.to.setVoiceOffFinish();
         break;
       case TypePlayer.VILLAGEOIS:
         break;
@@ -298,6 +322,7 @@ class Server {
         .indexWhere((element) => element.id == listOfMap[0]["id"]);
     if (ip1 != -1) {
       PlayerController.to.listPlayer[ip1].isKill = true;
+      PlayerController.to.nbPlayerAlive--;
     }
     ip1 = PlayerController.to.listPlayerAlive
         .indexWhere((element) => element.id == listOfMap[0]["id"]);
@@ -305,10 +330,11 @@ class Server {
       PlayerController.to.listPlayerAlive.removeAt(ip1);
       PlayerController.to.nbPlayerAlive--;
     }*/
-    PlayerController.to.nbPlayerAlive--;
     if (listOfMap[0]["id"] == PlayerController.to.player.id) {
       PlayerController.to.player.isKill = true;
     }
+    print("NB PLAYER ALIVE: ${PlayerController.to.nbPlayerAlive}");
+    print("NB PLAYERS STATUS: ${PlayerController.to.listPlayer}");
   }
 
   selectPlayerVote(Player player) {

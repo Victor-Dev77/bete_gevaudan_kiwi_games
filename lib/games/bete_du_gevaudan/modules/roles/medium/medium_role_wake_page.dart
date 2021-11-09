@@ -39,6 +39,8 @@ class MediumRoleWakePage extends GetView<MediumRoleController> {
         ],
       );
     }
+    if (PlayerController.to.player.isKill)
+      return PlayerController.to.killPlayerWidget();
     if (PlayerController.to.player.typePlayer != TypePlayer.MEDIUM)
       return PlayerController.to.sleepPlayerPageWidget();
     return Container(
@@ -81,7 +83,7 @@ class MediumRoleWakePage extends GetView<MediumRoleController> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: GetBuilder<MediumRoleController>(
               builder: (_) {
-                var listPlayer = PlayerController.to.listPlayerAlive;
+                var listPlayer = PlayerController.to.listPlayer;
                 listPlayer.removeWhere(
                     (element) => element.typePlayer == TypePlayer.MEDIUM);
                 return GridView.builder(

@@ -40,6 +40,8 @@ class ProtecteurRoleWakePage extends GetView<ProtecteurRoleController> {
         ],
       );
     }
+    if (PlayerController.to.player.isKill)
+      return PlayerController.to.killPlayerWidget();
     if (PlayerController.to.player.typePlayer != TypePlayer.PROTECTEUR)
       return PlayerController.to.sleepPlayerPageWidget();
     return Container(
@@ -74,7 +76,7 @@ class ProtecteurRoleWakePage extends GetView<ProtecteurRoleController> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: GetBuilder<ProtecteurRoleController>(
                 builder: (_) {
-                  var listPlayer = PlayerController.to.listPlayerAlive;
+                  var listPlayer = PlayerController.to.listPlayer;
                   listPlayer.removeWhere(
                       (element) => element.typePlayer == TypePlayer.PROTECTEUR);
                   return GridView.builder(

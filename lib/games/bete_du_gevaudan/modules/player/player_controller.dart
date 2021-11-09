@@ -121,11 +121,17 @@ class PlayerController extends GetxController {
 
   bool containsRole(TypePlayer typePlayer) {
     bool res = false;
-    listPlayerAlive.forEach((element) {
-      if (element.typePlayer == typePlayer) {
+    for (int i = 0; i < listPlayer.length; i++) {
+      if (listPlayer[i].typePlayer == typePlayer && !listPlayer[i].isKill) {
+        /*if (nbTour > 0 &&
+            (typePlayer == TypePlayer.MARIEUSE ||
+                typePlayer == TypePlayer.MALE_ALPHA))
+          res = false;
+        else*/
         res = true;
+        return res;
       }
-    });
+    }
     return res;
   }
 
@@ -300,28 +306,22 @@ class PlayerController extends GetxController {
         Column(
           children: [
             Expanded(
-              flex: 2,
               child: married?.length == 2 ? _buildMarried() : Container(),
             ),
             Expanded(
+              flex: 3,
               child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "FERMEZ LES YEUX, VOUS DORMEZ",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: ConstantColor.white,
-                      fontSize: 22,
-                    ),
+                child: Text(
+                  "FERMEZ LES YEUX, VOUS DORMEZ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: ConstantColor.white,
+                    fontSize: 22,
                   ),
                 ),
               ),
             ),
-            Expanded(
-              flex: 2,
-              child: Container(),
-            ),
+            Spacer()
           ],
         ),
       ],
@@ -338,7 +338,7 @@ class PlayerController extends GetxController {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[

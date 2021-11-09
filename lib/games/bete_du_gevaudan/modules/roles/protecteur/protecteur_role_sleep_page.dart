@@ -40,6 +40,8 @@ class ProtecteurRoleSleepPage extends GetView<ProtecteurRoleController> {
         ],
       );
     }
+    if (PlayerController.to.player.isKill)
+      return PlayerController.to.killPlayerWidget();
     return PlayerController.to.sleepPlayerPageWidget();
   }
 }

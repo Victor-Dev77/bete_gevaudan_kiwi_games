@@ -53,6 +53,7 @@ class VotePage extends GetView<VoteController> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 20,
                             mainAxisSpacing: 10,
+                            childAspectRatio: 0.75,
                           ),
                           itemBuilder: (ctx, index) {
                             var player = PlayerController.to.listPlayer[index];

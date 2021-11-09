@@ -305,6 +305,7 @@ class Server {
       PlayerController.to.listPlayerAlive.removeAt(ip1);
       PlayerController.to.nbPlayerAlive--;
     }*/
+    PlayerController.to.nbPlayerAlive--;
     if (listOfMap[0]["id"] == PlayerController.to.player.id) {
       PlayerController.to.player.isKill = true;
     }

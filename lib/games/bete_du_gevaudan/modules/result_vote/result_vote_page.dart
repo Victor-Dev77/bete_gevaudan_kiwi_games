@@ -26,11 +26,15 @@ class ResultVotePage extends GetView<ResultVoteController> {
             return Container();
           }),
           Center(
-            child: Text(
-              Constant.resultVoteNoDead,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: ConstantColor.white, fontSize: 22),
-            ),
+            child: Obx(() {
+              return Text(
+                controller.voteWithDead
+                    ? "LE VILLAGE S'EST PRONONCE. ${controller.playerDead!.name.toUpperCase()} N'EST\nPLUS. IL ETAIT ${controller.playerDead!.nameTypePlayer}"
+                    : Constant.resultVoteNoDead,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: ConstantColor.white, fontSize: 22),
+              );
+            }),
           ),
         ],
       );

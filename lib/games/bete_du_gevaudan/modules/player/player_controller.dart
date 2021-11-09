@@ -4,6 +4,7 @@ import 'package:kiwigames/controllers/controllers.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/distrib_role.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/vote/vote_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
@@ -72,6 +73,7 @@ class PlayerController extends GetxController {
   int nbPlayerReady = 0;
   List<Player> listPlayer = [];
   List<Player> listPlayerAlive = [];
+  Player? playerKillByVote;
 
   // Specific Role Player
   List<Player>? married; // Marieuse
@@ -108,8 +110,11 @@ class PlayerController extends GetxController {
 
   addPlayerReadyVoted() {
     if (player.isPrincipale) nbPlayerReady++;
-    if (nbPlayerReady == listPlayer.length) {
+    if (nbPlayerReady == nbPlayerAlive) {
       nbPlayerReady = 0;
+      playerKillByVote = VoteController.to.getResultVote();
+      if (playerKillByVote != null)
+        Server.instance.deadPlayer(playerKillByVote!);
       Server.instance.nextPage(GameTour.RESULT_VOTE);
     }
   }

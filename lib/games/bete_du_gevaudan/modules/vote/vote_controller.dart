@@ -21,7 +21,11 @@ class VoteController extends GetxController {
   Player? playerSelected;
   RxBool _voted = false.obs;
   bool get voted => _voted.value;
-  setVoted() => _voted.value = true;
+  setVoted() {
+    _voted.value = true;
+    update();
+  }
+
   Map<String, Map<String, dynamic>> playersVoted = {};
 
   @override
@@ -63,6 +67,49 @@ class VoteController extends GetxController {
     playersVoted[player.name]!['cmpt']++;
     playersVoted[player.name]!['votants'].add(auteur);
     update();
+  }
+
+  Player? getResultVote() {
+    List<String> names = [];
+    playersVoted.forEach((key, value) {
+      if (value["cmpt"] > 0) {
+        for (int i = 0; i < value["cmpt"]; i++) {
+          names.add(key);
+        }
+      }
+    });
+    var majority = _getMajority(names, names.length);
+    if (majority == null) {
+      // Egalité
+      print("egalité voted");
+    } else {
+      // Mort
+      var ip1 = PlayerController.to.listPlayer
+          .indexWhere((element) => element.name == majority);
+      if (ip1 != -1) {
+        var p = PlayerController.to.listPlayer[ip1];
+        print("player voted dead => $p");
+        return p;
+      }
+    }
+    return null;
+  }
+
+  String? _getMajority(List<String> array, int size) {
+    int count = 0;
+    int i = 0;
+    String? majorityElement;
+    for (i = 0; i < size; i++) {
+      if (count == 0) majorityElement = array[i];
+      if (array[i] == majorityElement)
+        count++;
+      else
+        count--;
+    }
+    count = 0;
+    for (i = 0; i < size; i++) if (array[i] == majorityElement) count++;
+    if (count > size / 2) return majorityElement;
+    return null;
   }
 
   _initVideo() async {

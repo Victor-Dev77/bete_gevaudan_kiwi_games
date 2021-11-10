@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/controllers/controllers.dart';
+import 'package:kiwigames/models/models.dart';
 import 'package:kiwigames/shared/shared.dart';
 
 class Browse extends StatelessWidget {
@@ -39,14 +40,7 @@ class LandingCarourel extends GetView<BrowseController> {
             controller: controller.tabController,
             children: controller.carouselSlides
                 .map(
-                  (slide) => CarouselSlide(
-                    name: slide.name,
-                    catchPhrase: slide.catchPhrase,
-                    description: slide.description,
-                    imagePath: slide.imagePath,
-                    isAvailable: slide.isAvailable,
-                    gamePath: slide.gamePath,
-                  ),
+                  (game) => CarouselSlide(game: game),
                 )
                 .toList(),
           )),
@@ -55,22 +49,9 @@ class LandingCarourel extends GetView<BrowseController> {
 }
 
 class CarouselSlide extends StatelessWidget {
-  final String name;
-  final String catchPhrase;
-  final String description;
-  final String imagePath;
-  final String? gamePath;
-  final bool isAvailable;
+  final Game game;
 
-  const CarouselSlide({
-    Key? key,
-    required this.name,
-    required this.catchPhrase,
-    required this.description,
-    required this.imagePath,
-    this.gamePath,
-    required this.isAvailable,
-  }) : super(key: key);
+  const CarouselSlide({Key? key, required this.game}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +59,7 @@ class CarouselSlide extends StatelessWidget {
       alignment: Alignment.bottomLeft,
       fit: StackFit.expand,
       children: [
-        Image.asset(imagePath, fit: BoxFit.cover),
+        Image.asset(game.imagePath, fit: BoxFit.cover),
         Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -88,43 +69,24 @@ class CarouselSlide extends StatelessWidget {
             ),
           ),
         ),
-        SlideText(
-          name: name,
-          catchPhrase: catchPhrase,
-          description: description,
-          available: isAvailable,
-          gamePath: gamePath,
-        ),
+        SlideText(game: game),
       ],
     );
   }
 }
 
 class SlideText extends GetView<BrowseController> {
-  final String name;
-  final String catchPhrase;
-  final String description;
-  final String? gamePath;
-  final bool available;
+  final Game game;
 
-  const SlideText({
-    Key? key,
-    required this.name,
-    required this.catchPhrase,
-    required this.description,
-    this.gamePath,
-    required this.available,
-  }) : super(key: key);
+  const SlideText({Key? key, required this.game}) : super(key: key);
 
   void launchGame() {
-    if (gamePath != null) {
-      controller.launchGame(gamePath!);
-    }
+    controller.launchGame(game);
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget bottomButton = available
+    Widget bottomButton = game.isAvailable
         ? ElevatedButton(
             child: Text('play'.tr),
             onPressed: launchGame,
@@ -151,16 +113,16 @@ class SlideText extends GetView<BrowseController> {
               : null,
           children: [
             Text(
-              name,
+              game.name,
               style: Get.textTheme.headline5,
             ),
             Text(
-              catchPhrase,
+              game.catchPhrase,
               style: Get.textTheme.headline6,
             ),
             const HeightSpacer(10.0),
             Text(
-              description,
+              game.description,
               maxLines: 20,
             ),
             Align(alignment: Alignment.bottomLeft, child: bottomButton),
@@ -213,12 +175,7 @@ class GameRow extends GetView<BrowseController> {
               separatorBuilder: (_, __) => const WidthSpacer(20.0),
               itemBuilder: (context, index) {
                 final game = controller.gameList[index];
-                return Game(
-                  name: game.name,
-                  imagePath: game.imagePath,
-                  isAvailable: game.isAvailable,
-                  gamePath: game.gamePath,
-                );
+                return _Game(game: game);
               },
             ),
           ),
@@ -228,11 +185,8 @@ class GameRow extends GetView<BrowseController> {
   }
 }
 
-class Game extends GetView<BrowseController> {
-  final String name;
-  final String imagePath;
-  final String? gamePath;
-  final bool isAvailable;
+class _Game extends GetView<BrowseController> {
+  final Game game;
 
   static final BorderRadius borderRadius = BorderRadius.circular(5.0);
   static final List<Shadow> textShadow = [
@@ -251,26 +205,18 @@ class Game extends GetView<BrowseController> {
     ),
   ];
 
-  const Game({
-    Key? key,
-    required this.name,
-    required this.imagePath,
-    required this.gamePath,
-    required this.isAvailable,
-  }) : super(key: key);
+  const _Game({Key? key, required this.game}) : super(key: key);
 
   void launchGame() {
     // TODO check for user number
-    if (gamePath != null) {
-      controller.launchGame(gamePath!);
-    }
+    controller.launchGame(game);
   }
 
   @override
   Widget build(BuildContext context) {
     double aspectRatio = MediaQuery.of(context).size.width <= 600 ? 1 : 16 / 9;
     return InkWell(
-      onTap: isAvailable ? launchGame : null,
+      onTap: game.isAvailable ? launchGame : null,
       borderRadius: borderRadius,
       child: AspectRatio(
         aspectRatio: aspectRatio,
@@ -279,13 +225,13 @@ class Game extends GetView<BrowseController> {
             borderRadius: borderRadius,
             boxShadow: boxShadow,
             image: DecorationImage(
-              image: AssetImage(imagePath),
+              image: AssetImage(game.imagePath),
               fit: BoxFit.cover,
             ),
           ),
           child: Stack(
             children: [
-              if (!isAvailable) ...[
+              if (!game.isAvailable) ...[
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(0.75),
@@ -300,7 +246,7 @@ class Game extends GetView<BrowseController> {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  name,
+                  game.name,
                   style: Get.textTheme.headline6?.copyWith(shadows: textShadow),
                 ),
               ),

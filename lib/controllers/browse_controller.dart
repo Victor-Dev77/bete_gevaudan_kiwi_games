@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/controllers/controllers.dart';
 import 'package:kiwigames/models/models.dart';
+import 'package:kiwigames/shared/shared.dart';
 
 class BrowseController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -13,6 +14,9 @@ class BrowseController extends GetxController
       catchPhrase: 'Le jeu du loup-garou version Kiwi games',
       // TODO change game path
       gamePath: '/loup-du-gevaudan',
+      minPlayers: 3,
+      maxPlayers: 20,
+      duration: 20,
       description: '''
 Nous sommes en l’an 1764, un loup-garou sévit dans le Gévaudan et se cache parmi les villageois.
 Vous êtes ces villageois, et certains d’entre vous ont des choses à cacher...
@@ -28,6 +32,9 @@ Les bêtes doivent décimer tous les villageois pour gagner, ce sera l’inverse
     Game(
       name: 'Funny Guess',
       catchPhrase: 'Mimes et devinettes',
+      minPlayers: 3,
+      maxPlayers: 4,
+      duration: 20,
       description: '''
 Chaque joueur doit se mettre en groupe de 2 (le dernier peut rejoindre le moins bon groupe pour aider !)
 Funny Guess se joue en 3 manches sur une base de 20 mots :
@@ -45,6 +52,9 @@ L’équipe gagnante est celle qui aura fait gagné le plus de mots !
     Game(
       name: 'Devine dessine',
       catchPhrase: 'Le téléphone arabe du dessin',
+      minPlayers: 3,
+      maxPlayers: 20,
+      duration: 20,
       description: '''
 Chaque participant prend un papier et un stylo.
 Chacun se voit attribuer un mot qu’il doit dessiner en 1 minute puis prendre en photo pour l’envoyer au joueur suivant.
@@ -60,6 +70,9 @@ Le même scénario se répète jusqu’à effectuer un tour complet.
     Game(
       name: 'Le Bouc Émissaire',
       catchPhrase: 'Noms de code avec mot clé chiffrés',
+      minPlayers: 3,
+      maxPlayers: 20,
+      duration: 20,
       description: '''
 Les joueurs disposent d’une grille de 16 mots aléatoires. Un maître du jeu est désigné. La moitié de ces mots est rouge, l’autre est verte. Seul le maître du jeu connaît cette répartition. Il doit faire deviner aux autres joueurs les mots verts. 
 Le maître du jeu gagne si :
@@ -78,6 +91,9 @@ Pour les autres joueurs :
     Game(
       name: 'Gif and Co',
       catchPhrase: 'Ayez le commentaire de GIF le plus drôle !',
+      minPlayers: 3,
+      maxPlayers: 20,
+      duration: 20,
       description: '''
 Il y a 5 manches, à chaque manche, un GIF est montré. Chacun doit donner un commentaire à ce GIF.
 Chaque commentaire est montré à l’écran puis chaque joueur doit voter pour le commentaire le plus drôle (sauf le sien !).
@@ -96,6 +112,9 @@ La personne ayant remporté le plus de votes gagne !
       catchPhrase: 'Le jeu du loup-garou version Kiwi games',
       // TODO change game path
       gamePath: '/loup-du-gevaudan',
+      minPlayers: 3,
+      maxPlayers: 20,
+      duration: 20,
       description: '''
 Nous sommes en l’an 1764, un loup-garou sévit dans le Gévaudan et se cache parmi les villageois.
 Vous êtes ces villageois, et certains d’entre vous ont des choses à cacher...
@@ -111,6 +130,9 @@ Les bêtes doivent décimer tous les villageois pour gagner, ce sera l’inverse
     Game(
       name: 'Funny Guess',
       catchPhrase: 'Mimes et devinettes',
+      minPlayers: 3,
+      maxPlayers: 4,
+      duration: 20,
       description: '''
 Chaque joueur doit se mettre en groupe de 2 (le dernier peut rejoindre le moins bon groupe pour aider !)
 Funny Guess se joue en 3 manches sur une base de 20 mots :
@@ -128,6 +150,9 @@ L’équipe gagnante est celle qui aura fait gagné le plus de mots !
     Game(
       name: 'Devine dessine',
       catchPhrase: 'Le téléphone arabe du dessin',
+      minPlayers: 3,
+      maxPlayers: 20,
+      duration: 20,
       description: '''
 Chaque participant prend un papier et un stylo.
 Chacun se voit attribuer un mot qu’il doit dessiner en 1 minute puis prendre en photo pour l’envoyer au joueur suivant.
@@ -143,6 +168,9 @@ Le même scénario se répète jusqu’à effectuer un tour complet.
     Game(
       name: 'Le Bouc Émissaire',
       catchPhrase: 'Noms de code avec mot clé chiffrés',
+      minPlayers: 3,
+      maxPlayers: 20,
+      duration: 20,
       description: '''
 Les joueurs disposent d’une grille de 16 mots aléatoires. Un maître du jeu est désigné. La moitié de ces mots est rouge, l’autre est verte. Seul le maître du jeu connaît cette répartition. Il doit faire deviner aux autres joueurs les mots verts. 
 Le maître du jeu gagne si :
@@ -161,6 +189,9 @@ Pour les autres joueurs :
     Game(
       name: 'Gif and Co',
       catchPhrase: 'Ayez le commentaire de GIF le plus drôle !',
+      minPlayers: 3,
+      maxPlayers: 20,
+      duration: 20,
       description: '''
 Il y a 5 manches, à chaque manche, un GIF est montré. Chacun doit donner un commentaire à ce GIF.
 Chaque commentaire est montré à l’écran puis chaque joueur doit voter pour le commentaire le plus drôle (sauf le sien !).
@@ -181,7 +212,7 @@ La personne ayant remporté le plus de votes gagne !
   void onInit() {
     super.onInit();
     tabController = TabController(vsync: this, length: carouselSlides.length);
-    timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
+    timer = Timer.periodic(const Duration(seconds: 10), (_) {
       int currentTab = tabController!.index;
       int nextTab = currentTab + 1;
       int newTab = nextTab >= carouselSlides.length ? 0 : nextTab;
@@ -189,11 +220,20 @@ La personne ayant remporté le plus de votes gagne !
     });
   }
 
-  void launchGame(String gamePath) {
-    LobbyController.to.sendToLobby({
+  void launchGame(Game game) {
+    LobbyController lobbyController = LobbyController.to;
+    if (lobbyController.userList.length < game.minPlayers) {
+      Get.dialog(InfoAlert('not_enough_players'.tr));
+      return;
+    }
+    if (lobbyController.userList.length > game.maxPlayers) {
+      Get.dialog(InfoAlert('too_much_players'.tr));
+      return;
+    }
+    lobbyController.sendToLobby({
       'type': 'to all',
       'message': {
-        'play game': gamePath,
+        'play game': game.gamePath,
       }
     });
   }

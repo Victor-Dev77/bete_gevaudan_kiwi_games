@@ -89,6 +89,10 @@ Retourner à l'accueil ?
 Le code de réinitialisation n'est plus valide ou a expiré
 Réinitialiser le mot de passe ?
 ''',
+          'not_enough_players':
+              'Vous devez être plus nombreux pour jouer à ce jeu',
+          'too_much_players':
+              'Vous devez être moins nombreux pour jouer à ce jeu',
         },
       };
 }

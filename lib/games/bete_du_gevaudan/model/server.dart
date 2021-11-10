@@ -93,6 +93,10 @@ class Server {
     else if (data["message"].toString().contains("vote-")) {
       _checkVotePlayer(data);
     }
+    // Send List Player
+    else if (data["message"].toString().contains("sendListPlayer-")) {
+      _assignListPlayer(data);
+    }
     // Get finish Voice Off for player
     else if (data["message"]
         .toString()
@@ -357,5 +361,21 @@ class Server {
       VoteController.to.updatePlayersVoted(PlayerController.to.listPlayer[ip1],
           PlayerController.to.listPlayer[ip2]);
     }
+  }
+
+  sendListPlayer(List<Player> listPlayer) {
+    _send({
+      "message": "sendListPlayer-$listPlayer",
+      "type": "to users",
+    });
+  }
+
+  _assignListPlayer(Map data) {
+    var msg = data["message"].toString().substring("sendListPlayer-".length);
+    List listOfMap = json.decode(msg);
+    var list = listOfMap.map((map) {
+      return Player.fromJson(map);
+    });
+    PlayerController.to.listPlayer = list.toList();
   }
 }

@@ -86,6 +86,7 @@ class ResultVoteController extends GetxController {
         case ProcessingState.completed:
           PlayerController.to.nbTour++;
           Server.instance.increaseNBTour(PlayerController.to.nbTour);
+          Server.instance.sendListPlayer(PlayerController.to.listPlayer);
           Server.instance.nextPage(GameTour.SLEEP);
           break;
       }

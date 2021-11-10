@@ -76,8 +76,8 @@ class LoupRoleWakePage extends GetView<LoupRoleController> {
               child: GetBuilder<LoupRoleController>(
                 builder: (_) {
                   var listPlayer = PlayerController.to.listPlayer;
-                  listPlayer.removeWhere(
-                      (element) => element.typePlayer == TypePlayer.LOUP);
+                  listPlayer.removeWhere((element) =>
+                      element.typePlayer == TypePlayer.LOUP || element.isKill);
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,

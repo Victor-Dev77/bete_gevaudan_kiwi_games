@@ -123,12 +123,12 @@ class PlayerController extends GetxController {
     bool res = false;
     for (int i = 0; i < listPlayer.length; i++) {
       if (listPlayer[i].typePlayer == typePlayer && !listPlayer[i].isKill) {
-        /*if (nbTour > 0 &&
+        if (nbTour > 0 &&
             (typePlayer == TypePlayer.MARIEUSE ||
                 typePlayer == TypePlayer.MALE_ALPHA))
           res = false;
-        else*/
-        res = true;
+        else
+          res = true;
         return res;
       }
     }

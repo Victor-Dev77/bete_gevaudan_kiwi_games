@@ -84,8 +84,8 @@ class MediumRoleWakePage extends GetView<MediumRoleController> {
             child: GetBuilder<MediumRoleController>(
               builder: (_) {
                 var listPlayer = PlayerController.to.listPlayer;
-                listPlayer.removeWhere(
-                    (element) => element.typePlayer == TypePlayer.MEDIUM);
+                listPlayer.removeWhere((element) =>
+                    element.typePlayer == TypePlayer.MEDIUM || element.isKill);
                 return GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,

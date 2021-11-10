@@ -118,15 +118,23 @@ class Player {
       "typePlayer": typePlayer.toString(),
       "isKill": isKill,
       "isHost": isHost,
+      "screen": screen,
+      "isPrincipale": isPrincipale,
     };
   }
 
   @override
   String toString() => json.encode(toJson());
 
-  /*factory Player.fromDocument(Map<dynamic, dynamic> map) {
+  factory Player.fromJson(Map<dynamic, dynamic> map) {
     return Player(
-      id: map['uid'],
-    );
-  }*/
+        id: map['id'],
+        name: map["name"],
+        isKill: map['isKill'],
+        isHost: map['isHost'],
+        screen: map['screen'],
+        isPrincipale: map['isPrincipale'],
+        typePlayer: TypePlayer.values
+            .firstWhere((e) => e.toString() == map["typePlayer"].toString()));
+  }
 }

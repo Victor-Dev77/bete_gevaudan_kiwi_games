@@ -75,8 +75,9 @@ class MarieuseRoleWakePage extends GetView<MarieuseRoleController> {
               child: GetBuilder<MarieuseRoleController>(
                 builder: (_) {
                   var listPlayer = PlayerController.to.listPlayer;
-                  listPlayer.removeWhere(
-                      (element) => element.typePlayer == TypePlayer.MARIEUSE);
+                  listPlayer.removeWhere((element) =>
+                      element.typePlayer == TypePlayer.MARIEUSE ||
+                      element.isKill);
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,

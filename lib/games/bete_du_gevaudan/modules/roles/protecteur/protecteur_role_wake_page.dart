@@ -77,8 +77,9 @@ class ProtecteurRoleWakePage extends GetView<ProtecteurRoleController> {
               child: GetBuilder<ProtecteurRoleController>(
                 builder: (_) {
                   var listPlayer = PlayerController.to.listPlayer;
-                  listPlayer.removeWhere(
-                      (element) => element.typePlayer == TypePlayer.PROTECTEUR);
+                  listPlayer.removeWhere((element) =>
+                      element.typePlayer == TypePlayer.PROTECTEUR ||
+                      element.isKill);
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,

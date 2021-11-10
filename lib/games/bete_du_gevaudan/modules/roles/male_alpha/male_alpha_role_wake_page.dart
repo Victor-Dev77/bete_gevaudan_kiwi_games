@@ -76,8 +76,9 @@ class MaleAlphaRoleWakePage extends GetView<MaleAlphaRoleController> {
               child: GetBuilder<MaleAlphaRoleController>(
                 builder: (_) {
                   var listPlayer = PlayerController.to.listPlayer;
-                  listPlayer.removeWhere(
-                      (element) => element.typePlayer == TypePlayer.MALE_ALPHA);
+                  listPlayer.removeWhere((element) =>
+                      element.typePlayer == TypePlayer.MALE_ALPHA ||
+                      element.isKill);
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,

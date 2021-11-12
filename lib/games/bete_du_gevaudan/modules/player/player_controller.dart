@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kiwigames/controllers/controllers.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/distrib_role.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
@@ -9,6 +10,7 @@ import 'package:kiwigames/games/bete_du_gevaudan/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_image.dart';
+import 'package:vibration/vibration.dart';
 
 enum GameTour {
   INTRO_GAME,
@@ -374,5 +376,19 @@ class PlayerController extends GetxController {
         ),
       ),
     );
+  }
+
+  deadPetitFarceur() async {
+    print("PETIT FARCEUR MORT");
+    bool? canVibrate = await Vibration.hasVibrator();
+    if (canVibrate == true) {
+      // vibrate - sleep 0.5s - vibrate - sleep 1s - vibrate - sleep 0.5s - vibrate
+      Vibration.vibrate(pattern: [100, 500, 500, 500, 1000, 500, 500, 500]);
+    } else {
+      final AudioPlayer justAudioPlayer = AudioPlayer();
+      await justAudioPlayer.setAsset(
+          "assets/images/platform/games/bete_du_gevaudan/vibreur.mp3");
+      justAudioPlayer.play();
+    }
   }
 }

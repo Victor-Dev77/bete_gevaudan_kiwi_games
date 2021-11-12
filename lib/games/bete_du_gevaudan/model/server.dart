@@ -362,6 +362,13 @@ class Server {
       if (ip1 != -1) {
         PlayerController.to.listPlayer[ip1].isKill = true;
         PlayerController.to.nbPlayerAlive--;
+        if (PlayerController.to.listPlayer[ip1].typePlayer ==
+                TypePlayer.LE_PETIT_FARCEUR &&
+            !PlayerController.to.player.isPrincipale &&
+            PlayerController.to.player.typePlayer != TypePlayer.LOUP &&
+            PlayerController.to.player.typePlayer != TypePlayer.MALE_ALPHA) {
+          PlayerController.to.deadPetitFarceur();
+        }
       }
       if (list["id"] == PlayerController.to.player.id) {
         PlayerController.to.player.isKill = true;

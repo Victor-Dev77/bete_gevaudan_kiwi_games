@@ -112,7 +112,7 @@ class PlayerController extends GetxController {
   }
 
   addPlayerReadyVoted() {
-    if (player.isHost) nbPlayerReady++;
+    if (player.isPrincipale) nbPlayerReady++;
     if (nbPlayerReady == nbPlayerAlive) {
       nbPlayerReady = 0;
       playerKillByVote = VoteController.to.getResultVote();

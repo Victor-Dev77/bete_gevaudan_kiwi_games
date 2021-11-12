@@ -133,7 +133,7 @@ class Server {
   imReadyVoted() {
     _send({
       "message": "readyResultVote",
-      "type": "to host",
+      "type": "to principale",
     });
   }
 

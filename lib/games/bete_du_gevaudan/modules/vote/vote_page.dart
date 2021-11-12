@@ -50,54 +50,112 @@ class VotePage extends GetView<VoteController> {
                     child: Container(
                       child: GetBuilder<VoteController>(
                         builder: (_) {
-                          return GridView.builder(
-                            itemCount: PlayerController.to.listPlayer.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 10,
-                            ),
-                            itemBuilder: (ctx, index) {
-                              var player =
-                                  PlayerController.to.listPlayer[index];
-                              var playerShow = _.playersVoted[player.name]!;
-                              return Container(
-                                child: Row(
+                          var itemCount = PlayerController.to.listPlayer.length;
+                          var nbRow = (itemCount / 2).ceil();
+                          return Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(
-                                      player.name,
-                                      style: TextStyle(
-                                        color: playerShow["isDead"]
-                                            ? ConstantColor.grey
-                                            : ConstantColor.white,
-                                        fontSize: 22,
-                                      ),
-                                    ),
-                                    SizedBox(width: 20),
-                                    Container(
-                                      width: 50,
-                                      height: 50,
-                                      color: playerShow["isDead"]
-                                          ? ConstantColor.grey
-                                          : ConstantColor.white,
-                                      child: Center(
-                                        child: Text(
-                                          playerShow["isDead"]
-                                              ? "X"
-                                              : playerShow["cmpt"].toString(),
-                                          style: TextStyle(
-                                            color: ConstantColor.black,
-                                            fontSize: 22,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: List.generate(nbRow, (index) {
+                                    var player =
+                                        PlayerController.to.listPlayer[index];
+                                    var playerShow =
+                                        _.playersVoted[player.name]!;
+                                    return Container(
+                                      margin: EdgeInsets.only(bottom: 50),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            player.name,
+                                            style: TextStyle(
+                                              color: playerShow["isDead"]
+                                                  ? ConstantColor.grey
+                                                  : ConstantColor.white,
+                                              fontSize: 22,
+                                            ),
                                           ),
-                                        ),
+                                          SizedBox(width: 20),
+                                          Container(
+                                            width: 50,
+                                            height: 50,
+                                            color: playerShow["isDead"]
+                                                ? ConstantColor.grey
+                                                : ConstantColor.white,
+                                            child: Center(
+                                              child: Text(
+                                                playerShow["isDead"]
+                                                    ? "X"
+                                                    : playerShow["cmpt"]
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  color: ConstantColor.black,
+                                                  fontSize: 22,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
+                                    );
+                                  }),
                                 ),
-                              );
-                            },
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children:
+                                      List.generate(itemCount - nbRow, (index) {
+                                    var newIndex = index + nbRow;
+                                    var player = PlayerController
+                                        .to.listPlayer[newIndex];
+                                    var playerShow =
+                                        _.playersVoted[player.name]!;
+                                    return Container(
+                                      margin: EdgeInsets.only(bottom: 50),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            player.name,
+                                            style: TextStyle(
+                                              color: playerShow["isDead"]
+                                                  ? ConstantColor.grey
+                                                  : ConstantColor.white,
+                                              fontSize: 22,
+                                            ),
+                                          ),
+                                          SizedBox(width: 20),
+                                          Container(
+                                            width: 50,
+                                            height: 50,
+                                            color: playerShow["isDead"]
+                                                ? ConstantColor.grey
+                                                : ConstantColor.white,
+                                            child: Center(
+                                              child: Text(
+                                                playerShow["isDead"]
+                                                    ? "X"
+                                                    : playerShow["cmpt"]
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  color: ConstantColor.black,
+                                                  fontSize: 22,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                                )
+                              ],
+                            ),
                           );
                         },
                       ),

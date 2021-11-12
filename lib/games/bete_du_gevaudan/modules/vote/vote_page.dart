@@ -6,6 +6,7 @@ import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controlle
 import 'package:kiwigames/games/bete_du_gevaudan/modules/vote/vote_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/widgets_global/button_action_game.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/widgets_global/button_select_player.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/widgets_global/player_vote_principal.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant_color.dart';
 
@@ -64,43 +65,9 @@ class VotePage extends GetView<VoteController> {
                                         PlayerController.to.listPlayer[index];
                                     var playerShow =
                                         _.playersVoted[player.name]!;
-                                    return Container(
-                                      margin: EdgeInsets.only(bottom: 50),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text(
-                                            player.name,
-                                            style: TextStyle(
-                                              color: playerShow["isDead"]
-                                                  ? ConstantColor.grey
-                                                  : ConstantColor.white,
-                                              fontSize: 22,
-                                            ),
-                                          ),
-                                          SizedBox(width: 20),
-                                          Container(
-                                            width: 50,
-                                            height: 50,
-                                            color: playerShow["isDead"]
-                                                ? ConstantColor.grey
-                                                : ConstantColor.white,
-                                            child: Center(
-                                              child: Text(
-                                                playerShow["isDead"]
-                                                    ? "X"
-                                                    : playerShow["cmpt"]
-                                                        .toString(),
-                                                style: TextStyle(
-                                                  color: ConstantColor.black,
-                                                  fontSize: 22,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    return PlayerVotePrincipal(
+                                      player: player,
+                                      playerShow: playerShow,
                                     );
                                   }),
                                 ),
@@ -114,43 +81,9 @@ class VotePage extends GetView<VoteController> {
                                         .to.listPlayer[newIndex];
                                     var playerShow =
                                         _.playersVoted[player.name]!;
-                                    return Container(
-                                      margin: EdgeInsets.only(bottom: 50),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text(
-                                            player.name,
-                                            style: TextStyle(
-                                              color: playerShow["isDead"]
-                                                  ? ConstantColor.grey
-                                                  : ConstantColor.white,
-                                              fontSize: 22,
-                                            ),
-                                          ),
-                                          SizedBox(width: 20),
-                                          Container(
-                                            width: 50,
-                                            height: 50,
-                                            color: playerShow["isDead"]
-                                                ? ConstantColor.grey
-                                                : ConstantColor.white,
-                                            child: Center(
-                                              child: Text(
-                                                playerShow["isDead"]
-                                                    ? "X"
-                                                    : playerShow["cmpt"]
-                                                        .toString(),
-                                                style: TextStyle(
-                                                  color: ConstantColor.black,
-                                                  fontSize: 22,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    return PlayerVotePrincipal(
+                                      player: player,
+                                      playerShow: playerShow,
                                     );
                                   }),
                                 )

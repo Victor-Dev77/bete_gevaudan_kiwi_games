@@ -53,5 +53,11 @@ class AppPages {
       page: () => const ForgotPassword(),
       binding: ForgotPasswordBinding(),
     ),
-  ]..addAll(BeteDuGevaudanPages.beteDuGevaudanRoutes);
+    GetPage(
+      name: '/reset-password',
+      page: () => const ResetPassword(),
+      binding: ResetPasswordBinding(),
+    ),
+    ...BeteDuGevaudanPages.beteDuGevaudanRoutes,
+  ];
 }

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
 
 class DistribRole {
   static List<TypePlayer> _listRole = [
@@ -23,7 +24,8 @@ class DistribRole {
     print("Nombre de joueurs: $nbPlayer");
 
     // Nombre de loup en fonction nb joueur
-    int nbLoup = _getNbLoupByNbPlayer(nbPlayer);
+    int nbLoup = getNbLoupByNbPlayer(nbPlayer);
+    PlayerController.to.nbLoup = nbLoup;
     print("Loup: $nbLoup");
     // Repartir les loups dans les joueurs
     int i = 0;
@@ -69,7 +71,7 @@ class DistribRole {
     return _players;
   }
 
-  static int _getNbLoupByNbPlayer(int nbPlayer) {
+  static int getNbLoupByNbPlayer(int nbPlayer) {
     var listNbLoup = _getListNbLoup(nbPlayer);
     int nbLoupFinal = 0;
     if (listNbLoup.length == 1)

@@ -59,6 +59,10 @@ class Server {
     else if (data["message"] == "readyResultVote") {
       PlayerController.to.addPlayerReadyVoted();
     }
+    // Wait player click vote loup
+    else if (data["message"].toString().contains("voteLoup-")) {
+      _checkVotePlayerLoup(data);
+    }
     // Change Page
     else if (data["message"].toString().contains("GameTour.")) {
       GameTour tour = GameTour.values
@@ -122,15 +126,36 @@ class Server {
   imReady() {
     _send({
       "message": "readySleep",
-      "type": "to principale",
+      "type": "to host",
     });
   }
 
   imReadyVoted() {
     _send({
       "message": "readyResultVote",
-      "type": "to principale",
+      "type": "to host",
     });
+  }
+
+  selectPlayerVoteLoup(Player player) {
+    _send({
+      "message": "voteLoup-[${player.toString()}]",
+      "type": "to host",
+    });
+  }
+
+  _checkVotePlayerLoup(Map data) {
+    var msg = data["message"].toString().substring("voteLoup-".length);
+    List listOfMap = json.decode(msg);
+    List<Player> listOfPlayer = [];
+    listOfMap.forEach((item) {
+      var ip1 = PlayerController.to.listPlayer
+          .indexWhere((element) => element.id == item["id"]);
+      if (ip1 != -1) {
+        listOfPlayer.add(PlayerController.to.listPlayer[ip1]);
+      }
+    });
+    PlayerController.to.addPlayerReadyVotedLoup(listOfPlayer);
   }
 
   nextPage(GameTour tour) {
@@ -173,7 +198,6 @@ class Server {
             .firstWhere((e) => e.toString() == map["typePlayer"].toString());
       }
     });
-    PlayerController.to.listPlayerAlive = PlayerController.to.listPlayer;
   }
 
   // Specific Role Marieuse
@@ -265,11 +289,21 @@ class Server {
   }
 
   finishVoiceOff(String username, TypePlayer typePlayer) {
-    _send({
-      "message": "ready-$username-${typePlayer.toString()}",
-      "type": "to one",
-      "username": username
-    });
+    if (typePlayer == TypePlayer.LOUP) {
+      var list = username.split("/");
+      list.forEach((element) {
+        _send({
+          "message": "ready-$element-${typePlayer.toString()}",
+          "type": "to one",
+          "username": element
+        });
+      });
+    } else
+      _send({
+        "message": "ready-$username-${typePlayer.toString()}",
+        "type": "to one",
+        "username": username
+      });
   }
 
   _makeReadyBtnVoiceOffFinish(Map data) {
@@ -329,12 +363,6 @@ class Server {
         PlayerController.to.listPlayer[ip1].isKill = true;
         PlayerController.to.nbPlayerAlive--;
       }
-      ip1 = PlayerController.to.listPlayerAlive
-          .indexWhere((element) => element.id == list["id"]);
-      /*if (ip1 != -1) {
-        PlayerController.to.listPlayerAlive.removeAt(ip1);
-        PlayerController.to.nbPlayerAlive--;
-      }*/
       if (list["id"] == PlayerController.to.player.id) {
         PlayerController.to.player.isKill = true;
       }

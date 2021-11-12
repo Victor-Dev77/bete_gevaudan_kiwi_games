@@ -25,6 +25,12 @@ class LoupRoleController extends GetxController {
   RxBool _voiceOffFinish = false.obs;
   bool get voiceOffFinish => _voiceOffFinish.value;
   setVoiceOffFinish() => _voiceOffFinish.value = true;
+  RxBool _voted = false.obs;
+  bool get voted => _voted.value;
+  setVoted() {
+    _voted.value = true;
+    update();
+  }
 
   @override
   void onInit() {

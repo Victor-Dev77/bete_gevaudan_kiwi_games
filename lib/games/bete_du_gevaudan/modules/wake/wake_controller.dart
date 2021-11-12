@@ -80,6 +80,9 @@ class WakeController extends GetxController {
             playerVoted.addAll(married);
             _resultVoteDead.value = 2;
             _initAudio("wake_with_dead_");
+            if (playerVoted[0].typePlayer == TypePlayer.LOUP ||
+                playerVoted[1].typePlayer == TypePlayer.LOUP)
+              PlayerController.to.nbLoup--;
             Server.instance.deadPlayerList(playerVoted);
           } else {
             // Juste playerVote de mort
@@ -87,6 +90,8 @@ class WakeController extends GetxController {
             _resultVoteDead.value = 2;
             playerVoted.add(playerVote);
             _initAudio("wake_with_dead_");
+            if (playerVote.typePlayer == TypePlayer.LOUP)
+              PlayerController.to.nbLoup--;
             Server.instance.deadPlayer(playerVote);
           }
         } else {
@@ -95,6 +100,8 @@ class WakeController extends GetxController {
           _resultVoteDead.value = 2;
           _initAudio("wake_with_dead_");
           playerVoted.add(playerVote);
+          if (playerVote.typePlayer == TypePlayer.LOUP)
+            PlayerController.to.nbLoup--;
           Server.instance.deadPlayer(playerVote);
         }
       }

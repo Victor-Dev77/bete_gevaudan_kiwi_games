@@ -51,7 +51,6 @@ class PlayerController extends GetxController {
           screen: p.screen ?? "user",
           isPrincipale: false));
     }
-    listPlayerAlive.addAll(listPlayer);
     _player = listPlayer.firstWhere(
         (element) => element.name == LobbyController.to.username,
         orElse: () => Player(
@@ -72,7 +71,6 @@ class PlayerController extends GetxController {
   int nbPlayerAlive = 0;
   int nbPlayerReady = 0;
   List<Player> listPlayer = [];
-  List<Player> listPlayerAlive = [];
   Player? playerKillByVote;
 
   // Specific Role Player
@@ -80,20 +78,24 @@ class PlayerController extends GetxController {
   Player? playerWillKillIfMaleAlphaDie; // Male Alpha
   Player? playerProtected; // Protecteur
   List<Player> playerKillByLoup = []; // Loup Garou
+  int nbLoup = 0;
+
+  initTour() {
+    playerProtected = null;
+    playerKillByLoup = [];
+  }
 
   bool attributTypePlayer() {
     if (player.isHost) {
       var distrib = DistribRole.distribRoles(listPlayer.length);
       distrib.entries.forEach((element) {
         int indexPlayer =
-            listPlayerAlive.indexWhere((item) => item.id == element.key);
+            listPlayer.indexWhere((item) => item.id == element.key);
         print('index player: $indexPlayer / ${element.key}');
         if (indexPlayer != -1) {
-          listPlayerAlive[indexPlayer].typePlayer = element.value;
+          listPlayer[indexPlayer].typePlayer = element.value;
         }
       });
-      listPlayer = listPlayerAlive;
-      print(listPlayerAlive);
       Server.instance.sendRolePlayer(listPlayer);
       return true;
     }
@@ -101,7 +103,8 @@ class PlayerController extends GetxController {
   }
 
   addPlayerReady() {
-    if (player.isPrincipale) nbPlayerReady++;
+    if (player.isHost) nbPlayerReady++;
+    print("NB PLAYER READY: $nbPlayerReady");
     if (nbPlayerReady == listPlayer.length) {
       nbPlayerReady = 0;
       Server.instance.nextPage(GameTour.SLEEP);
@@ -109,13 +112,29 @@ class PlayerController extends GetxController {
   }
 
   addPlayerReadyVoted() {
-    if (player.isPrincipale) nbPlayerReady++;
+    if (player.isHost) nbPlayerReady++;
     if (nbPlayerReady == nbPlayerAlive) {
       nbPlayerReady = 0;
       playerKillByVote = VoteController.to.getResultVote();
       if (playerKillByVote != null)
         Server.instance.deadPlayer(playerKillByVote!);
       Server.instance.nextPage(GameTour.RESULT_VOTE);
+    }
+  }
+
+  addPlayerReadyVotedLoup(List<Player> list) {
+    if (player.isHost) nbPlayerReady++;
+    print("AVANT KILLBYLOUP: $playerKillByLoup");
+    playerKillByLoup.addAll(list);
+    print("APRES KILLBYLOUP: $playerKillByLoup");
+    var maleAlphaNB = containsRole(TypePlayer.MALE_ALPHA) ? 1 : 0;
+    if (nbPlayerReady == nbLoup + maleAlphaNB) {
+      nbPlayerReady = 0;
+      print("LIST VOTE LOUP $playerKillByLoup");
+      Server.instance.choicePlayerKillByLoup(playerKillByLoup);
+      Server.instance.sendListPlayer(listPlayer);
+      Future.delayed(Duration(seconds: 1),
+          () => Server.instance.nextPage(GameTour.WOLF_SLEEP));
     }
   }
 
@@ -137,11 +156,23 @@ class PlayerController extends GetxController {
 
   String getUsernameForTypePlayer(TypePlayer typePlayer) {
     String res = "";
-    listPlayerAlive.forEach((element) {
-      if (element.typePlayer == typePlayer) {
-        res = element.name;
-      }
-    });
+    String resLoup = "";
+    if (typePlayer == TypePlayer.LOUP) {
+      listPlayer.forEach((element) {
+        if (element.typePlayer == typePlayer ||
+            element.typePlayer == TypePlayer.MALE_ALPHA) {
+          resLoup += "${element.name}/";
+        }
+      });
+      resLoup = resLoup.substring(0, resLoup.length - 1);
+      res = resLoup;
+    } else {
+      listPlayer.forEach((element) {
+        if (element.typePlayer == typePlayer) {
+          res = element.name;
+        }
+      });
+    }
     return res;
   }
 
@@ -232,37 +263,6 @@ class PlayerController extends GetxController {
     var length = players.length;
     for (int i = 0; i < length; i++) {
       listPlayer[i].name = players[i];
-    }
-  }
-
-  killPlayer(int id) {
-    int index = listPlayer.indexWhere((item) => item.id == id);
-    if (index != -1) {
-      print(listPlayer[index].name);
-      listPlayer[index].isKill = true;
-      nbPlayerAlive--;
-      listPlayerAlive.removeWhere((item) => item.id == id);
-      if (nbPlayerAlive <= 1) {
-        nbTour = 0;
-        gameTour = GameTour.END_GAME;
-        print("FIN DE PARTIE !! AUCUN JOUEUR");
-        Get.offAllNamed(Routes.END_GAME);
-      } else {
-        /*PlayerController.to.gameTour =
-            PlayerController.to.gameTour == GameTour.KILL_WOLF
-                ? GameTour.WAIT_1
-                : GameTour.WAIT_2;
-        Future.delayed(Duration(seconds: 2), () {
-          if (PlayerController.to.gameTour == GameTour.WAIT_1) {
-            PlayerController.to.gameTour = GameTour.KILL_FARMER;
-            Get.offAllNamed(Routes.KILL);
-          } else {
-            nbTour++;
-            PlayerController.to.gameTour = GameTour.SLEEP;
-            Get.offAllNamed(Routes.END_GAME); //TODO: SLEEP
-          }
-        });*/
-      }
     }
   }
 

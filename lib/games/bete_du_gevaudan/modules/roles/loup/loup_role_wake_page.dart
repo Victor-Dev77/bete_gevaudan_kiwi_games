@@ -41,7 +41,8 @@ class LoupRoleWakePage extends GetView<LoupRoleController> {
     }
     if (PlayerController.to.player.isKill)
       return PlayerController.to.killPlayerWidget();
-    if (PlayerController.to.player.typePlayer != TypePlayer.LOUP)
+    if (PlayerController.to.player.typePlayer != TypePlayer.LOUP &&
+        PlayerController.to.player.typePlayer != TypePlayer.MALE_ALPHA)
       return PlayerController.to.sleepPlayerPageWidget();
     return Container(
       child: Column(
@@ -77,7 +78,9 @@ class LoupRoleWakePage extends GetView<LoupRoleController> {
                 builder: (_) {
                   var listPlayer = PlayerController.to.listPlayer;
                   listPlayer.removeWhere((element) =>
-                      element.typePlayer == TypePlayer.LOUP || element.isKill);
+                      element.typePlayer == TypePlayer.LOUP ||
+                      element.typePlayer == TypePlayer.MALE_ALPHA ||
+                      element.isKill);
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -91,7 +94,9 @@ class LoupRoleWakePage extends GetView<LoupRoleController> {
                       return ButtonSelectPlayer(
                         player: player,
                         enabled: _.isPlayer(player),
-                        onTap: (_player) => _.clickPlayer(_player),
+                        onTap: _.voted
+                            ? (_player) {}
+                            : (_player) => _.clickPlayer(_player),
                       );
                     },
                   );
@@ -102,20 +107,15 @@ class LoupRoleWakePage extends GetView<LoupRoleController> {
           Expanded(
             child: Center(
               child: Obx(() {
-                if (controller.voiceOffFinish)
+                if (controller.voiceOffFinish && !controller.voted)
                   return GetBuilder<LoupRoleController>(
                     builder: (_) {
                       return ButtonActionGame(
                         onTap: () {
                           print(_.playerSelected);
-                          PlayerController.to.playerKillByLoup
-                              .add(_.playerSelected!);
-                          Server.instance.choicePlayerKillByLoup(
-                              PlayerController.to.playerKillByLoup);
-                          Future.delayed(
-                              Duration(seconds: 1),
-                              () => Server.instance
-                                  .nextPage(GameTour.WOLF_SLEEP));
+                          _.setVoted();
+                          Server.instance
+                              .selectPlayerVoteLoup(_.playerSelected!);
                         },
                         isActive: _.playerSelected != null,
                         text: "SUIVANT",

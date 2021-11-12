@@ -21,6 +21,7 @@ class SleepController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    PlayerController.to.initTour();
     if (PlayerController.to.player.isPrincipale) {
       _initAudio();
       _initVideo();

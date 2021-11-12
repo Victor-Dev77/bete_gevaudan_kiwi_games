@@ -1,0 +1,23 @@
+{
+    "name": "Kiwigames",
+    "short_name": "Kiwigames",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#343434",
+    "theme_color": "#adc22f",
+    "description": "Kiwigames est une plateforme de jeux de société en ligne",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

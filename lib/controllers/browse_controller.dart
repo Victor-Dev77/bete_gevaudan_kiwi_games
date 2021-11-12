@@ -14,7 +14,7 @@ class BrowseController extends GetxController
       catchPhrase: 'Le jeu du loup-garou version Kiwi games',
       // TODO change game path
       gamePath: '/loup-du-gevaudan',
-      minPlayers: 3,
+      minPlayers: 4,
       maxPlayers: 20,
       duration: 20,
       description: '''
@@ -23,7 +23,7 @@ Vous êtes ces villageois, et certains d’entre vous ont des choses à cacher..
 Chaque nuit, lorsque les villageois dorment, les bêtes se réveillent et tuent leur proie. Ce sera aux villageois de voter pour tuer l’un d’entre eux en espérant qu’il soit fautif des meurtres comis.
 Les bêtes doivent décimer tous les villageois pour gagner, ce sera l’inverse pour que les villageois gagnent.
 
-3 joueurs et +
+4 joueurs et +
 20 min de jeu
 ''',
       imagePath: 'assets/images/platform/games/bete_du_gevaudan.jpg',
@@ -112,7 +112,7 @@ La personne ayant remporté le plus de votes gagne !
       catchPhrase: 'Le jeu du loup-garou version Kiwi games',
       // TODO change game path
       gamePath: '/loup-du-gevaudan',
-      minPlayers: 3,
+      minPlayers: 4,
       maxPlayers: 20,
       duration: 20,
       description: '''
@@ -121,7 +121,7 @@ Vous êtes ces villageois, et certains d’entre vous ont des choses à cacher..
 Chaque nuit, lorsque les villageois dorment, les bêtes se réveillent et tuent leur proie. Ce sera aux villageois de voter pour tuer l’un d’entre eux en espérant qu’il soit fautif des meurtres comis.
 Les bêtes doivent décimer tous les villageois pour gagner, ce sera l’inverse pour que les villageois gagnent.
 
-3 joueurs et +
+4 joueurs et +
 20 min de jeu
 ''',
       imagePath: 'assets/images/platform/games/bete_du_gevaudan.jpg',

@@ -157,7 +157,15 @@ class MediumRoleWakePage extends GetView<MediumRoleController> {
         ),
         Expanded(
           flex: 3,
-          child: Container(),
+          child: Padding(
+            padding: const EdgeInsets.all(25),
+            child: Center(
+              child: Image.asset(
+                controller.playerSelected!.imageTypePlayer,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
         ),
         Expanded(
           child: Center(

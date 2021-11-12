@@ -322,23 +322,33 @@ class Server {
   _checkDeadPlayer(Map data) {
     var msg = data["message"].toString().substring("dead-".length);
     List listOfMap = json.decode(msg);
-    var ip1 = PlayerController.to.listPlayer
-        .indexWhere((element) => element.id == listOfMap[0]["id"]);
-    if (ip1 != -1) {
-      PlayerController.to.listPlayer[ip1].isKill = true;
-      PlayerController.to.nbPlayerAlive--;
-    }
-    ip1 = PlayerController.to.listPlayerAlive
-        .indexWhere((element) => element.id == listOfMap[0]["id"]);
-    /*if (ip1 != -1) {
-      PlayerController.to.listPlayerAlive.removeAt(ip1);
-      PlayerController.to.nbPlayerAlive--;
-    }*/
-    if (listOfMap[0]["id"] == PlayerController.to.player.id) {
-      PlayerController.to.player.isKill = true;
-    }
+    listOfMap.forEach((list) {
+      var ip1 = PlayerController.to.listPlayer
+          .indexWhere((element) => element.id == list["id"]);
+      if (ip1 != -1) {
+        PlayerController.to.listPlayer[ip1].isKill = true;
+        PlayerController.to.nbPlayerAlive--;
+      }
+      ip1 = PlayerController.to.listPlayerAlive
+          .indexWhere((element) => element.id == list["id"]);
+      /*if (ip1 != -1) {
+        PlayerController.to.listPlayerAlive.removeAt(ip1);
+        PlayerController.to.nbPlayerAlive--;
+      }*/
+      if (list["id"] == PlayerController.to.player.id) {
+        PlayerController.to.player.isKill = true;
+      }
+    });
+
     print("NB PLAYER ALIVE: ${PlayerController.to.nbPlayerAlive}");
     print("NB PLAYERS STATUS: ${PlayerController.to.listPlayer}");
+  }
+
+  deadPlayerList(List<Player> list) {
+    _send({
+      "message": "dead-${list.toString()}",
+      "type": "to all",
+    });
   }
 
   selectPlayerVote(Player player) {

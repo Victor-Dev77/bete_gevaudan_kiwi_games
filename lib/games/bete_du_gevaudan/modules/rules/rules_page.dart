@@ -26,8 +26,13 @@ class RulesPage extends StatelessWidget {
         children: [
           Obx(() {
             if (controller.videoCharged)
-              return Center(
-                child: Chewie(controller: controller.chewieController),
+              return SizedBox.expand(
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: Center(
+                    child: Chewie(controller: controller.chewieController),
+                  ),
+                ),
               );
             return Container();
           }),

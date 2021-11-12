@@ -30,7 +30,7 @@ class RulesController extends GetxController {
     await videoPlayerController.initialize();
     _chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
-      aspectRatio: 16 / 9,
+      // aspectRatio: 16 / 9,
       autoPlay: true,
       looping: true,
       showControls: false,

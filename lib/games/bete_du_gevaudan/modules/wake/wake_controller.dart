@@ -20,7 +20,7 @@ class WakeController extends GetxController {
   bool get videoCharged => _videoCharged.value;
   RxInt _resultVoteDead = 0.obs;
   int get resultVoteDead => _resultVoteDead.value;
-  Player? playerVote;
+  List<Player> playerVoted = [];
 
   @override
   void onInit() {
@@ -48,7 +48,7 @@ class WakeController extends GetxController {
     //TODO manque sorciere
 
     // Determiné majorité ou égalité
-    playerVote = _getMajority(killsByLoup, killsByLoup.length);
+    var playerVote = _getMajority(killsByLoup, killsByLoup.length);
     if (playerVote == null) {
       // Egalité mais verifier sorciere
 
@@ -59,12 +59,12 @@ class WakeController extends GetxController {
     } else {
       // Joueur voté
       if (playerKillByMaleAlpha != null &&
-          playerVote!.typePlayer == TypePlayer.MALE_ALPHA) {
+          playerVote.typePlayer == TypePlayer.MALE_ALPHA) {
         //Mort Male Alpha mais transferer a autre joueur
         playerVote = playerKillByMaleAlpha;
         print("male alpha");
       }
-      if (playerProtected != null && playerProtected.name == playerVote!.name) {
+      if (playerProtected != null && playerProtected.name == playerVote.name) {
         // Pas de mort grace au protecteur
         print("sauvé par le protecteur");
         _resultVoteDead.value = 1;
@@ -77,19 +77,25 @@ class WakeController extends GetxController {
           if (index != -1) {
             // Marrié donc 2 mort
             print("married");
+            playerVoted.addAll(married);
+            _resultVoteDead.value = 2;
+            _initAudio("wake_with_dead_");
+            Server.instance.deadPlayerList(playerVoted);
           } else {
             // Juste playerVote de mort
             print("dead");
             _resultVoteDead.value = 2;
+            playerVoted.add(playerVote);
             _initAudio("wake_with_dead_");
-            Server.instance.deadPlayer(playerVote!);
+            Server.instance.deadPlayer(playerVote);
           }
         } else {
           // Juste playerVote de mort
           print("dead");
           _resultVoteDead.value = 2;
           _initAudio("wake_with_dead_");
-          Server.instance.deadPlayer(playerVote!);
+          playerVoted.add(playerVote);
+          Server.instance.deadPlayer(playerVote);
         }
       }
     }

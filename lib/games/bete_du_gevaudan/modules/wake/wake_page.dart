@@ -34,7 +34,9 @@ class WakePage extends GetView<WakeController> {
                 );
               return Text(
                 controller.resultVoteDead == 2
-                    ? "LE VILLAGE SE REVEILLE.\n${controller.playerVote!.name.toUpperCase()} EST MORT !"
+                    ? controller.playerVoted.length == 2
+                        ? "LE VILLAGE SE REVEILLE.\n${controller.playerVoted[0].name.toUpperCase()} ET ${controller.playerVoted[1].name.toUpperCase()}\nSONT MORT !"
+                        : "LE VILLAGE SE REVEILLE.\n${controller.playerVoted[0].name.toUpperCase()} EST MORT !"
                     : Constant.wakeNoKill,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: ConstantColor.white, fontSize: 22),

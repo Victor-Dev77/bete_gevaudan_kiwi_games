@@ -89,6 +89,12 @@ class Server {
     else if (data["message"].toString().contains("choicePlayerKillByLoup-")) {
       _assignPlayerKilledByLoup(data);
     }
+    // Specific Role Loup
+    else if (data["message"]
+        .toString()
+        .contains("choiceSorcierePlayerToKill-")) {
+      _assignSorcierePlayerToKill(data);
+    }
     // Dead Player
     else if (data["message"].toString().contains("dead-")) {
       _checkDeadPlayer(data);
@@ -147,15 +153,13 @@ class Server {
   _checkVotePlayerLoup(Map data) {
     var msg = data["message"].toString().substring("voteLoup-".length);
     List listOfMap = json.decode(msg);
-    List<Player> listOfPlayer = [];
-    listOfMap.forEach((item) {
-      var ip1 = PlayerController.to.listPlayer
-          .indexWhere((element) => element.id == item["id"]);
-      if (ip1 != -1) {
-        listOfPlayer.add(PlayerController.to.listPlayer[ip1]);
-      }
-    });
-    PlayerController.to.addPlayerReadyVotedLoup(listOfPlayer);
+    var ip1 = PlayerController.to.listPlayer
+        .indexWhere((element) => element.name == listOfMap[0]["name"]);
+    print("joueur index vote loup $ip1 /// ${PlayerController.to.listPlayer}");
+    if (ip1 != -1) {
+      PlayerController.to
+          .addPlayerReadyVotedLoup(PlayerController.to.listPlayer[ip1]);
+    }
   }
 
   nextPage(GameTour tour) {
@@ -411,7 +415,7 @@ class Server {
   sendListPlayer(List<Player> listPlayer) {
     _send({
       "message": "sendListPlayer-$listPlayer",
-      "type": "to users",
+      "type": "to all",
     });
   }
 
@@ -422,5 +426,26 @@ class Server {
       return Player.fromJson(map);
     });
     PlayerController.to.listPlayer = list.toList();
+  }
+
+  // Specific Role Sorciere
+  choiceSorcierePlayerToKill(Player player) {
+    _send({
+      "message": "choiceSorcierePlayerToKill-[${player.toString()}]",
+      "type": "to all",
+    });
+  }
+
+  _assignSorcierePlayerToKill(Map data) {
+    var msg = data["message"]
+        .toString()
+        .substring("choiceSorcierePlayerToKill-".length);
+    List listOfMap = json.decode(msg);
+    var ip1 = PlayerController.to.listPlayer
+        .indexWhere((element) => element.id == listOfMap[0]["id"]);
+    if (ip1 != -1) {
+      PlayerController.to.playerSorciereToKill =
+          PlayerController.to.listPlayer[ip1];
+    }
   }
 }

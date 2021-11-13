@@ -29,7 +29,9 @@ class ResultVotePage extends GetView<ResultVoteController> {
             child: Obx(() {
               return Text(
                 controller.voteWithDead
-                    ? "LE VILLAGE S'EST PRONONCE. ${controller.playerDead!.name.toUpperCase()} N'EST\nPLUS. IL ETAIT ${controller.playerDead!.nameTypePlayer}"
+                    ? controller.playerIsMarried
+                        ? "LE VILLAGE S'EST PRONONCE.\n${PlayerController.to.married![0].name.toUpperCase()} ET ${PlayerController.to.married![1].name.toUpperCase()}\nN'EST PLUS. ILS ETAIENT ${PlayerController.to.married![0].nameTypePlayer} ET ${PlayerController.to.married![1].nameTypePlayer}"
+                        : "LE VILLAGE S'EST PRONONCE. ${controller.playerDead!.name.toUpperCase()} N'EST\nPLUS. IL ETAIT ${controller.playerDead!.nameTypePlayer}"
                     : Constant.resultVoteNoDead,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: ConstantColor.white, fontSize: 22),

@@ -20,6 +20,17 @@ class ResultVoteController extends GetxController {
   bool get voteWithDead => _voteWithDead.value;
   Player? playerDead;
 
+  bool get playerIsMarried {
+    if (playerDead != null && PlayerController.to.married != null) {
+      var index = PlayerController.to.married!
+          .indexWhere((element) => element.name == playerDead!.name);
+      if (index != -1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -62,9 +73,10 @@ class ResultVoteController extends GetxController {
     // result_vote_dead_loup_
     // result_vote_dead_villageois_
     if (PlayerController.to.playerKillByVote != null) {
-      _voteWithDead.value = true;
       playerDead = PlayerController.to.playerKillByVote;
-      if (PlayerController.to.playerKillByVote!.typePlayer == TypePlayer.LOUP)
+      _voteWithDead.value = true;
+      if (PlayerController.to.playerKillByVote!.typePlayer ==
+          TypePlayer.LOUP) //TODO: OU MALE ALPHA ????
         audioPath = "result_vote_dead_loup_";
       else
         audioPath = "result_vote_dead_villageois_";

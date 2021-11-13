@@ -80,6 +80,7 @@ class PlayerController extends GetxController {
   Player? playerWillKillIfMaleAlphaDie; // Male Alpha
   Player? playerProtected; // Protecteur
   List<Player> playerKillByLoup = []; // Loup Garou
+  Player? playerSorciereToKill; // Protecteur
   int nbLoup = 0;
 
   initTour() {
@@ -118,23 +119,25 @@ class PlayerController extends GetxController {
     if (nbPlayerReady == nbPlayerAlive) {
       nbPlayerReady = 0;
       playerKillByVote = VoteController.to.getResultVote();
-      if (playerKillByVote != null)
-        Server.instance.deadPlayer(playerKillByVote!);
+      if (playerKillByVote != null) {
+        _checkSortOfVote();
+      }
       Server.instance.nextPage(GameTour.RESULT_VOTE);
     }
   }
 
-  addPlayerReadyVotedLoup(List<Player> list) {
+  addPlayerReadyVotedLoup(Player list) {
     if (player.isHost) nbPlayerReady++;
     print("AVANT KILLBYLOUP: $playerKillByLoup");
-    playerKillByLoup.addAll(list);
+    playerKillByLoup.add(list);
     print("APRES KILLBYLOUP: $playerKillByLoup");
     var maleAlphaNB = containsRole(TypePlayer.MALE_ALPHA) ? 1 : 0;
+    print(
+        "nb player ready: $nbPlayerReady / $nbLoup / $maleAlphaNB == ${nbLoup + maleAlphaNB}");
     if (nbPlayerReady == nbLoup + maleAlphaNB) {
       nbPlayerReady = 0;
       print("LIST VOTE LOUP $playerKillByLoup");
       Server.instance.choicePlayerKillByLoup(playerKillByLoup);
-      Server.instance.sendListPlayer(listPlayer);
       Future.delayed(Duration(seconds: 1),
           () => Server.instance.nextPage(GameTour.WOLF_SLEEP));
     }
@@ -389,6 +392,41 @@ class PlayerController extends GetxController {
       await justAudioPlayer.setAsset(
           "assets/images/platform/games/bete_du_gevaudan/vibreur.mp3");
       justAudioPlayer.play();
+    }
+  }
+
+  _checkSortOfVote() {
+    // Male Alpha
+    if (playerWillKillIfMaleAlphaDie != null &&
+        playerKillByVote!.typePlayer == TypePlayer.MALE_ALPHA) {
+      //Mort Male Alpha mais transferer a autre joueur
+      playerKillByVote = playerWillKillIfMaleAlphaDie;
+      print("male alpha");
+    }
+    // Marier
+    if (married != null) {
+      var index = married!
+          .indexWhere((element) => element.name == playerKillByVote!.name);
+      if (index != -1) {
+        // Marrié donc 2 mort
+        print("married");
+        if (married![0].typePlayer == TypePlayer.LOUP ||
+            married![1].typePlayer == TypePlayer.LOUP) nbLoup--;
+        nbPlayerAlive -= 2;
+        Server.instance.deadPlayerList(married!);
+      } else {
+        // Juste playerVote de mort
+        print("dead");
+        if (playerKillByVote!.typePlayer == TypePlayer.LOUP) nbLoup--;
+        nbPlayerAlive--;
+        Server.instance.deadPlayer(playerKillByVote!);
+      }
+    } else {
+      // Juste playerVote de mort
+      print("dead");
+      if (playerKillByVote!.typePlayer == TypePlayer.LOUP) nbLoup--;
+      nbPlayerAlive--;
+      Server.instance.deadPlayer(playerKillByVote!);
     }
   }
 }

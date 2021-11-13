@@ -23,6 +23,10 @@ class SorciereRoleController extends GetxController {
   bool get voiceOffFinish => _voiceOffFinish.value;
   setVoiceOffFinish() => _voiceOffFinish.value = true;
 
+  Player? playerSelected;
+  RxBool _isVotedShow = false.obs;
+  bool get isVotedShow => _isVotedShow.value;
+
   @override
   void onInit() {
     super.onInit();
@@ -91,6 +95,17 @@ class SorciereRoleController extends GetxController {
       changeAudio = true;
     }
   }
+
+  clickPlayer(Player player) {
+    playerSelected = player;
+    print("click player: $player");
+    update();
+  }
+
+  isPlayer(Player player) => player.id == playerSelected?.id;
+
+  showVoteList() => _isVotedShow.value = true;
+  hideVoteList() => _isVotedShow.value = false;
 
   @override
   void onClose() {

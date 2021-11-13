@@ -37,25 +37,22 @@ class WakeController extends GetxController {
     }
   }
 
-  //TODO faire apres le ready des loups si plusieurs loup
-
   _checkSortOfTour() {
     List<Player> killsByLoup = PlayerController.to.playerKillByLoup;
     List<Player>? married = PlayerController.to.married;
     Player? playerProtected = PlayerController.to.playerProtected;
     Player? playerKillByMaleAlpha =
         PlayerController.to.playerWillKillIfMaleAlphaDie;
-    //TODO manque sorciere
+    Player? playerSorciereToKill = PlayerController.to.playerSorciereToKill;
 
     // Determiné majorité ou égalité
     var playerVote = _getMajority(killsByLoup, killsByLoup.length);
     if (playerVote == null) {
-      // Egalité mais verifier sorciere
-
       // Egalité
       print("egalité");
       _resultVoteDead.value = 1;
       _initAudio("wake_without_dead_");
+      return;
     } else {
       // Joueur voté
       if (playerKillByMaleAlpha != null &&
@@ -64,46 +61,56 @@ class WakeController extends GetxController {
         playerVote = playerKillByMaleAlpha;
         print("male alpha");
       }
-      if (playerProtected != null && playerProtected.name == playerVote.name) {
+      // Sorciere
+      if (playerSorciereToKill != null) {
+        playerVote = playerSorciereToKill;
+        print("sorciere");
+      }
+      // Protecteur
+      else if (playerProtected != null &&
+          playerProtected.name == playerVote.name) {
         // Pas de mort grace au protecteur
         print("sauvé par le protecteur");
         _resultVoteDead.value = 1;
         _initAudio("wake_without_dead_");
-      } else {
-        // Mort
-        if (married != null) {
-          var index =
-              married.indexWhere((element) => element.name == playerVote!.name);
-          if (index != -1) {
-            // Marrié donc 2 mort
-            print("married");
-            playerVoted.addAll(married);
-            _resultVoteDead.value = 2;
-            _initAudio("wake_with_dead_");
-            if (playerVoted[0].typePlayer == TypePlayer.LOUP ||
-                playerVoted[1].typePlayer == TypePlayer.LOUP)
-              PlayerController.to.nbLoup--;
-            Server.instance.deadPlayerList(playerVoted);
-          } else {
-            // Juste playerVote de mort
-            print("dead");
-            _resultVoteDead.value = 2;
-            playerVoted.add(playerVote);
-            _initAudio("wake_with_dead_");
-            if (playerVote.typePlayer == TypePlayer.LOUP)
-              PlayerController.to.nbLoup--;
-            Server.instance.deadPlayer(playerVote);
-          }
+        return;
+      }
+      // Mort
+      if (married != null) {
+        var index =
+            married.indexWhere((element) => element.name == playerVote!.name);
+        if (index != -1) {
+          // Marrié donc 2 mort
+          print("married");
+          playerVoted.addAll(married);
+          _resultVoteDead.value = 2;
+          _initAudio("wake_with_dead_");
+          if (playerVoted[0].typePlayer == TypePlayer.LOUP ||
+              playerVoted[1].typePlayer == TypePlayer.LOUP)
+            PlayerController.to.nbLoup--;
+          PlayerController.to.nbPlayerAlive -= 2;
+          Server.instance.deadPlayerList(playerVoted);
         } else {
           // Juste playerVote de mort
           print("dead");
           _resultVoteDead.value = 2;
-          _initAudio("wake_with_dead_");
           playerVoted.add(playerVote);
+          _initAudio("wake_with_dead_");
           if (playerVote.typePlayer == TypePlayer.LOUP)
             PlayerController.to.nbLoup--;
+          PlayerController.to.nbPlayerAlive--;
           Server.instance.deadPlayer(playerVote);
         }
+      } else {
+        // Juste playerVote de mort
+        print("dead");
+        _resultVoteDead.value = 2;
+        _initAudio("wake_with_dead_");
+        playerVoted.add(playerVote);
+        if (playerVote.typePlayer == TypePlayer.LOUP)
+          PlayerController.to.nbLoup--;
+        PlayerController.to.nbPlayerAlive--;
+        Server.instance.deadPlayer(playerVote);
       }
     }
   }

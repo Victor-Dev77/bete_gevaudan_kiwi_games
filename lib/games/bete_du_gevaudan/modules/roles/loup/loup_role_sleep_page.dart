@@ -1,5 +1,7 @@
 import 'package:chewie/chewie.dart';
 import 'package:get/get.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/model/player.dart';
+import 'package:kiwigames/games/bete_du_gevaudan/model/server.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/player/player_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/modules/roles/loup/loup_role_controller.dart';
 import 'package:kiwigames/games/bete_du_gevaudan/utils/constant/constant.dart';
@@ -15,10 +17,34 @@ class LoupRoleSleepPage extends GetView<LoupRoleController> {
     );
   }
 
+  Player? _getMajority(List<Player> array, int size) {
+    int count = 0;
+    int i = 0;
+    Player? majorityElement;
+    for (i = 0; i < size; i++) {
+      if (count == 0) majorityElement = array[i];
+      if (array[i] == majorityElement)
+        count++;
+      else
+        count--;
+    }
+    count = 0;
+    for (i = 0; i < size; i++) if (array[i] == majorityElement) count++;
+    if (count > size / 2) return majorityElement;
+    return null;
+  }
+
   _buildScreen() {
     Future.delayed(PlayerController.to.durationChrono, () {
       controller.onClose();
-      PlayerController.to.switchGameTour(GameTour.SORCIERE_WAKE);
+      if (PlayerController.to.player.isPrincipale)
+        Server.instance.sendListPlayer(PlayerController.to.listPlayer);
+      var player = _getMajority(PlayerController.to.playerKillByLoup,
+          PlayerController.to.playerKillByLoup.length);
+      if (player == null) // Egalité donc sorciere ne joue pas
+        PlayerController.to.switchGameTour(GameTour.WAKE);
+      else
+        PlayerController.to.switchGameTour(GameTour.SORCIERE_WAKE);
     });
     if (PlayerController.to.player.isPrincipale) {
       return Stack(
